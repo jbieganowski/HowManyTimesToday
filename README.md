@@ -1,33 +1,46 @@
+<p align="center">
+  <img src="docs/images/banner.svg" alt="How Many Times Today" width="100%">
+</p>
+
+<p align="center">
+  <a href="README.md"><b>English</b></a> ·
+  <a href="README.pl.md">Polski</a>
+</p>
+
 # How Many Times Today
 
-Integracja Home Assistant + karta Lovelace do śledzenia czynności wykonywanych
-cyklicznie w ciągu dnia (leki, karmienie zwierząt, picie wody itp.).
+A Home Assistant custom integration + Lovelace card for tracking things that
+need to happen a certain number of times per day (medication, pet feeding,
+drinking water, anything recurring).
 
 ## Status
 
-Projekt w fazie projektowania — szkielet repozytorium, implementacja w toku.
+Design/early implementation phase — repository scaffold and backend engine in
+place, Lovelace card not built yet.
 
-## Koncepcja
+## Concept
 
-Każda zdefiniowana czynność (np. "tabletka 2x dziennie o 9:00 i 22:00") tworzy
-niezależne "sloty" — osobny przycisk na każde oczekiwane wystąpienie w ciągu dnia.
+Each defined task (e.g. "pill, twice a day at 9:00 and 22:00") expands into
+independent **slots** — one button per expected occurrence per day.
 
-Przycisk zmienia kolor w czasie (zielony → czerwony → brązowy) w miarę zbliżania
-się i mijania oczekiwanej godziny, a w skrajnym przypadku zaczyna migać.
-Naciśnięcie resetuje slot i zapisuje wpis w historii.
+The button's color fades over time (green → red → brown) as the expected time
+approaches and passes, and starts blinking in extreme cases (forgotten /
+significantly overdue). Pressing it resets the slot and logs an entry in its
+history.
 
-Pełna specyfikacja funkcjonalna: [docs/SPECYFIKACJA.md](docs/SPECYFIKACJA.md)
+Full functional specification: [docs/SPECIFICATION.md](docs/SPECIFICATION.md)
+([Polish version](docs/SPECYFIKACJA.md))
 
-## Dokumentacja i śledzenie zadań
+## Documentation & issue tracking
 
-- Confluence: przestrzeń `HMTT` na jacekbieganowski.atlassian.net
-- Jira: projekt `HMTT`
+- Confluence: `HMTT` space on jacekbieganowski.atlassian.net
+- Jira: `HMTT` project
 
-## Instalacja
+## Installation
 
-Docelowo przez [HACS](https://hacs.xyz/) jako custom repository (status: jeszcze
-niegotowe do użycia).
+Eventually via [HACS](https://hacs.xyz/) as a custom repository (not ready for
+use yet).
 
-## Licencja
+## License
 
-MIT — patrz [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).

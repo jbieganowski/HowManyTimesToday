@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 240" width="960" height="240">
+  <defs>
+    <linearGradient id="buttonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2e7d32"/>
+      <stop offset="45%" stop-color="#c62828"/>
+      <stop offset="100%" stop-color="#5d4037"/>
+    </linearGradient>
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fbfaf8"/>
+      <stop offset="100%" stop-color="#f1efe9"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="1" y="1" width="958" height="238" rx="24" fill="url(#cardGradient)" stroke="#ddd8cc" stroke-width="2"/>
+
+  <!-- circular "slot" button: green -> red -> brown gradient with a check mark -->
+  <circle cx="130" cy="120" r="78" fill="url(#buttonGradient)"/>
+  <circle cx="130" cy="120" r="78" fill="none" stroke="#ffffff" stroke-width="4" opacity="0.6"/>
+  <path d="M 95 122 L 120 148 L 168 92" fill="none" stroke="#ffffff" stroke-width="12"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- small countdown ring accent -->
+  <circle cx="130" cy="120" r="92" fill="none" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="4 10"/>
+
+  <!-- use-case icons: pill, paw, water drop -->
+  <g transform="translate(250,70)">
+    <rect x="0" y="10" width="46" height="20" rx="10" fill="#8e6cb0"/>
+    <rect x="23" y="10" width="23" height="20" rx="10" fill="#5c3d82"/>
+  </g>
+  <g transform="translate(250,120)">
+    <circle cx="14" cy="18" r="9" fill="#7a9e7e"/>
+    <circle cx="2" cy="4" r="5" fill="#7a9e7e"/>
+    <circle cx="14" cy="-2" r="5" fill="#7a9e7e"/>
+    <circle cx="26" cy="4" r="5" fill="#7a9e7e"/>
+  </g>
+  <g transform="translate(252,160)">
+    <path d="M12 0 C 20 14 24 20 24 27 A12 12 0 1 1 0 27 C 0 20 4 14 12 0 Z" fill="#4a90c4"/>
+  </g>
+
+  <text x="340" y="105" font-family="Segoe UI, Arial, sans-serif" font-size="46" font-weight="700" fill="#2b2b28">
+    How Many Times Today
+  </text>
+  <text x="340" y="145" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#6b6859">
+    Home Assistant plugin / wtyczka — meds, feeding, water, anything recurring
+  </text>
+  <text x="340" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#8a8777">
+    one independent slot per expected occurrence · color fades as the deadline approaches
+  </text>
+</svg>

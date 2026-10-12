@@ -1,14 +1,22 @@
 # Changelog
 
+([Polish version](CHANGELOG.pl.md))
+
 ## [Unreleased]
 
-- Szkielet repozytorium, specyfikacja funkcjonalna, licencja MIT
-- Silnik integracji (`custom_components/how_many_times_today/`):
-  - model harmonogramu (stałe godziny / interwał, polityka spóźnień compress/reset)
-  - trwała historia naciśnięć (per slot, czyszczenie całościowe i po tygodniach ISO)
-  - coordinator wyliczający etap koloru (zielony → przejście → czerwony → brązowy → migający) i odliczanie
-  - Config Flow + Options Flow (dodawanie/edycja/usuwanie zadań, ustawienia globalne: dźwięk, próg migania, wyłącznik synchronizacji z Buy The Way jako placeholder)
-  - encje `button` (potwierdzenie) i `sensor` (stan + atrybuty dla karty) per slot
-  - usługi `press_slot`, `clear_history`
-  - tłumaczenia: en (źródło), pl
-- Brakuje jeszcze: karty Lovelace (frontend), pozostałych języków dopasowanych do Buy The Way, testów jednostkowych, walidacji HACS/hassfest
+- Repository scaffold, functional specification, MIT license
+- Integration engine (`custom_components/how_many_times_today/`):
+  - scheduling model (fixed times / interval, compress/reset late-press policy)
+  - persistent press history (per slot, full or ISO-week-selective clearing)
+  - coordinator computing the color stage (green → transition → red → overdue →
+    blinking) and the countdown
+  - Config Flow + Options Flow (add/edit/remove tasks, global settings: sound,
+    blink threshold, "sync with Buy The Way" placeholder toggle)
+  - `button` (confirm) and `sensor` (state + attributes for the card) entities
+    per slot
+  - `press_slot` and `clear_history` services
+  - translations: en (source), pl
+- Bilingual README/CHANGELOG/specification (English + Polish) and a generated
+  SVG project banner
+- Still missing: Lovelace card (frontend), remaining languages matched to Buy
+  The Way, unit tests, HACS/hassfest validation

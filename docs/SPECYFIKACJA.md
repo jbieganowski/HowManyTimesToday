@@ -1,6 +1,8 @@
 # Specyfikacja funkcjonalna — How Many Times Today
 
-Stan: ustalone w rozmowie 2026-10-12, implementacja jeszcze nierozpoczęta.
+([wersja angielska](SPECIFICATION.md))
+
+Stan: ustalone w rozmowie 2026-10-12, implementacja w toku (zobacz [CHANGELOG](../CHANGELOG.pl.md)).
 
 ## Architektura
 
