@@ -1,0 +1,88 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "How Many Times Today",
+        "description": "Настройте интеграцию. Задачи (лекарства, кормление, вода и т. д.) добавляются позже с помощью кнопки «Configure»."
+      }
+    },
+    "abort": {
+      "already_configured": "Уже настроено"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_task": "Добавить новую задачу",
+          "manage_tasks": "Изменить или удалить задачу",
+          "global_settings": "Общие настройки (звук, порог мигания, синхронизация с Buy The Way)"
+        }
+      },
+      "add_task": {
+        "title": "Новая задача",
+        "data": {
+          "name": "Название (например, Лекарство от сердца, Корм для кота)",
+          "mode": "Режим расписания"
+        }
+      },
+      "add_task_fixed_times": {
+        "title": "Фиксированное время",
+        "description": "Время в 24-часовом формате через запятую, например {example}",
+        "data": {
+          "times_csv": "Время"
+        }
+      },
+      "add_task_interval": {
+        "title": "Интервал",
+        "data": {
+          "interval_hours": "Интервал (часы)",
+          "reference_time": "Первое время дня",
+          "late_policy": "При позднем нажатии следующий цикл должен"
+        }
+      },
+      "manage_tasks": {
+        "title": "Выберите задачу",
+        "data": {
+          "task_id": "Задача",
+          "action": "Действие"
+        }
+      },
+      "edit_task": {
+        "title": "Редактировать задачу",
+        "data": {
+          "name": "Название",
+          "times_csv": "Время",
+          "interval_hours": "Интервал (часы)",
+          "reference_time": "Первое время дня",
+          "late_policy": "При позднем нажатии следующий цикл должен"
+        }
+      },
+      "global_settings": {
+        "title": "Общие настройки",
+        "data": {
+          "global_sound": "Звук уведомления",
+          "blink_threshold_minutes": "Через сколько минут просрочки кнопка начнёт мигать",
+          "btw_sync_enabled": "Синхронизация с Buy The Way (скоро)"
+        }
+      }
+    },
+    "abort": {
+      "no_tasks": "Задачи ещё не определены"
+    },
+    "selector": {
+      "schedule_mode": {
+        "options": {
+          "fixed_times": "Фиксированное время дня",
+          "interval": "Интервал с последнего нажатия"
+        }
+      },
+      "late_policy": {
+        "options": {
+          "compress": "Сократить этот цикл на величину задержки (по умолчанию)",
+          "reset": "Сбросить на полный новый интервал"
+        }
+      }
+    }
+  }
+}

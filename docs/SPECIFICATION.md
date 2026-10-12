@@ -64,10 +64,24 @@ In addition:
 
 ## Multilingual support
 
-- Language set **matched exactly to Buy The Way**
-- Missing language → falls back to English
+- Language set **matched exactly to Buy The Way** (confirmed from
+  `Models/Jezyk.cs` in the Buy The Way repo, 2026-10-13): Polish, English (US),
+  English (GB), German, Russian, Ukrainian, Simplified Chinese. Home Assistant
+  does not distinguish English regional variants for component translations,
+  so both English variants map to a single `en` translation file here.
+- Missing language → falls back to English (Home Assistant's own translation
+  fallback mechanism already does this for `strings.json`/`translations/*.json`;
+  the Lovelace card implements the same fallback itself in JS, since it isn't
+  covered by that mechanism)
+- Covers both halves of the UI: the backend Config/Options Flow
+  (`translations/{en,pl,de,ru,uk,zh-Hans}.json`) and the Lovelace card's own
+  static strings (`CARD_STRINGS` in the card JS, keyed by `hass.language`)
 - Standing cross-product rule: Buy The Way's and this plugin's supported
   languages must always stay in sync
+- Note: Buy The Way's own internal fallback is Polish (its default language);
+  this plugin's fallback is English instead, per explicit instruction — only
+  the supported language *set* needs to match, not each product's fallback
+  behavior
 
 ## Buy The Way integration (future)
 

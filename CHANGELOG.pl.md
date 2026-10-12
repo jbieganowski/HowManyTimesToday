@@ -17,4 +17,5 @@
   - tłumaczenia: en (źródło), pl
 - Karta Lovelace (`how-many-times-today-card.js`): przycisk z gradientem koloru w czasie, odliczanie na żywo, historia naciśnięć z czyszczeniem po tygodniach, syntetyzowane dźwięki alarmowe (bez potrzeby plików audio) — dołączona wewnątrz pakietu integracji i rejestrowana/wstrzykiwana automatycznie przez backend, bez ręcznego dodawania zasobu Lovelace
 - Poprawiony baner projektu: rozdzielony na osobne wersje EN/PL SVG (pierwsza wersja mieszała oba języki w jednym obrazku i wychodziła poza prawą krawędź) + wygenerowana ikona/logo pod HACS/brands
-- Brakuje jeszcze: pozostałych języków dopasowanych do Buy The Way, testów jednostkowych, walidacji HACS/hassfest, wizualnego edytora karty/opcji
+- Pełna zgodność językowa z potwierdzonym zestawem 7 języków Buy The Way: dodano tłumaczenia backendu `de`, `ru`, `uk`, `zh-Hans` (`en` już pokrywa oba warianty angielskiego z punktu widzenia Home Assistant) oraz zlokalizowano własne statyczne teksty karty Lovelace we wszystkich tych językach, z fallbackiem na angielski
+- Brakuje jeszcze: testów jednostkowych, walidacji HACS/hassfest, wizualnego edytora karty/opcji

@@ -1,0 +1,88 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "How Many Times Today",
+        "description": "Налаштуйте інтеграцію. Завдання (ліки, годування, вода тощо) додаються пізніше за допомогою кнопки «Configure»."
+      }
+    },
+    "abort": {
+      "already_configured": "Вже налаштовано"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_task": "Додати нове завдання",
+          "manage_tasks": "Редагувати або видалити завдання",
+          "global_settings": "Загальні налаштування (звук, поріг блимання, синхронізація з Buy The Way)"
+        }
+      },
+      "add_task": {
+        "title": "Нове завдання",
+        "data": {
+          "name": "Назва (напр., Ліки для серця, Корм для кота)",
+          "mode": "Режим розкладу"
+        }
+      },
+      "add_task_fixed_times": {
+        "title": "Фіксований час",
+        "description": "Час у 24-годинному форматі через кому, напр. {example}",
+        "data": {
+          "times_csv": "Час"
+        }
+      },
+      "add_task_interval": {
+        "title": "Інтервал",
+        "data": {
+          "interval_hours": "Інтервал (години)",
+          "reference_time": "Перша поява дня",
+          "late_policy": "У разі пізнього натискання наступний цикл має"
+        }
+      },
+      "manage_tasks": {
+        "title": "Виберіть завдання",
+        "data": {
+          "task_id": "Завдання",
+          "action": "Дія"
+        }
+      },
+      "edit_task": {
+        "title": "Редагувати завдання",
+        "data": {
+          "name": "Назва",
+          "times_csv": "Час",
+          "interval_hours": "Інтервал (години)",
+          "reference_time": "Перша поява дня",
+          "late_policy": "У разі пізнього натискання наступний цикл має"
+        }
+      },
+      "global_settings": {
+        "title": "Загальні налаштування",
+        "data": {
+          "global_sound": "Звук сповіщення",
+          "blink_threshold_minutes": "Через скільки хвилин прострочення кнопка почне блимати",
+          "btw_sync_enabled": "Синхронізація з Buy The Way (незабаром)"
+        }
+      }
+    },
+    "abort": {
+      "no_tasks": "Завдань ще не визначено"
+    },
+    "selector": {
+      "schedule_mode": {
+        "options": {
+          "fixed_times": "Фіксований час доби",
+          "interval": "Інтервал від останнього натискання"
+        }
+      },
+      "late_policy": {
+        "options": {
+          "compress": "Скоротити цей цикл на величину затримки (за замовчуванням)",
+          "reset": "Скинути на повний новий інтервал"
+        }
+      }
+    }
+  }
+}

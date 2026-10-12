@@ -27,5 +27,9 @@
 - Fixed project banner: split into separate EN/PL SVGs (the first version
   mixed both languages in one image and overflowed its right edge) + a
   generated icon/logo for HACS/brands
-- Still missing: remaining languages matched to Buy The Way, unit tests,
-  HACS/hassfest validation, a visual card/options editor
+- Full language parity with Buy The Way's confirmed 7-language set: added
+  `de`, `ru`, `uk`, `zh-Hans` backend translations (`en` already covers both
+  English variants for Home Assistant's purposes) and localized the Lovelace
+  card's own static strings in all of them, with an English fallback
+- Still missing: unit tests, HACS/hassfest validation, a visual card/options
+  editor

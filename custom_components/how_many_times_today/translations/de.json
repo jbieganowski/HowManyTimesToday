@@ -1,0 +1,88 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "How Many Times Today",
+        "description": "Richte die Integration ein. Aufgaben (Medikamente, Fütterung, Wasser, ...) werden anschließend über die Schaltfläche „Configure\" hinzugefügt."
+      }
+    },
+    "abort": {
+      "already_configured": "Bereits eingerichtet"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_task": "Neue Aufgabe hinzufügen",
+          "manage_tasks": "Aufgabe bearbeiten oder entfernen",
+          "global_settings": "Globale Einstellungen (Ton, Blinkschwelle, Buy The Way-Synchronisierung)"
+        }
+      },
+      "add_task": {
+        "title": "Neue Aufgabe",
+        "data": {
+          "name": "Name (z. B. Herzmedikament, Katzenfutter)",
+          "mode": "Zeitplanmodus"
+        }
+      },
+      "add_task_fixed_times": {
+        "title": "Feste Uhrzeiten",
+        "description": "Durch Kommas getrennte 24-Stunden-Zeiten, z. B. {example}",
+        "data": {
+          "times_csv": "Uhrzeiten"
+        }
+      },
+      "add_task_interval": {
+        "title": "Intervall",
+        "data": {
+          "interval_hours": "Intervall (Stunden)",
+          "reference_time": "Erstes Vorkommen des Tages",
+          "late_policy": "Bei verspätetem Drücken soll der nächste Zyklus"
+        }
+      },
+      "manage_tasks": {
+        "title": "Aufgabe auswählen",
+        "data": {
+          "task_id": "Aufgabe",
+          "action": "Aktion"
+        }
+      },
+      "edit_task": {
+        "title": "Aufgabe bearbeiten",
+        "data": {
+          "name": "Name",
+          "times_csv": "Uhrzeiten",
+          "interval_hours": "Intervall (Stunden)",
+          "reference_time": "Erstes Vorkommen des Tages",
+          "late_policy": "Bei verspätetem Drücken soll der nächste Zyklus"
+        }
+      },
+      "global_settings": {
+        "title": "Globale Einstellungen",
+        "data": {
+          "global_sound": "Benachrichtigungston",
+          "blink_threshold_minutes": "Minuten Verspätung, bevor die Schaltfläche blinkt",
+          "btw_sync_enabled": "Synchronisierung mit Buy The Way (demnächst)"
+        }
+      }
+    },
+    "abort": {
+      "no_tasks": "Noch keine Aufgaben definiert"
+    },
+    "selector": {
+      "schedule_mode": {
+        "options": {
+          "fixed_times": "Feste Tageszeiten",
+          "interval": "Intervall seit letztem Drücken"
+        }
+      },
+      "late_policy": {
+        "options": {
+          "compress": "Diesen Zyklus um die Verzögerung verkürzen (Standard)",
+          "reset": "Auf ein volles neues Intervall zurücksetzen"
+        }
+      }
+    }
+  }
+}

@@ -27,10 +27,10 @@ function formatDuration(totalSeconds) {
   return `${sign}${sec}s`;
 }
 
-function formatTime(iso) {
+function formatTime(iso, locale) {
   if (!iso) return "—";
   const d = new Date(iso);
-  return d.toLocaleString(undefined, {
+  return d.toLocaleString(locale || undefined, {
     weekday: "short",
     hour: "2-digit",
     minute: "2-digit",
@@ -44,6 +44,95 @@ function isoWeekOf(date) {
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
   const weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
   return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
+}
+
+// --- UI strings, language set kept in sync with Buy The Way (see docs/SPECIFICATION.md);
+// unsupported languages fall back to English ---
+const CARD_STRINGS = {
+  en: {
+    show_history: "▶ show history",
+    hide_history: "▼ hide history",
+    clear_all: "Clear all history",
+    clear_selected_weeks: "Clear selected weeks",
+    no_presses: "No presses yet",
+    last: "Last",
+    total: "total",
+    confirm_clear_all: "Clear the entire history for this slot?",
+    in_prefix: "in",
+    overdue_prefix: "overdue by",
+    entity_not_found: "Entity not found",
+  },
+  pl: {
+    show_history: "▶ pokaż historię",
+    hide_history: "▼ ukryj historię",
+    clear_all: "Wyczyść całą historię",
+    clear_selected_weeks: "Wyczyść wybrane tygodnie",
+    no_presses: "Brak naciśnięć",
+    last: "Ostatnio",
+    total: "łącznie",
+    confirm_clear_all: "Wyczyścić całą historię tego slotu?",
+    in_prefix: "za",
+    overdue_prefix: "spóźnienie o",
+    entity_not_found: "Nie znaleziono encji",
+  },
+  de: {
+    show_history: "▶ Verlauf anzeigen",
+    hide_history: "▼ Verlauf ausblenden",
+    clear_all: "Gesamten Verlauf löschen",
+    clear_selected_weeks: "Ausgewählte Wochen löschen",
+    no_presses: "Noch keine Bestätigungen",
+    last: "Zuletzt",
+    total: "gesamt",
+    confirm_clear_all: "Den gesamten Verlauf für diesen Slot löschen?",
+    in_prefix: "in",
+    overdue_prefix: "überfällig um",
+    entity_not_found: "Entität nicht gefunden",
+  },
+  ru: {
+    show_history: "▶ показать историю",
+    hide_history: "▼ скрыть историю",
+    clear_all: "Очистить всю историю",
+    clear_selected_weeks: "Очистить выбранные недели",
+    no_presses: "Пока нет нажатий",
+    last: "Последнее",
+    total: "всего",
+    confirm_clear_all: "Очистить всю историю этого слота?",
+    in_prefix: "через",
+    overdue_prefix: "просрочено на",
+    entity_not_found: "Сущность не найдена",
+  },
+  uk: {
+    show_history: "▶ показати історію",
+    hide_history: "▼ приховати історію",
+    clear_all: "Очистити всю історію",
+    clear_selected_weeks: "Очистити вибрані тижні",
+    no_presses: "Поки немає натискань",
+    last: "Останнє",
+    total: "всього",
+    confirm_clear_all: "Очистити всю історію цього слоту?",
+    in_prefix: "через",
+    overdue_prefix: "прострочено на",
+    entity_not_found: "Сутність не знайдено",
+  },
+  "zh-hans": {
+    show_history: "▶ 显示历史",
+    hide_history: "▼ 隐藏历史",
+    clear_all: "清除全部历史",
+    clear_selected_weeks: "清除所选周",
+    no_presses: "尚无记录",
+    last: "上次",
+    total: "共计",
+    confirm_clear_all: "确定清除此插槽的全部历史吗？",
+    in_prefix: "还有",
+    overdue_prefix: "已超时",
+    entity_not_found: "未找到实体",
+  },
+};
+
+function translate(hassLanguage, key) {
+  const lang = (hassLanguage || "en").toLowerCase();
+  const dict = CARD_STRINGS[lang] || CARD_STRINGS[lang.split("-")[0]] || CARD_STRINGS.en;
+  return dict[key] ?? CARD_STRINGS.en[key] ?? key;
 }
 
 // --- tiny synthesized alert tones, no audio asset files required ---
@@ -108,6 +197,10 @@ class HowManyTimesTodayCard extends HTMLElement {
     return 3;
   }
 
+  _t(key) {
+    return translate(this._hass?.language, key);
+  }
+
   connectedCallback() {
     this._interval = setInterval(() => this._tick(), 1000);
   }
@@ -161,7 +254,7 @@ class HowManyTimesTodayCard extends HTMLElement {
 
   _onClearAll() {
     const attrs = this._stateObj.attributes;
-    if (!confirm("Clear the entire history for this slot?")) return;
+    if (!confirm(this._t("confirm_clear_all"))) return;
     this._hass.callService("how_many_times_today", "clear_history", {
       slot_id: attrs.slot_id,
     });
@@ -184,17 +277,22 @@ class HowManyTimesTodayCard extends HTMLElement {
   _render() {
     const root = this.shadowRoot;
     if (!this._stateObj) {
-      root.innerHTML = `<ha-card><div class="placeholder">Entity not found: ${this._config.entity}</div></ha-card>`;
+      root.innerHTML = `<ha-card><div class="placeholder">${this._t("entity_not_found")}: ${this._config.entity}</div></ha-card>`;
       return;
     }
 
+    const locale = this._hass?.language;
     const attrs = this._stateObj.attributes;
     const stage = this._stateObj.state;
     const name = attrs.friendly_name || this._config.entity;
     const color = this._computeColor(stage, attrs);
     const seconds = attrs.seconds_to_next_expected;
     const countdownLabel =
-      seconds == null ? "—" : seconds >= 0 ? `in ${formatDuration(seconds)}` : `overdue by ${formatDuration(seconds)}`;
+      seconds == null
+        ? "—"
+        : seconds >= 0
+        ? `${this._t("in_prefix")} ${formatDuration(seconds)}`
+        : `${this._t("overdue_prefix")} ${formatDuration(seconds)}`;
 
     const history = attrs.history || [];
     const weeks = [...new Set(history.map((ts) => isoWeekOf(new Date(ts))))].reverse();
@@ -233,11 +331,11 @@ class HowManyTimesTodayCard extends HTMLElement {
           <div class="info">
             <div class="name">${name}</div>
             <div class="countdown">${countdownLabel}</div>
-            <div class="last">Last: ${formatTime(attrs.last_pressed_at)} · total: ${attrs.press_count ?? 0}</div>
+            <div class="last">${this._t("last")}: ${formatTime(attrs.last_pressed_at, locale)} · ${this._t("total")}: ${attrs.press_count ?? 0}</div>
           </div>
         </div>
-        <div class="history-toggle" id="toggle">${this._historyOpen ? "▼ hide history" : "▶ show history"}</div>
-        ${this._historyOpen ? this._renderHistory(history, weeks) : ""}
+        <div class="history-toggle" id="toggle">${this._historyOpen ? this._t("hide_history") : this._t("show_history")}</div>
+        ${this._historyOpen ? this._renderHistory(history, weeks, locale) : ""}
       </ha-card>
     `;
 
@@ -257,22 +355,22 @@ class HowManyTimesTodayCard extends HTMLElement {
     }
   }
 
-  _renderHistory(history, weeks) {
+  _renderHistory(history, weeks, locale) {
     const items = history
       .slice()
       .reverse()
-      .map((ts) => `<li>${formatTime(ts)}</li>`)
+      .map((ts) => `<li>${formatTime(ts, locale)}</li>`)
       .join("");
     const weekCheckboxes = weeks
       .map((w) => `<label><input type="checkbox" value="${w}"> ${w}</label>`)
       .join("");
     return `
       <div class="history">
-        <ul>${items || "<li><em>No presses yet</em></li>"}</ul>
-        <button id="clear-all">Clear all history</button>
+        <ul>${items || `<li><em>${this._t("no_presses")}</em></li>`}</ul>
+        <button id="clear-all">${this._t("clear_all")}</button>
         ${
           weeks.length
-            ? `<div class="week-list">${weekCheckboxes}<button id="clear-weeks">Clear selected weeks</button></div>`
+            ? `<div class="week-list">${weekCheckboxes}<button id="clear-weeks">${this._t("clear_selected_weeks")}</button></div>`
             : ""
         }
       </div>
