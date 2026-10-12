@@ -18,6 +18,11 @@ Naciśnięcie resetuje slot i zapisuje wpis w historii.
 
 Pełna specyfikacja funkcjonalna: [docs/SPECYFIKACJA.md](docs/SPECYFIKACJA.md)
 
+## Dokumentacja i śledzenie zadań
+
+- Confluence: przestrzeń `HMTT` na jacekbieganowski.atlassian.net
+- Jira: projekt `HMTT`
+
 ## Instalacja
 
 Docelowo przez [HACS](https://hacs.xyz/) jako custom repository (status: jeszcze
