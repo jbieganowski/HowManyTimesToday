@@ -10,8 +10,11 @@ Status: agreed in conversation on 2026-10-12, implementation in progress (see
 - **Custom Integration** (`custom_components/how_many_times_today/`) —
   backend: schedules, counters, history, HA entities. Configured entirely
   through Config Flow (UI wizard, no YAML editing).
-- **Custom Lovelace Card** (`www/`) — frontend: button with a color gradient,
-  blinking, countdown.
+- **Custom Lovelace Card** (`custom_components/how_many_times_today/www/`) —
+  frontend: button with a color gradient, blinking, countdown. Bundled inside
+  the integration package (not a repo-root `www/`) so HACS's "integration"
+  category actually deploys it; the integration registers and auto-injects it
+  itself, no manual Lovelace resource needed.
 - Installation eventually via **HACS** (one click, no manual scripts).
 
 ## Data model — task and slots

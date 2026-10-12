@@ -19,5 +19,13 @@
 - Bilingual README/CHANGELOG/specification (English + Polish) and a generated
   SVG project banner
 - `icon.png` / `logo.png` (+ @2x) at repo root for HACS/brands
-- Still missing: Lovelace card (frontend), remaining languages matched to Buy
-  The Way, unit tests, HACS/hassfest validation
+- Lovelace card (`how-many-times-today-card.js`): color-fading confirm button,
+  live countdown, press history with per-week clearing, synthesized alert
+  sounds (no audio asset files needed) — bundled inside the integration
+  package and auto-registered/injected by the backend, no manual Lovelace
+  resource step
+- Fixed project banner: split into separate EN/PL SVGs (the first version
+  mixed both languages in one image and overflowed its right edge) + a
+  generated icon/logo for HACS/brands
+- Still missing: remaining languages matched to Buy The Way, unit tests,
+  HACS/hassfest validation, a visual card/options editor

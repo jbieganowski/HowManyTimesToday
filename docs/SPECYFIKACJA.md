@@ -9,8 +9,11 @@ Stan: ustalone w rozmowie 2026-10-12, implementacja w toku (zobacz [CHANGELOG](.
 - **Custom Integration** (`custom_components/how_many_times_today/`) — backend:
   harmonogramy, liczniki, historia, encje HA. Konfiguracja przez Config Flow
   (kreator w UI, bez edycji YAML).
-- **Custom Lovelace Card** (`www/`) — frontend: przycisk z gradientem kolorów,
-  miganiem, odliczaniem.
+- **Custom Lovelace Card** (`custom_components/how_many_times_today/www/`) —
+  frontend: przycisk z gradientem kolorów, miganiem, odliczaniem. Dołączona
+  wewnątrz pakietu integracji (nie w root-owym `www/`), żeby kategoria
+  „integration" w HACS faktycznie ją wdrażała; integracja sama ją rejestruje
+  i wstrzykuje — bez ręcznego dodawania zasobu Lovelace.
 - Instalacja docelowo przez **HACS** (jeden klik, bez ręcznych skryptów).
 
 ## Model danych — zadanie i sloty

@@ -15,4 +15,6 @@
   - encje `button` (potwierdzenie) i `sensor` (stan + atrybuty dla karty) per slot
   - usługi `press_slot`, `clear_history`
   - tłumaczenia: en (źródło), pl
-- Brakuje jeszcze: karty Lovelace (frontend), pozostałych języków dopasowanych do Buy The Way, testów jednostkowych, walidacji HACS/hassfest
+- Karta Lovelace (`how-many-times-today-card.js`): przycisk z gradientem koloru w czasie, odliczanie na żywo, historia naciśnięć z czyszczeniem po tygodniach, syntetyzowane dźwięki alarmowe (bez potrzeby plików audio) — dołączona wewnątrz pakietu integracji i rejestrowana/wstrzykiwana automatycznie przez backend, bez ręcznego dodawania zasobu Lovelace
+- Poprawiony baner projektu: rozdzielony na osobne wersje EN/PL SVG (pierwsza wersja mieszała oba języki w jednym obrazku i wychodziła poza prawą krawędź) + wygenerowana ikona/logo pod HACS/brands
+- Brakuje jeszcze: pozostałych języków dopasowanych do Buy The Way, testów jednostkowych, walidacji HACS/hassfest, wizualnego edytora karty/opcji

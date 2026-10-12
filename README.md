@@ -39,7 +39,15 @@ Full functional specification: [docs/SPECIFICATION.md](docs/SPECIFICATION.md)
 ## Installation
 
 Eventually via [HACS](https://hacs.xyz/) as a custom repository (not ready for
-use yet).
+use yet). The Lovelace card is bundled inside the integration and registers
+itself automatically — no manual Resource step required.
+
+Adding a slot to a dashboard (one card per slot sensor):
+
+```yaml
+type: custom:how-many-times-today-card
+entity: sensor.cat_food_1_status
+```
 
 ## License
 

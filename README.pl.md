@@ -39,7 +39,15 @@ Pełna specyfikacja funkcjonalna: [docs/SPECYFIKACJA.md](docs/SPECYFIKACJA.md)
 ## Instalacja
 
 Docelowo przez [HACS](https://hacs.xyz/) jako custom repository (status:
-jeszcze niegotowe do użycia).
+jeszcze niegotowe do użycia). Karta Lovelace jest dołączona wewnątrz integracji
+i rejestruje się sama — bez ręcznego dodawania zasobu.
+
+Dodanie slotu do pulpitu (jedna karta na jeden sensor slotu):
+
+```yaml
+type: custom:how-many-times-today-card
+entity: sensor.karma_dla_kota_1_status
+```
 
 ## Licencja
 

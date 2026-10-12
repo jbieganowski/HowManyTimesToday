@@ -1,6 +1,9 @@
 """How Many Times Today — track recurring daily confirmations (meds, feeding, ...)."""
 from __future__ import annotations
 
+import logging
+from pathlib import Path
+
 import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall
@@ -10,6 +13,11 @@ from .const import ATTR_SLOT_ID, ATTR_WEEKS, DOMAIN, SERVICE_CLEAR_HISTORY, SERV
 from .coordinator import HowManyTimesTodayCoordinator
 
 PLATFORMS = ["button", "sensor"]
+
+_LOGGER = logging.getLogger(__name__)
+
+CARD_URL_PATH = f"/{DOMAIN}_files/how-many-times-today-card.js"
+CARD_VERSION = 1  # bump to bust browser/frontend caches whenever the card JS changes
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -22,7 +30,44 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     entry.async_on_unload(entry.add_update_listener(_async_options_updated))
 
     _async_register_services(hass)
+    await _async_register_frontend_card(hass)
     return True
+
+
+async def _async_register_frontend_card(hass: HomeAssistant) -> None:
+    """Serve the bundled Lovelace card and auto-inject it, so users never have to
+    add a Resource manually in Settings -> Dashboards (one-click install only).
+    """
+    if hass.data.get(f"{DOMAIN}_frontend_registered"):
+        return
+    hass.data[f"{DOMAIN}_frontend_registered"] = True
+
+    # The card ships INSIDE this package (custom_components/how_many_times_today/www/),
+    # not under <config>/www/ — HACS (integration category) only deploys the
+    # custom_components/<domain>/ tree, so anything outside it would never
+    # reach a real installation.
+    card_path = str(Path(__file__).parent / "www" / "how-many-times-today-card.js")
+
+    try:
+        from homeassistant.components.http import StaticPathConfig
+
+        await hass.http.async_register_static_paths(
+            [StaticPathConfig(CARD_URL_PATH, card_path, cache_headers=False)]
+        )
+    except ImportError:
+        # older HA core without StaticPathConfig
+        hass.http.register_static_path(CARD_URL_PATH, card_path, cache_headers=False)
+    except Exception:  # noqa: BLE001
+        _LOGGER.warning(
+            "Could not register the How Many Times Today card as a static path; "
+            "add it manually as a Lovelace resource: %s",
+            CARD_URL_PATH,
+        )
+        return
+
+    from homeassistant.components.frontend import add_extra_js_url
+
+    add_extra_js_url(hass, f"{CARD_URL_PATH}?v={CARD_VERSION}")
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
