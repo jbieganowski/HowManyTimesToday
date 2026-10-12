@@ -6,6 +6,7 @@
 
 - Szkielet repozytorium, specyfikacja funkcjonalna, licencja MIT
 - Dwujęzyczny README/CHANGELOG/specyfikacja (angielski + polski) i wygenerowany baner SVG projektu
+- `icon.png` / `logo.png` (+ @2x) w katalogu głównym repo pod HACS/brands
 - Silnik integracji (`custom_components/how_many_times_today/`):
   - model harmonogramu (stałe godziny / interwał, polityka spóźnień compress/reset)
   - trwała historia naciśnięć (per slot, czyszczenie całościowe i po tygodniach ISO)

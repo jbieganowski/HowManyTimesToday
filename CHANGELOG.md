@@ -18,5 +18,6 @@
   - translations: en (source), pl
 - Bilingual README/CHANGELOG/specification (English + Polish) and a generated
   SVG project banner
+- `icon.png` / `logo.png` (+ @2x) at repo root for HACS/brands
 - Still missing: Lovelace card (frontend), remaining languages matched to Buy
   The Way, unit tests, HACS/hassfest validation
