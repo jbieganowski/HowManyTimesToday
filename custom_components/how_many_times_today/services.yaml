@@ -1,0 +1,26 @@
+press_slot:
+  name: Press slot
+  description: Confirm a slot programmatically (same effect as pressing its button).
+  fields:
+    slot_id:
+      name: Slot ID
+      required: true
+      selector:
+        text:
+
+clear_history:
+  name: Clear history
+  description: Clear press history, entirely or for specific ISO weeks.
+  fields:
+    slot_id:
+      name: Slot ID
+      description: Omit to clear history for every slot.
+      required: false
+      selector:
+        text:
+    weeks:
+      name: Weeks
+      description: "ISO week strings (e.g. 2026-W41). Omit to clear all history."
+      required: false
+      selector:
+        object:

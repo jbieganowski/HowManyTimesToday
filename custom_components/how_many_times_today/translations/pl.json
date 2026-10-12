@@ -1,0 +1,88 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "How Many Times Today",
+        "description": "Konfiguracja integracji. Zadania (leki, karmienie, woda itp.) dodajesz później przyciskiem Configure."
+      }
+    },
+    "abort": {
+      "already_configured": "Już skonfigurowano"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_task": "Dodaj nowe zadanie",
+          "manage_tasks": "Edytuj lub usuń zadanie",
+          "global_settings": "Ustawienia globalne (dźwięk, próg migania, synchronizacja z Buy The Way)"
+        }
+      },
+      "add_task": {
+        "title": "Nowe zadanie",
+        "data": {
+          "name": "Nazwa (np. Lek na serce, Karma dla kota)",
+          "mode": "Tryb harmonogramu"
+        }
+      },
+      "add_task_fixed_times": {
+        "title": "Stałe godziny",
+        "description": "Godziny oddzielone przecinkami, np. {example}",
+        "data": {
+          "times_csv": "Godziny"
+        }
+      },
+      "add_task_interval": {
+        "title": "Interwał",
+        "data": {
+          "interval_hours": "Interwał (godziny)",
+          "reference_time": "Pierwsze wystąpienie w ciągu dnia",
+          "late_policy": "Przy spóźnionym naciśnięciu kolejny cykl ma"
+        }
+      },
+      "manage_tasks": {
+        "title": "Wybierz zadanie",
+        "data": {
+          "task_id": "Zadanie",
+          "action": "Akcja"
+        }
+      },
+      "edit_task": {
+        "title": "Edytuj zadanie",
+        "data": {
+          "name": "Nazwa",
+          "times_csv": "Godziny",
+          "interval_hours": "Interwał (godziny)",
+          "reference_time": "Pierwsze wystąpienie w ciągu dnia",
+          "late_policy": "Przy spóźnionym naciśnięciu kolejny cykl ma"
+        }
+      },
+      "global_settings": {
+        "title": "Ustawienia globalne",
+        "data": {
+          "global_sound": "Dźwięk powiadomienia",
+          "blink_threshold_minutes": "Po ilu minutach spóźnienia przycisk zacznie migać",
+          "btw_sync_enabled": "Synchronizacja z Buy The Way (wkrótce)"
+        }
+      }
+    },
+    "abort": {
+      "no_tasks": "Nie zdefiniowano jeszcze żadnych zadań"
+    },
+    "selector": {
+      "schedule_mode": {
+        "options": {
+          "fixed_times": "Stałe godziny w ciągu dnia",
+          "interval": "Interwał od ostatniego naciśnięcia"
+        }
+      },
+      "late_policy": {
+        "options": {
+          "compress": "Skrócić ten cykl o opóźnienie (domyślnie)",
+          "reset": "Zresetować do pełnego nowego interwału"
+        }
+      }
+    }
+  }
+}

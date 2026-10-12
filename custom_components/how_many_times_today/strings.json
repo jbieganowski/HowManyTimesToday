@@ -1,0 +1,88 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "How Many Times Today",
+        "description": "Set up the integration. Tasks (medication, feeding, water, ...) are added afterwards via the Configure button."
+      }
+    },
+    "abort": {
+      "already_configured": "Already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_task": "Add a new task",
+          "manage_tasks": "Edit or remove a task",
+          "global_settings": "Global settings (sound, blink threshold, Buy The Way sync)"
+        }
+      },
+      "add_task": {
+        "title": "New task",
+        "data": {
+          "name": "Name (e.g. Heart medication, Cat food)",
+          "mode": "Schedule mode"
+        }
+      },
+      "add_task_fixed_times": {
+        "title": "Fixed times",
+        "description": "Comma-separated 24h times, e.g. {example}",
+        "data": {
+          "times_csv": "Times"
+        }
+      },
+      "add_task_interval": {
+        "title": "Interval",
+        "data": {
+          "interval_hours": "Interval (hours)",
+          "reference_time": "First occurrence of the day",
+          "late_policy": "If pressed late, next cycle should"
+        }
+      },
+      "manage_tasks": {
+        "title": "Select a task",
+        "data": {
+          "task_id": "Task",
+          "action": "Action"
+        }
+      },
+      "edit_task": {
+        "title": "Edit task",
+        "data": {
+          "name": "Name",
+          "times_csv": "Times",
+          "interval_hours": "Interval (hours)",
+          "reference_time": "First occurrence of the day",
+          "late_policy": "If pressed late, next cycle should"
+        }
+      },
+      "global_settings": {
+        "title": "Global settings",
+        "data": {
+          "global_sound": "Notification sound",
+          "blink_threshold_minutes": "Minutes overdue before the button blinks",
+          "btw_sync_enabled": "Sync with Buy The Way (coming soon)"
+        }
+      }
+    },
+    "abort": {
+      "no_tasks": "No tasks defined yet"
+    },
+    "selector": {
+      "schedule_mode": {
+        "options": {
+          "fixed_times": "Fixed times of day",
+          "interval": "Interval since last press"
+        }
+      },
+      "late_policy": {
+        "options": {
+          "compress": "Shorten this cycle by the delay (default)",
+          "reset": "Reset to a full fresh interval"
+        }
+      }
+    }
+  }
+}
