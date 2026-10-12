@@ -41,9 +41,9 @@
     How Many Times Today
   </text>
   <text x="340" y="145" font-family="Segoe UI, Arial, sans-serif" font-size="22" fill="#6b6859">
-    Home Assistant plugin / wtyczka — meds, feeding, water, anything recurring
+    Home Assistant plugin + Lovelace card
   </text>
   <text x="340" y="178" font-family="Segoe UI, Arial, sans-serif" font-size="18" fill="#8a8777">
-    one independent slot per expected occurrence · color fades as the deadline approaches
+    Meds, feeding, water &#8212; anything recurring
   </text>
 </svg>

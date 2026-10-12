@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/banner.svg" alt="How Many Times Today" width="100%">
+  <img src="docs/images/banner.pl.svg" alt="How Many Times Today" width="100%">
 </p>
 
 <p align="center">
