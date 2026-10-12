@@ -31,5 +31,10 @@
   `de`, `ru`, `uk`, `zh-Hans` backend translations (`en` already covers both
   English variants for Home Assistant's purposes) and localized the Lovelace
   card's own static strings in all of them, with an English fallback
+- Added illustrative mockups of the card's color states and the Options Flow
+  menu (EN + PL) to the README — generated from the actual color/layout values,
+  clearly labeled as mockups rather than real screenshots (no browser
+  automation available yet to capture a live HA UI)
 - Still missing: unit tests, HACS/hassfest validation, a visual card/options
-  editor
+  editor, real screenshots once the integration can be tested against a live
+  Home Assistant instance

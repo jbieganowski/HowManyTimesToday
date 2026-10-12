@@ -31,6 +31,17 @@ history.
 Full functional specification: [docs/SPECIFICATION.md](docs/SPECIFICATION.md)
 ([Polish version](docs/SPECYFIKACJA.md))
 
+<p align="center">
+  <img src="docs/images/card-states.png" alt="Slot button states" width="100%">
+</p>
+<p align="center">
+  <img src="docs/images/config-menu.png" alt="Configuration menu" width="70%">
+</p>
+
+> These are illustrative mockups built from the actual card/color code, not
+> real screenshots — there is no browser automation in this environment to
+> capture a live Home Assistant UI yet.
+
 ## Documentation & issue tracking
 
 - Confluence: `HMTT` space on jacekbieganowski.atlassian.net

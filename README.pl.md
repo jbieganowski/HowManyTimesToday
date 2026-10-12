@@ -31,6 +31,17 @@ wpis w historii.
 Pełna specyfikacja funkcjonalna: [docs/SPECYFIKACJA.md](docs/SPECYFIKACJA.md)
 ([wersja angielska](docs/SPECIFICATION.md))
 
+<p align="center">
+  <img src="docs/images/card-states.pl.png" alt="Stany przycisku slotu" width="100%">
+</p>
+<p align="center">
+  <img src="docs/images/config-menu.pl.png" alt="Menu konfiguracji" width="70%">
+</p>
+
+> To ilustracje poglądowe zbudowane na bazie faktycznego kodu karty/kolorów,
+> nie prawdziwe zrzuty ekranu — w tym środowisku nie mam jeszcze automatyzacji
+> przeglądarki, żeby przechwycić działający interfejs Home Assistant.
+
 ## Dokumentacja i śledzenie zadań
 
 - Confluence: przestrzeń `HMTT` na jacekbieganowski.atlassian.net
