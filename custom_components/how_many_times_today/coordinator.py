@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.dispatcher import async_dispatcher_send
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import (
@@ -15,6 +16,7 @@ from .const import (
     CONF_TASKS,
     DEFAULT_BLINK_THRESHOLD_MINUTES,
     DOMAIN,
+    SIGNAL_SLOTS_UPDATED,
     UPDATE_INTERVAL_SECONDS,
 )
 from .models import (
@@ -56,14 +58,21 @@ class HowManyTimesTodayCoordinator(DataUpdateCoordinator[None]):
             CONF_BLINK_THRESHOLD_MINUTES, DEFAULT_BLINK_THRESHOLD_MINUTES
         )
 
-    def _rebuild_slots(self) -> None:
+    def _rebuild_slots(self) -> tuple[set[str], set[str]]:
         """Recompute the slot list from current options, keeping runtime state for
         slots that still exist (editing a task must not wipe its history/progress).
+
+        Returns (added_slot_ids, removed_slot_ids) so callers can add/remove the
+        corresponding HA entities for slots that appear/disappear after the
+        integration's initial setup (e.g. a task added/edited/removed at runtime).
         """
         new_defs: dict[str, SlotDefinition] = {}
         for task in self.tasks:
             for slot_def in build_slots(task):
                 new_defs[slot_def.slot_id] = slot_def
+
+        added = set(new_defs) - set(self.slot_defs)
+        removed = set(self.slot_defs) - set(new_defs)
 
         now = dt_now()
         for slot_id, slot_def in new_defs.items():
@@ -77,12 +86,17 @@ class HowManyTimesTodayCoordinator(DataUpdateCoordinator[None]):
             self.slot_states.pop(stale_id, None)
 
         self.slot_defs = new_defs
+        return added, removed
 
     async def async_setup(self) -> None:
         await self.history.async_load()
 
     async def async_options_updated(self) -> None:
-        self._rebuild_slots()
+        added, removed = self._rebuild_slots()
+        if added or removed:
+            async_dispatcher_send(
+                self.hass, SIGNAL_SLOTS_UPDATED.format(self.entry.entry_id), added, removed
+            )
         await self.async_request_refresh()
 
     async def _async_update_data(self) -> None:

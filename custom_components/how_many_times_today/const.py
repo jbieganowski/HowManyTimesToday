@@ -48,6 +48,11 @@ AVAILABLE_SOUNDS = [
 
 UPDATE_INTERVAL_SECONDS = 30
 
+# dispatcher signal fired whenever slots are added/removed after the initial
+# platform setup (e.g. a task added/edited/removed via Options Flow while HA is
+# running) - format with the config entry_id
+SIGNAL_SLOTS_UPDATED = DOMAIN + "_slots_updated_{}"
+
 STORAGE_VERSION = 1
 STORAGE_KEY_PREFIX = f"{DOMAIN}_history"
 

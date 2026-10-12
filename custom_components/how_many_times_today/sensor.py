@@ -5,11 +5,13 @@ from __future__ import annotations
 
 from homeassistant.components.sensor import SensorEntity
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import CONF_GLOBAL_SOUND, DOMAIN
+from .const import CONF_GLOBAL_SOUND, DOMAIN, SIGNAL_SLOTS_UPDATED
 from .coordinator import HowManyTimesTodayCoordinator, dt_now
 
 
@@ -19,6 +21,23 @@ async def async_setup_entry(
     coordinator: HowManyTimesTodayCoordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_entities(
         SlotStateSensor(coordinator, slot_id) for slot_id in coordinator.slot_defs
+    )
+
+    @callback
+    def _handle_slots_updated(added: set[str], removed: set[str]) -> None:
+        if added:
+            async_add_entities(SlotStateSensor(coordinator, slot_id) for slot_id in added)
+        if removed:
+            registry = er.async_get(hass)
+            for slot_id in removed:
+                entity_id = registry.async_get_entity_id("sensor", DOMAIN, f"{slot_id}_state")
+                if entity_id:
+                    registry.async_remove(entity_id)
+
+    entry.async_on_unload(
+        async_dispatcher_connect(
+            hass, SIGNAL_SLOTS_UPDATED.format(entry.entry_id), _handle_slots_updated
+        )
     )
 
 

@@ -6,3 +6,6 @@ __pycache__/
 *.log
 node_modules/
 .DS_Store
+
+# local HA test instance (Docker) - real auth DB/secrets, never publish
+.ha-test-config/

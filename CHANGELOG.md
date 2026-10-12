@@ -35,6 +35,17 @@
   menu (EN + PL) to the README — generated from the actual color/layout values,
   clearly labeled as mockups rather than real screenshots (no browser
   automation available yet to capture a live HA UI)
+- Set up a persistent local Docker test instance (`hmtt-test-ha`,
+  `docs/TESTING.md`) and exercised the integration end-to-end through it for
+  the first time — found and fixed two real bugs:
+  - `_parse_hhmm` crashed on HA's `TimeSelector` output (`HH:MM:SS`), which
+    broke every interval-mode task and any task edited through the UI's time
+    picker
+  - the dynamic add/remove dispatcher handlers in `button.py`/`sensor.py`
+    weren't decorated with `@callback`, so Home Assistant ran them on a
+    worker thread instead of the event loop — new/removed tasks silently
+    failed to add or remove entities while HA was running (only a full
+    restart from a previously-saved config worked)
 - Still missing: unit tests, HACS/hassfest validation, a visual card/options
-  editor, real screenshots once the integration can be tested against a live
-  Home Assistant instance
+  editor, real screenshots (now that a live test instance exists, these are
+  unblocked for a future pass)

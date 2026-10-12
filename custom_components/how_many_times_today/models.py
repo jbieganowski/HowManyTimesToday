@@ -18,8 +18,10 @@ from .const import (
 
 
 def _parse_hhmm(value: str) -> time:
-    hour, minute = value.split(":")
-    return time(int(hour), int(minute))
+    # HA's TimeSelector returns "HH:MM:SS"; manually typed fixed_times entries are
+    # "HH:MM" - accept both, ignore seconds either way
+    parts = value.split(":")
+    return time(int(parts[0]), int(parts[1]))
 
 
 @dataclass
