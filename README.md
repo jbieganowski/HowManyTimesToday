@@ -42,6 +42,17 @@ Full functional specification: [docs/SPECIFICATION.md](docs/SPECIFICATION.md)
 > real screenshots — there is no browser automation in this environment to
 > capture a live Home Assistant UI yet.
 
+<p align="center">
+  <img src="docs/images/screenshot-overview-dark.png" alt="Real screenshot of the local test instance" width="80%">
+</p>
+
+> This one above **is** a real screenshot — the local Docker test instance
+> (see [docs/TESTING.md](docs/TESTING.md)), authenticated, in Polish, in dark
+> mode. A real screenshot of the card itself is still pending: this HA
+> version's client-side router didn't cooperate with headless automation for
+> custom dashboard routes (see TESTING.md) — the card's behavior is instead
+> verified through the API-driven test sequence documented there.
+
 ## Documentation & issue tracking
 
 - Confluence: `HMTT` space on jacekbieganowski.atlassian.net

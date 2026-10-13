@@ -46,6 +46,12 @@
     worker thread instead of the event loop — new/removed tasks silently
     failed to add or remove entities while HA was running (only a full
     restart from a previously-saved config worked)
+- Confirmed dark mode + Polish language are durably stored server-side for
+  the test account (`.storage/frontend.user_data_*`), and captured one real
+  (non-mockup) screenshot of the authenticated instance via headless
+  Edge + raw Chrome DevTools Protocol (no Playwright/Selenium available) —
+  `docs/images/screenshot-overview-dark.png`
 - Still missing: unit tests, HACS/hassfest validation, a visual card/options
-  editor, real screenshots (now that a live test instance exists, these are
-  unblocked for a future pass)
+  editor, a real screenshot of the card itself (hit an unreliable SPA router
+  redirect for custom dashboard views in this HA version during headless
+  automation — see docs/TESTING.md)

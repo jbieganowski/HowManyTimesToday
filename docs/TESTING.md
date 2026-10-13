@@ -66,3 +66,53 @@ All of the above were verified working as of 2026-10-13 (see CHANGELOG for the
 two bugs this testing round found and fixed: a `HH:MM:SS` parsing crash, and
 a missing `@callback` on the dynamic add/remove dispatcher handlers that made
 Home Assistant run them on a worker thread instead of the event loop).
+
+## Driving a real browser against the instance (headless CDP)
+
+No Playwright/Selenium is installed, but Edge/Chrome's own headless mode plus
+the raw Chrome DevTools Protocol (a `websockets` client talking JSON-RPC to
+`ws://localhost:9222/devtools/...`) is enough to get a genuine authenticated
+screenshot:
+
+1. Launch the browser: `msedge.exe --headless=new --remote-debugging-port=9222
+   --user-data-dir=<scratch dir>`
+2. Open a tab (`PUT /json/new`), connect to its `webSocketDebuggerUrl`
+3. Inject an already-obtained access/refresh token pair into
+   `localStorage.hassTokens` (shape: `{hassUrl, clientId, refresh_token,
+   access_token, expires: <ms epoch>, token_type}`) — this is what a real
+   login ultimately produces, so pre-seeding it skips the login form
+4. `Page.navigate` and `Page.captureScreenshot`
+
+Two gotchas hit during the first attempt at this, both worth checking first
+next time:
+
+- **Dark mode needs `localStorage.selectedTheme`, not just the backend user
+  data.** `frontend/set_user_data` with key `dark_mode` round-trips fine but
+  is never read by the frontend (it's not a real key — confirmed by grepping
+  the actual served frontend JS bundle for `"selectedTheme"`/`"dark_mode"`
+  rather than guessing). The real key is `selectedTheme` (e.g. `{"dark":
+  true}`), and critically the **live app only reads it from the browser's own
+  `localStorage`** at boot — the backend `frontend.user_data_*.storage` copy
+  is only a cross-device sync target, not something re-fetched into the
+  running page automatically in every scenario. Set both (`localStorage` for
+  the immediate session, the backend will already have it from a prior
+  `set_user_data` call) if you need it to render dark in a freshly-injected
+  session.
+- **The service worker serves a stale cached `index.html`.** A plain `curl`
+  showed the `<script>` tag for a newly `add_extra_js_url`-registered card,
+  but the actual browser kept rendering a version from before that code
+  existed — HA's frontend is a PWA with an aggressive service worker. Fix:
+  `Network.setBypassServiceWorker` (CDP) plus
+  `navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r =>
+  r.unregister()))` and clearing `caches`, then a real reload.
+- **Unresolved**: navigating to a custom dashboard view saved via
+  `lovelace/config/save` (e.g. `/lovelace/<view-path>`) was unreliable through
+  scripted `Page.navigate`/`pushState` — the router sometimes silently
+  redirected back to the newer `/home/overview` panel this HA version
+  introduced, even though `customElements.get('how-many-times-today-card')`
+  confirmed the card's JS module had loaded correctly. Built-in routes (e.g.
+  `/config/entities`) navigated fine via the same `pushState` +
+  `location-changed` event technique, so this looks specific to custom-saved
+  dashboard views in this HA version rather than the general approach. A real
+  screenshot of the card itself is still open — next attempt should probably
+  just open the real browser interactively rather than scripting navigation.

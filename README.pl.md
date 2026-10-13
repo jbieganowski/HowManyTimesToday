@@ -42,6 +42,17 @@ Pełna specyfikacja funkcjonalna: [docs/SPECYFIKACJA.md](docs/SPECYFIKACJA.md)
 > nie prawdziwe zrzuty ekranu — w tym środowisku nie mam jeszcze automatyzacji
 > przeglądarki, żeby przechwycić działający interfejs Home Assistant.
 
+<p align="center">
+  <img src="docs/images/screenshot-overview-dark.png" alt="Prawdziwy zrzut lokalnej instancji testowej" width="80%">
+</p>
+
+> Ten powyższy **jest** prawdziwym zrzutem — lokalna testowa instancja w
+> Dockerze (zobacz [docs/TESTING.md](docs/TESTING.md)), zalogowana, po polsku,
+> w trybie ciemnym. Prawdziwy zrzut samej karty wciąż czeka — router SPA w tej
+> wersji HA nie współpracował z automatyzacją dla ścieżek własnych dashboardów
+> (szczegóły w TESTING.md) — działanie karty jest zamiast tego zweryfikowane
+> sekwencją testów przez API opisaną tam.
+
 ## Dokumentacja i śledzenie zadań
 
 - Confluence: przestrzeń `HMTT` na jacekbieganowski.atlassian.net
