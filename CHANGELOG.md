@@ -59,7 +59,16 @@
   real Home Assistant install (`tests/conftest.py` loads `models.py`/`const.py`
   directly, sidestepping the integration's `__init__.py` and its `homeassistant`
   dependency) and on every push via GitHub Actions (`.github/workflows/tests.yml`)
-- Still missing: HACS/hassfest validation, a visual card/options editor, a
-  real screenshot of the card itself (hit an unreliable SPA router redirect
-  for custom dashboard views in this HA version during headless automation —
-  see docs/TESTING.md)
+- Added `hassfest`/HACS validation as GitHub Actions (`.github/workflows/validate.yml`)
+  and fixed everything the first real run caught:
+  - manifest.json was missing `dependencies: ["http"]` (needed for the
+    integration's own static-path/frontend registration) and `requirements: []`
+  - `selector` translations (`schedule_mode`/`late_policy` option labels) were
+    nested under `options.selector` in strings.json and every translation file
+    — hassfest requires `selector` as a top-level key, sibling to `config`/`options`
+  - added HACS-required brand assets at
+    `custom_components/how_many_times_today/brand/{icon,logo}.png`
+  - set the GitHub repository's description and topics (HACS checks both)
+- Still missing: a visual card/options editor, a real screenshot of the card
+  itself (hit an unreliable SPA router redirect for custom dashboard views in
+  this HA version during headless automation — see docs/TESTING.md)

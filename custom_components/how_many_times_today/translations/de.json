@@ -69,19 +69,19 @@
     },
     "abort": {
       "no_tasks": "Noch keine Aufgaben definiert"
+    }
+  },
+  "selector": {
+    "schedule_mode": {
+      "options": {
+        "fixed_times": "Feste Tageszeiten",
+        "interval": "Intervall seit letztem Drücken"
+      }
     },
-    "selector": {
-      "schedule_mode": {
-        "options": {
-          "fixed_times": "Feste Tageszeiten",
-          "interval": "Intervall seit letztem Drücken"
-        }
-      },
-      "late_policy": {
-        "options": {
-          "compress": "Diesen Zyklus um die Verzögerung verkürzen (Standard)",
-          "reset": "Auf ein volles neues Intervall zurücksetzen"
-        }
+    "late_policy": {
+      "options": {
+        "compress": "Diesen Zyklus um die Verzögerung verkürzen (Standard)",
+        "reset": "Auf ein volles neues Intervall zurücksetzen"
       }
     }
   }

@@ -69,19 +69,19 @@
     },
     "abort": {
       "no_tasks": "尚未定义任何任务"
+    }
+  },
+  "selector": {
+    "schedule_mode": {
+      "options": {
+        "fixed_times": "固定时间点",
+        "interval": "自上次按下以来的间隔"
+      }
     },
-    "selector": {
-      "schedule_mode": {
-        "options": {
-          "fixed_times": "固定时间点",
-          "interval": "自上次按下以来的间隔"
-        }
-      },
-      "late_policy": {
-        "options": {
-          "compress": "将本周期缩短延迟的时长（默认）",
-          "reset": "重置为全新的完整间隔"
-        }
+    "late_policy": {
+      "options": {
+        "compress": "将本周期缩短延迟的时长（默认）",
+        "reset": "重置为全新的完整间隔"
       }
     }
   }

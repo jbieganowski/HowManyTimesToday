@@ -69,19 +69,19 @@
     },
     "abort": {
       "no_tasks": "No tasks defined yet"
+    }
+  },
+  "selector": {
+    "schedule_mode": {
+      "options": {
+        "fixed_times": "Fixed times of day",
+        "interval": "Interval since last press"
+      }
     },
-    "selector": {
-      "schedule_mode": {
-        "options": {
-          "fixed_times": "Fixed times of day",
-          "interval": "Interval since last press"
-        }
-      },
-      "late_policy": {
-        "options": {
-          "compress": "Shorten this cycle by the delay (default)",
-          "reset": "Reset to a full fresh interval"
-        }
+    "late_policy": {
+      "options": {
+        "compress": "Shorten this cycle by the delay (default)",
+        "reset": "Reset to a full fresh interval"
       }
     }
   }

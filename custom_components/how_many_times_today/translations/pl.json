@@ -69,19 +69,19 @@
     },
     "abort": {
       "no_tasks": "Nie zdefiniowano jeszcze żadnych zadań"
+    }
+  },
+  "selector": {
+    "schedule_mode": {
+      "options": {
+        "fixed_times": "Stałe godziny w ciągu dnia",
+        "interval": "Interwał od ostatniego naciśnięcia"
+      }
     },
-    "selector": {
-      "schedule_mode": {
-        "options": {
-          "fixed_times": "Stałe godziny w ciągu dnia",
-          "interval": "Interwał od ostatniego naciśnięcia"
-        }
-      },
-      "late_policy": {
-        "options": {
-          "compress": "Skrócić ten cykl o opóźnienie (domyślnie)",
-          "reset": "Zresetować do pełnego nowego interwału"
-        }
+    "late_policy": {
+      "options": {
+        "compress": "Skrócić ten cykl o opóźnienie (domyślnie)",
+        "reset": "Zresetować do pełnego nowego interwału"
       }
     }
   }
