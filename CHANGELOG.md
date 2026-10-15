@@ -51,7 +51,15 @@
   (non-mockup) screenshot of the authenticated instance via headless
   Edge + raw Chrome DevTools Protocol (no Playwright/Selenium available) —
   `docs/images/screenshot-overview-dark.png`
-- Still missing: unit tests, HACS/hassfest validation, a visual card/options
-  editor, a real screenshot of the card itself (hit an unreliable SPA router
-  redirect for custom dashboard views in this HA version during headless
-  automation — see docs/TESTING.md)
+- Unit tests for the scheduling engine (`tests/test_models.py`, 23 cases):
+  fixed-times and interval slot generation (including midnight wraparound and
+  the `HH:MM:SS` vs `HH:MM` parsing that broke things last round), late-press
+  compress/reset policy and its one-shot override, and every color-stage
+  transition including the exact blink-threshold boundary. Runs without a
+  real Home Assistant install (`tests/conftest.py` loads `models.py`/`const.py`
+  directly, sidestepping the integration's `__init__.py` and its `homeassistant`
+  dependency) and on every push via GitHub Actions (`.github/workflows/tests.yml`)
+- Still missing: HACS/hassfest validation, a visual card/options editor, a
+  real screenshot of the card itself (hit an unreliable SPA router redirect
+  for custom dashboard views in this HA version during headless automation —
+  see docs/TESTING.md)

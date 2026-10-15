@@ -14,8 +14,9 @@ cyklicznie w ciągu dnia (leki, karmienie zwierząt, picie wody itp.).
 
 ## Status
 
-Projekt w fazie projektowania — szkielet repozytorium i silnik backendu
-gotowe, karta Lovelace jeszcze niezbudowana.
+Silnik integracji, karta Lovelace i tłumaczenia są zaimplementowane i
+zweryfikowane na żywej instancji Home Assistant. Zostało jeszcze: walidacja
+HACS/hassfest i wizualny edytor opcji. Szczegóły w [CHANGELOG.pl.md](CHANGELOG.pl.md).
 
 ## Koncepcja
 
@@ -70,6 +71,19 @@ Dodanie slotu do pulpitu (jedna karta na jeden sensor slotu):
 type: custom:how-many-times-today-card
 entity: sensor.karma_dla_kota_1_status
 ```
+
+## Rozwój
+
+Testy jednostkowe pokrywają czystą logikę harmonogramu
+(`custom_components/how_many_times_today/models.py`) bez potrzeby realnej
+instalacji Home Assistant:
+
+```sh
+pip install -r requirements-test.txt
+python -m pytest tests/
+```
+
+Uruchamiają się automatycznie przy każdym pushu przez GitHub Actions.
 
 ## Licencja
 

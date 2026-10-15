@@ -15,8 +15,9 @@ drinking water, anything recurring).
 
 ## Status
 
-Design/early implementation phase — repository scaffold and backend engine in
-place, Lovelace card not built yet.
+Core integration, Lovelace card and translations are implemented and verified
+against a live Home Assistant instance. Still open: HACS/hassfest validation
+and a visual options editor. See [CHANGELOG.md](CHANGELOG.md) for details.
 
 ## Concept
 
@@ -70,6 +71,18 @@ Adding a slot to a dashboard (one card per slot sensor):
 type: custom:how-many-times-today-card
 entity: sensor.cat_food_1_status
 ```
+
+## Development
+
+Unit tests cover the pure scheduling logic (`custom_components/how_many_times_today/models.py`)
+without needing a real Home Assistant install:
+
+```sh
+pip install -r requirements-test.txt
+python -m pytest tests/
+```
+
+Runs automatically on every push via GitHub Actions.
 
 ## License
 
