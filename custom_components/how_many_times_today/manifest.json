@@ -6,5 +6,6 @@
   "documentation": "https://github.com/jbieganowski/HowManyTimesToday",
   "issue_tracker": "https://github.com/jbieganowski/HowManyTimesToday/issues",
   "iot_class": "local_push",
+  "requirements": [],
   "version": "0.0.1"
 }
