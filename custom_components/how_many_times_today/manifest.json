@@ -5,8 +5,8 @@
   "config_flow": true,
   "dependencies": ["http"],
   "documentation": "https://github.com/jbieganowski/HowManyTimesToday",
-  "issue_tracker": "https://github.com/jbieganowski/HowManyTimesToday/issues",
   "iot_class": "local_push",
+  "issue_tracker": "https://github.com/jbieganowski/HowManyTimesToday/issues",
   "requirements": [],
   "version": "0.0.1"
 }
