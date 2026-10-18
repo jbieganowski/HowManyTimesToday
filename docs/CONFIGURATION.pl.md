@@ -173,6 +173,18 @@ Gdy pasuje kilka, wygrywa pierwszy w tej kolejności: `inactive`, `pending`,
 
 ![Który stan wygrywa](images/diagram-stage-states.pl.svg)
 
+Karta nie polega samym kolorem: pod nazwą pokazuje krótkie, proste zdanie o stanie.
+
+| Stan | Zdanie na karcie |
+| --- | --- |
+| `pending` | Jeszcze się nie zaczęło |
+| `green` | Zrobione – wszystko w porządku |
+| `transition` | Zbliża się pora |
+| `red` | TERAZ – czas to zrobić |
+| `blinking_brown` | UWAGA – spóźnione! |
+| `exceeded` | Zrobione za dużo razy |
+| `inactive` | Wyłączone |
+
 Atrybuty:
 
 | Atrybut | Znaczenie |

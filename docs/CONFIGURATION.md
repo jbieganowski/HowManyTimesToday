@@ -173,6 +173,19 @@ When several apply, the first match in this order wins: `inactive`, `pending`,
 
 ![Which state wins](images/diagram-stage-states.svg)
 
+The card never relies on colour alone: under the name it shows a short, plain sentence
+for the state.
+
+| State | Sentence on the card |
+| --- | --- |
+| `pending` | Not started yet |
+| `green` | Done — all good |
+| `transition` | Getting close |
+| `red` | NOW — time to do it |
+| `blinking_brown` | WARNING — overdue! |
+| `exceeded` | Done too many times |
+| `inactive` | Switched off |
+
 Attributes:
 
 | Attribute | Meaning |

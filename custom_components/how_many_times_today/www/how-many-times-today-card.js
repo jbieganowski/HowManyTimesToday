@@ -69,6 +69,14 @@ const CARD_STRINGS = {
     editor_entity_label: "Schedule sensor",
     inactive_label: "inactive",
     pending_label: "not started yet",
+    status_pending: "Not started yet",
+    status_green: "Done — all good",
+    status_transition: "Getting close",
+    status_red: "NOW — time to do it",
+    status_blinking_brown: "WARNING — overdue!",
+    status_exceeded: "Done too many times",
+    status_inactive: "Switched off",
+    status_number_blinking: "Blinking number: last time was recorded outside the schedule",
     answer_dialog_title: "What happened at {time}?",
     answer_already_done: "A. It was done, just not recorded",
     answer_do_now: "B. Wasn't done at {time}, doing it now",
@@ -94,6 +102,14 @@ const CARD_STRINGS = {
     editor_entity_label: "Sensor harmonogramu",
     inactive_label: "nieaktywne",
     pending_label: "jeszcze nie wystartował",
+    status_pending: "Jeszcze się nie zaczęło",
+    status_green: "Zrobione – wszystko w porządku",
+    status_transition: "Zbliża się pora",
+    status_red: "TERAZ – czas to zrobić",
+    status_blinking_brown: "UWAGA – spóźnione!",
+    status_exceeded: "Zrobione za dużo razy",
+    status_inactive: "Wyłączone",
+    status_number_blinking: "Migająca liczba: ostatnie wykonanie zapisano poza planem",
     answer_dialog_title: "Co się stało o {time}?",
     answer_already_done: "A. Było wykonane, tylko nie zapisano",
     answer_do_now: "B. Nie wykonano o {time}, robię to teraz",
@@ -225,11 +241,16 @@ class HowManyTimesTodayCard extends HTMLElement {
     if (!this.shadowRoot) {
       this.attachShadow({ mode: "open" });
     }
+    // Home Assistant may hand over `hass` before the config (the dashboard editor's
+    // preview does), so pick up the entity's state now that the config is known
+    this._stateObj = this._hass ? this._hass.states[config.entity] : undefined;
     this._render();
   }
 
   set hass(hass) {
     this._hass = hass;
+    // `hass` can arrive before setConfig(): nothing to show until the config is there
+    if (!this._config) return;
     const stateObj = hass.states[this._config.entity];
     this._stateObj = stateObj;
     this._tick();
@@ -404,12 +425,20 @@ class HowManyTimesTodayCard extends HTMLElement {
 
     const numberColor = state === "exceeded" ? "#000" : "#fff";
     const bigNumber = state === "inactive" ? null : attrs.count_today ?? 0;
-    const statusLine =
-      state === "inactive"
-        ? this._t("inactive_label")
-        : state === "pending"
-        ? this._t("pending_label")
-        : countdownLabel;
+    // Plain-language explanation of the current state, shown big and bold so the
+    // card is understandable without having to learn what each color means
+    // (important for elderly users in particular) - every state the card can be
+    // in while actively running has one of these, nothing is left unexplained.
+    const plainStatusKey = {
+      pending: "status_pending",
+      green: "status_green",
+      transition: "status_transition",
+      red: "status_red",
+      blinking_brown: "status_blinking_brown",
+      exceeded: "status_exceeded",
+      inactive: "status_inactive",
+    }[state] || "status_green";
+    const plainStatus = this._t(plainStatusKey);
 
     const oldestOpenSlot = (attrs.open_slots && attrs.open_slots[0]) || null;
 
@@ -434,6 +463,12 @@ class HowManyTimesTodayCard extends HTMLElement {
         .info { flex: 1; }
         .name { font-size: 1.1em; font-weight: 600; }
         .description { font-size: 0.85em; opacity: 0.7; }
+        .plain-status { font-size: 1.15em; font-weight: 700; margin-top: 2px; }
+        .plain-status.state-red, .plain-status.state-blinking_brown, .plain-status.state-exceeded {
+          color: #c62828;
+        }
+        .plain-status.state-green { color: #2e7d32; }
+        .number-blink-note { font-size: 1.05em; font-weight: 700; color: #a85c00; margin-top: 2px; }
         .countdown { font-size: 0.95em; opacity: 0.8; }
         .last { font-size: 0.85em; opacity: 0.6; }
         .history-toggle { cursor: pointer; font-size: 0.85em; margin-top: 8px; opacity: 0.7; }
@@ -466,7 +501,8 @@ class HowManyTimesTodayCard extends HTMLElement {
           <div class="info">
             <div class="name">${name}</div>
             ${attrs.description ? `<div class="description">${attrs.description}</div>` : ""}
-            <div class="countdown">${statusLine}</div>
+            <div class="plain-status state-${state}">${plainStatus}</div>
+            ${countdownLabel ? `<div class="countdown">${countdownLabel}</div>` : ""}
             <div class="last">${this._t("last")}: ${formatTime(attrs.last_pressed_at, locale)} · ${this._t("total")}: ${attrs.count_today ?? 0}/${attrs.planned_count ?? "?"}</div>
           </div>
         </div>
@@ -581,7 +617,9 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
   }
 
   _render() {
-    if (!this._hass) return;
+    // Home Assistant sets `hass` before the config on a fresh editor element, so both
+    // may be missing on the first call; render once the config has arrived
+    if (!this._hass || !this._config) return;
     if (!this.shadowRoot) this.attachShadow({ mode: "open" });
 
     this.shadowRoot.innerHTML = `
