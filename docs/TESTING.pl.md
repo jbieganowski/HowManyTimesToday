@@ -155,8 +155,10 @@ Pułapki warte sprawdzenia najpierw:
 - **Po zmianie JS karty nieaktualny service worker może zostawić wszystkie karty w „Błąd
   konfiguracji”** (`customElements.get('how-many-times-today-card')` zwraca `undefined`, bo
   serwowany jest stary, zbuforowany bundle). Ten sam przepis: wyrejestruj service worker,
-  wyczyść `caches`, przeładuj. Podbicie `CARD_VERSION` w `__init__.py` omija cache samego
-  URL-a karty, ale nie już zbuforowany service worker.
+  wyczyść `caches`, przeładuj. Sama karta jest serwowana z `ETag` i `Cache-Control: no-cache`
+  (bez adresu z wersją), więc edycja `www/how-many-times-today-card.js` działa od następnego
+  wczytania strony bez restartu Home Assistanta; stary obraz strony może zatrzymać już tylko
+  zbuforowany service worker.
 - Własne trasy dashboardu zapisane przez `lovelace/config/save` nawigują zawodnie przez
   skryptowe `Page.navigate`/`pushState`; prawdziwa, interaktywnie sterowana przeglądarka
   otwiera je bez problemu (zobacz `docs/images/screenshot-card-dashboard.jpg`).

@@ -151,8 +151,10 @@ Gotchas worth checking first:
 - **After changing the card JS, a stale service worker can leave every card on
   "Configuration error"** (`customElements.get('how-many-times-today-card')` is `undefined`
   because the old, cached bundle is served). Same recipe: unregister the service worker,
-  clear `caches`, reload. Bumping `CARD_VERSION` in `__init__.py` busts the card's own URL
-  but not an already-cached service worker.
+  clear `caches`, reload. The card itself is served with an `ETag` and `Cache-Control: no-cache`
+  (no versioned URL), so editing `www/how-many-times-today-card.js` takes effect on the next
+  page load without restarting Home Assistant; only an already-cached service worker can still
+  hold an old page.
 - Custom dashboard routes saved via `lovelace/config/save` navigate unreliably through
   scripted `Page.navigate`/`pushState`; a real, interactively driven browser opens them
   fine (see `docs/images/screenshot-card-dashboard.jpg`).

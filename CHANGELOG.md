@@ -41,7 +41,9 @@
 - One button per schedule with a big number, the description under it and the history with
   the bold "OUTSIDE THE SCHEDULE" prefix; the A/B/C question dialog; in-app message and
   sound; a visual editor with an entity picker limited to this integration's sensors.
-  Bundled inside the integration and registered automatically.
+  Bundled inside the integration and registered automatically; it is served with an ETag and
+  `no-cache`, so a changed card is picked up on the next page load without restarting Home
+  Assistant.
 
 ### Quality and documentation
 

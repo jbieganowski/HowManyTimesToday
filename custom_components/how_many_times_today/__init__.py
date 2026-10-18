@@ -1,9 +1,12 @@
 """How Many Times Today — track recurring daily confirmations (meds, feeding, ...)."""
 from __future__ import annotations
 
+import hashlib
 import logging
 from pathlib import Path
 
+from aiohttp import web
+from homeassistant.components.http import HomeAssistantView
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
@@ -29,7 +32,6 @@ PLATFORMS = ["sensor"]
 _LOGGER = logging.getLogger(__name__)
 
 CARD_URL_PATH = f"/{DOMAIN}_files/how-many-times-today-card.js"
-CARD_VERSION = 9  # bump to bust browser/frontend caches whenever the card JS changes
 
 
 async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -84,6 +86,35 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
+class _CardView(HomeAssistantView):
+    """Serves the card's JavaScript from the package.
+
+    The file is re-read on every request and sent with an ETag and
+    `Cache-Control: no-cache`: the browser asks "did it change?" on each page load and
+    gets a cheap 304 when not. So editing the card takes effect on the next page load -
+    no Home Assistant restart and no version number to bump - and there is no versioned
+    URL that a service worker or the browser could keep serving stale.
+    """
+
+    url = CARD_URL_PATH
+    name = f"{DOMAIN}:card"
+    requires_auth = False  # a <script> tag cannot send credentials; it is only the card
+
+    def __init__(self, hass: HomeAssistant, path: Path) -> None:
+        self._hass = hass
+        self._path = path
+
+    async def get(self, request: web.Request) -> web.Response:
+        data = await self._hass.async_add_executor_job(self._path.read_bytes)
+        etag = f'"{hashlib.md5(data).hexdigest()}"'  # noqa: S324 - a cache validator, not security
+        headers = {"Cache-Control": "no-cache", "ETag": etag}
+        if request.headers.get("If-None-Match") == etag:
+            return web.Response(status=304, headers=headers)
+        return web.Response(
+            body=data, content_type="application/javascript", charset="utf-8", headers=headers
+        )
+
+
 async def _async_register_frontend_card(hass: HomeAssistant) -> None:
     """Serve the bundled Lovelace card and auto-inject it, so users never have to
     add a Resource manually in Settings -> Dashboards (one-click install only).
@@ -93,23 +124,16 @@ async def _async_register_frontend_card(hass: HomeAssistant) -> None:
     hass.data[f"{DOMAIN}_frontend_registered"] = True
 
     # The card ships INSIDE this package (custom_components/how_many_times_today/www/),
-    # not under <config>/www/ — HACS (integration category) only deploys the
+    # not under <config>/www/ - HACS (integration category) only deploys the
     # custom_components/<domain>/ tree, so anything outside it would never
     # reach a real installation.
-    card_path = str(Path(__file__).parent / "www" / "how-many-times-today-card.js")
+    card_path = Path(__file__).parent / "www" / "how-many-times-today-card.js"
 
     try:
-        from homeassistant.components.http import StaticPathConfig
-
-        await hass.http.async_register_static_paths(
-            [StaticPathConfig(CARD_URL_PATH, card_path, cache_headers=False)]
-        )
-    except ImportError:
-        # older HA core without StaticPathConfig
-        hass.http.register_static_path(CARD_URL_PATH, card_path, cache_headers=False)
+        hass.http.register_view(_CardView(hass, card_path))
     except Exception:  # noqa: BLE001
         _LOGGER.warning(
-            "Could not register the How Many Times Today card as a static path; "
+            "Could not register the How Many Times Today card; "
             "add it manually as a Lovelace resource: %s",
             CARD_URL_PATH,
         )
@@ -117,7 +141,7 @@ async def _async_register_frontend_card(hass: HomeAssistant) -> None:
 
     from homeassistant.components.frontend import add_extra_js_url
 
-    add_extra_js_url(hass, f"{CARD_URL_PATH}?v={CARD_VERSION}")
+    add_extra_js_url(hass, CARD_URL_PATH)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

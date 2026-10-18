@@ -45,7 +45,8 @@
 - Jeden klawisz na harmonogram z dużą liczbą, opisem pod spodem i historią z pogrubionym
   przedrostkiem „POZA HARMONOGRAMEM”; okno pytania A/B/C; komunikat w aplikacji i dźwięk;
   edytor wizualny z selektorem encji ograniczonym do sensorów tej integracji. Dołączona do
-  integracji i rejestrowana automatycznie.
+  integracji i rejestrowana automatycznie; jest serwowana z ETag i `no-cache`, więc zmieniona
+  karta działa od następnego wczytania strony bez restartu Home Assistanta.
 
 ### Jakość i dokumentacja
 
