@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient></defs>
+  <rect x="1" y="1" width="998" height="558" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
+  <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">Naciśnięcie: w oknie lub poza nim</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">przykład: termin o 07:00 z oknem 30 minut</text>
+  <text x="240.0" y="124" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">06:00</text>
+  <text x="520.0" y="124" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">07:00</text>
+  <text x="800.0" y="124" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">08:00</text>
+  <rect x="380.0" y="140" width="280.0" height="44" rx="8" fill="#e6f2e7" stroke="#2e7d32" stroke-width="2"/>
+  <text x="380.0" y="206" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#2e7d32" text-anchor="start">okno 06:30 – 07:30</text>
+  <line x1="520.0" y1="134" x2="520.0" y2="192" stroke="#c62828" stroke-width="3"/>
+  <text x="520.0" y="210" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#c62828" text-anchor="middle">T = 07:00</text>
+  <circle cx="520.0" cy="162" r="7" fill="#c62828"/>
+  <rect x="40" y="250" width="300" height="92" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="190.0" y="274" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2e7d32" text-anchor="middle">W oknie</text>
+  <text x="190.0" y="292" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">zgodnie z harmonogramem: termin zamknięty,</text>
+  <text x="190.0" y="310" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">zwykły wpis w historii</text>
+  <rect x="350" y="250" width="300" height="92" rx="12" fill="#fbf0dc" stroke="#b26a00" stroke-width="1.8"/>
+  <text x="500.0" y="274" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#b26a00" text-anchor="middle">Poza oknem, termin otwarty</text>
+  <text x="500.0" y="292" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">pytanie o najstarszy otwarty termin</text>
+  <text x="500.0" y="310" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">(answer_required = true)</text>
+  <rect x="660" y="250" width="300" height="92" rx="12" fill="#fbe9e9" stroke="#c62828" stroke-width="1.8"/>
+  <text x="810.0" y="274" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#c62828" text-anchor="middle">Poza oknem, nic otwartego</text>
+  <text x="810.0" y="292" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">dodatkowe wykonanie: POZA</text>
+  <text x="810.0" y="310" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">HARMONOGRAMEM, liczba miga</text>
+  <text x="500" y="372" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#2b2b28" text-anchor="middle">Pytanie, gdy się pojawia:</text>
+  <rect x="40" y="392" width="920" height="42" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="70" cy="413" r="14" fill="#2e7d32"/>
+  <text x="70" y="419" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle">A</text>
+  <text x="100" y="419" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#2e7d32" text-anchor="start">already_done</text>
+  <text x="240" y="419" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#2b2b28" text-anchor="start">Zrobione wtedy, tylko nie zapisane</text>
+  <rect x="865.0" y="400" width="90" height="26" rx="13" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <text x="910" y="417.55" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#2e7d32" text-anchor="middle">licznik +1</text>
+  <rect x="40" y="442" width="920" height="42" rx="10" fill="#fbf0dc" stroke="#b26a00" stroke-width="1.5"/>
+  <circle cx="70" cy="463" r="14" fill="#b26a00"/>
+  <text x="70" y="469" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle">B</text>
+  <text x="100" y="469" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#b26a00" text-anchor="start">do_now</text>
+  <text x="240" y="469" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#2b2b28" text-anchor="start">Nie zrobiono wtedy — robię teraz</text>
+  <rect x="865.0" y="450" width="90" height="26" rx="13" fill="#fbf0dc" stroke="#b26a00" stroke-width="1.5"/>
+  <text x="910" y="467.55" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#b26a00" text-anchor="middle">licznik +1</text>
+  <rect x="40" y="492" width="920" height="42" rx="10" fill="#fbe9e9" stroke="#c62828" stroke-width="1.5"/>
+  <circle cx="70" cy="513" r="14" fill="#c62828"/>
+  <text x="70" y="519" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle">C</text>
+  <text x="100" y="519" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#c62828" text-anchor="start">extra</text>
+  <text x="240" y="519" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#2b2b28" text-anchor="start">Zrobione wtedy, a to dodatkowe</text>
+  <rect x="865.0" y="500" width="90" height="26" rx="13" fill="#fbe9e9" stroke="#c62828" stroke-width="1.5"/>
+  <text x="910" y="517.55" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#c62828" text-anchor="middle">licznik +2</text>
+  <text x="40" y="548" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#2b2b28" text-anchor="start">Kilka otwartych terminów zamyka się po jednym na naciśnięcie, od najstarszego.</text>
+</svg>

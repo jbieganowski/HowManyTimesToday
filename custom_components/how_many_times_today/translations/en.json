@@ -1,0 +1,183 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "How Many Times Today",
+        "description": "Set up the integration. Schedules (medication, feeding, water, ...) are added afterwards with the Configure button."
+      }
+    },
+    "abort": {
+      "already_configured": "Already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_schedule": "Add a new schedule",
+          "manage_schedules": "Edit, switch on/off or remove a schedule",
+          "global_settings": "Global settings (sound, push notification)"
+        }
+      },
+      "schedule_basics": {
+        "title": "Schedule",
+        "data": {
+          "name": "Name (e.g. Heart medication)",
+          "description": "Description (shown in the notification and above the history)",
+          "mode": "Schedule mode"
+        }
+      },
+      "schedule_count": {
+        "title": "Times per day",
+        "description": "How many times a day this should be done. The next step asks for each time.",
+        "data": {
+          "count": "Times per day (1-24)"
+        }
+      },
+      "schedule_times": {
+        "title": "Times of day",
+        "description": "Set the time of each execution.",
+        "data": {
+          "time_1": "Time 1",
+          "time_2": "Time 2",
+          "time_3": "Time 3",
+          "time_4": "Time 4",
+          "time_5": "Time 5",
+          "time_6": "Time 6",
+          "time_7": "Time 7",
+          "time_8": "Time 8",
+          "time_9": "Time 9",
+          "time_10": "Time 10",
+          "time_11": "Time 11",
+          "time_12": "Time 12",
+          "time_13": "Time 13",
+          "time_14": "Time 14",
+          "time_15": "Time 15",
+          "time_16": "Time 16",
+          "time_17": "Time 17",
+          "time_18": "Time 18",
+          "time_19": "Time 19",
+          "time_20": "Time 20",
+          "time_21": "Time 21",
+          "time_22": "Time 22",
+          "time_23": "Time 23",
+          "time_24": "Time 24"
+        }
+      },
+      "schedule_interval": {
+        "title": "Every X hours",
+        "description": "The first term is exactly the start you set in the next step; each following one comes this many hours after the previous.",
+        "data": {
+          "interval_hours": "Interval (hours)"
+        }
+      },
+      "schedule_range": {
+        "title": "Start, end and tolerance",
+        "description": "The schedule runs between the start and the optional end. A press this many minutes before or after a term counts as on schedule.",
+        "data": {
+          "start_at": "Start (date and time)",
+          "end_at": "End (date and time, optional)",
+          "window_minutes": "Tolerance window (minutes before and after)"
+        }
+      },
+      "manage_schedules": {
+        "title": "Select a schedule",
+        "data": {
+          "schedule_id": "Schedule",
+          "action": "Action"
+        }
+      },
+      "global_settings": {
+        "title": "Global settings",
+        "data": {
+          "global_sound": "Notification sound",
+          "notify_service": "Push notification service (optional, e.g. notify.mobile_app_phone)"
+        }
+      }
+    },
+    "error": {
+      "name_required": "Enter a name",
+      "invalid_datetime": "That date and time cannot be read",
+      "end_before_start": "The end must be later than the start"
+    },
+    "abort": {
+      "no_schedules": "No schedules defined yet"
+    }
+  },
+  "selector": {
+    "schedule_mode": {
+      "options": {
+        "fixed_times": "Fixed times of day",
+        "interval": "Every X hours"
+      }
+    },
+    "schedule_action": {
+      "options": {
+        "edit": "Edit this schedule",
+        "switch_active": "Switch on / off",
+        "remove": "Remove this schedule and its entity"
+      }
+    },
+    "answer": {
+      "options": {
+        "already_done": "It was done at that time, it just was not recorded",
+        "do_now": "It was not done then - I am doing it now",
+        "extra": "It was done then, and this is an additional one"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "schedule": {
+        "state": {
+          "pending": "Not started yet",
+          "green": "Done",
+          "transition": "Approaching",
+          "red": "Due now",
+          "blinking_brown": "Overdue",
+          "exceeded": "Too many today",
+          "inactive": "Inactive"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "answer_required": {
+      "message": "Pressing outside the tolerance window while a term is still open needs an answer (already_done, do_now or extra)."
+    },
+    "schedule_not_active": {
+      "message": "This schedule is not active (before its start, after its end, or switched off)."
+    }
+  },
+  "services": {
+    "press_schedule": {
+      "name": "Press schedule",
+      "description": "Confirm a schedule programmatically (the same as pressing its button on the card).",
+      "fields": {
+        "answer": {
+          "name": "Answer",
+          "description": "Needed when pressing outside the tolerance window while a term is still open (the answer_required attribute is true). It concerns the oldest open term."
+        }
+      }
+    },
+    "clear_history": {
+      "name": "Clear history",
+      "description": "Clear a schedule's press history, entirely or for specific ISO weeks.",
+      "fields": {
+        "weeks": {
+          "name": "Weeks",
+          "description": "ISO week strings (e.g. 2026-W41). Omit to clear the whole history."
+        }
+      }
+    },
+    "set_schedule_active": {
+      "name": "Switch schedule on or off",
+      "description": "Switch a schedule off by hand (grey button, no alerts, no missed entries) or back on.",
+      "fields": {
+        "active": {
+          "name": "Active"
+        }
+      }
+    }
+  }
+}

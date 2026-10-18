@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 640" width="1000" height="640">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient><marker id="m2e7d32" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="m7a9e7e" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7a9e7e"/></marker><marker id="mc62828" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c62828"/></marker><marker id="m5c3d82" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c3d82"/></marker><marker id="mb26a00" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b26a00"/></marker></defs>
+  <rect x="1" y="1" width="998" height="638" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
+  <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">What happens on a press</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">here: pressed outside the window while a term is open</text>
+  <rect x="40" y="110" width="140" height="44" rx="12" fill="#eee8f5" stroke="#5c3d82" stroke-width="1.8"/>
+  <text x="110.0" y="137.25" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#5c3d82" text-anchor="middle">Card (JS)</text>
+  <line x1="110" y1="154" x2="110" y2="610" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="5 5"/>
+  <rect x="250" y="110" width="140" height="44" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="320.0" y="137.25" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2e7d32" text-anchor="middle">sensor</text>
+  <line x1="320" y1="154" x2="320" y2="610" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="5 5"/>
+  <rect x="460" y="110" width="140" height="44" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="530.0" y="137.25" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2e7d32" text-anchor="middle">Coordinator</text>
+  <line x1="530" y1="154" x2="530" y2="610" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="5 5"/>
+  <rect x="660" y="110" width="140" height="44" rx="12" fill="#e8f0e9" stroke="#7a9e7e" stroke-width="1.8"/>
+  <text x="730.0" y="137.25" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#7a9e7e" text-anchor="middle">models.py</text>
+  <line x1="730" y1="154" x2="730" y2="610" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="5 5"/>
+  <rect x="830" y="110" width="140" height="44" rx="12" fill="#fbf0dc" stroke="#b26a00" stroke-width="1.8"/>
+  <text x="900.0" y="137.25" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#b26a00" text-anchor="middle">Stores</text>
+  <line x1="900" y1="154" x2="900" y2="610" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="5 5"/>
+  <line x1="110" y1="196" x2="320" y2="196" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
+  <text x="215.0" y="187" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#2e7d32" text-anchor="middle" stroke="#fbfaf8" stroke-width="6" stroke-linejoin="round" paint-order="stroke">1  press_schedule (no answer)</text>
+  <line x1="320" y1="244" x2="530" y2="244" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
+  <text x="425.0" y="235" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#2e7d32" text-anchor="middle" stroke="#fbfaf8" stroke-width="6" stroke-linejoin="round" paint-order="stroke">2  async_press(schedule_id)</text>
+  <line x1="530" y1="292" x2="730" y2="292" stroke="#7a9e7e" stroke-width="2" marker-end="url(#m7a9e7e)"/>
+  <text x="630.0" y="283" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#7a9e7e" text-anchor="middle" stroke="#fbfaf8" stroke-width="6" stroke-linejoin="round" paint-order="stroke">3  press(...)</text>
+  <line x1="730" y1="340" x2="530" y2="340" stroke="#c62828" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#mc62828)"/>
+  <text x="630.0" y="331" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#c62828" text-anchor="middle" stroke="#fbfaf8" stroke-width="6" stroke-linejoin="round" paint-order="stroke">4  AnswerRequired</text>
+  <line x1="320" y1="388" x2="110" y2="388" stroke="#c62828" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#mc62828)"/>
+  <text x="215.0" y="379" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#c62828" text-anchor="middle" stroke="#fbfaf8" stroke-width="6" stroke-linejoin="round" paint-order="stroke">5  error: answer_required</text>
+  <line x1="110" y1="436" x2="320" y2="436" stroke="#5c3d82" stroke-width="2" marker-end="url(#m5c3d82)"/>
+  <text x="215.0" y="427" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#5c3d82" text-anchor="middle" stroke="#fbfaf8" stroke-width="6" stroke-linejoin="round" paint-order="stroke">6  A/B/C dialog → press_schedule(answer)</text>
+  <line x1="530" y1="484" x2="730" y2="484" stroke="#7a9e7e" stroke-width="2" marker-end="url(#m7a9e7e)"/>
+  <text x="630.0" y="475" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#7a9e7e" text-anchor="middle" stroke="#fbfaf8" stroke-width="6" stroke-linejoin="round" paint-order="stroke">7  press(..., answer) → entries</text>
+  <line x1="530" y1="532" x2="900" y2="532" stroke="#b26a00" stroke-width="2" marker-end="url(#mb26a00)"/>
+  <text x="715.0" y="523" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#b26a00" text-anchor="middle" stroke="#fbfaf8" stroke-width="6" stroke-linejoin="round" paint-order="stroke">8  save history + state</text>
+  <line x1="320" y1="580" x2="110" y2="580" stroke="#5c3d82" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#m5c3d82)"/>
+  <text x="215.0" y="571" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#5c3d82" text-anchor="middle" stroke="#fbfaf8" stroke-width="6" stroke-linejoin="round" paint-order="stroke">9  state + attributes</text>
+  <text x="40" y="628" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="start">Inside the window there is no step 4-6: the press is simply recorded.</text>
+</svg>

@@ -1,0 +1,12 @@
+{
+  "domain": "how_many_times_today",
+  "name": "How Many Times Today",
+  "codeowners": ["@jbieganowski"],
+  "config_flow": true,
+  "dependencies": ["http"],
+  "documentation": "https://github.com/jbieganowski/HowManyTimesToday",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/jbieganowski/HowManyTimesToday/issues",
+  "requirements": [],
+  "version": "0.0.1"
+}

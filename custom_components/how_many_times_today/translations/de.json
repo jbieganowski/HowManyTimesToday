@@ -1,0 +1,183 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "How Many Times Today",
+        "description": "Richte die Integration ein. Zeitpläne (Medikamente, Fütterung, Wasser, ...) werden anschließend über die Schaltfläche „Konfigurieren“ hinzugefügt."
+      }
+    },
+    "abort": {
+      "already_configured": "Bereits eingerichtet"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_schedule": "Neuen Zeitplan hinzufügen",
+          "manage_schedules": "Zeitplan bearbeiten, ein-/ausschalten oder entfernen",
+          "global_settings": "Globale Einstellungen (Ton, Push-Benachrichtigung)"
+        }
+      },
+      "schedule_basics": {
+        "title": "Zeitplan",
+        "data": {
+          "name": "Name (z. B. Herzmedikament)",
+          "description": "Beschreibung (erscheint in der Benachrichtigung und über dem Verlauf)",
+          "mode": "Zeitplan-Modus"
+        }
+      },
+      "schedule_count": {
+        "title": "Wie oft pro Tag",
+        "description": "Wie oft am Tag dies erledigt werden soll. Im nächsten Schritt wird jede Uhrzeit abgefragt.",
+        "data": {
+          "count": "Ausführungen pro Tag (1-24)"
+        }
+      },
+      "schedule_times": {
+        "title": "Uhrzeiten",
+        "description": "Lege die Uhrzeit jeder Ausführung fest.",
+        "data": {
+          "time_1": "Uhrzeit 1",
+          "time_2": "Uhrzeit 2",
+          "time_3": "Uhrzeit 3",
+          "time_4": "Uhrzeit 4",
+          "time_5": "Uhrzeit 5",
+          "time_6": "Uhrzeit 6",
+          "time_7": "Uhrzeit 7",
+          "time_8": "Uhrzeit 8",
+          "time_9": "Uhrzeit 9",
+          "time_10": "Uhrzeit 10",
+          "time_11": "Uhrzeit 11",
+          "time_12": "Uhrzeit 12",
+          "time_13": "Uhrzeit 13",
+          "time_14": "Uhrzeit 14",
+          "time_15": "Uhrzeit 15",
+          "time_16": "Uhrzeit 16",
+          "time_17": "Uhrzeit 17",
+          "time_18": "Uhrzeit 18",
+          "time_19": "Uhrzeit 19",
+          "time_20": "Uhrzeit 20",
+          "time_21": "Uhrzeit 21",
+          "time_22": "Uhrzeit 22",
+          "time_23": "Uhrzeit 23",
+          "time_24": "Uhrzeit 24"
+        }
+      },
+      "schedule_interval": {
+        "title": "Alle X Stunden",
+        "description": "Der erste Termin ist genau der im nächsten Schritt gesetzte Start; jeder weitere folgt so viele Stunden nach dem vorherigen.",
+        "data": {
+          "interval_hours": "Intervall (Stunden)"
+        }
+      },
+      "schedule_range": {
+        "title": "Start, Ende und Toleranz",
+        "description": "Der Zeitplan läuft zwischen Start und dem optionalen Ende. Ein Druck so viele Minuten vor oder nach einem Termin gilt als planmäßig.",
+        "data": {
+          "start_at": "Start (Datum und Uhrzeit)",
+          "end_at": "Ende (Datum und Uhrzeit, optional)",
+          "window_minutes": "Toleranzfenster (Minuten davor und danach)"
+        }
+      },
+      "manage_schedules": {
+        "title": "Zeitplan auswählen",
+        "data": {
+          "schedule_id": "Zeitplan",
+          "action": "Aktion"
+        }
+      },
+      "global_settings": {
+        "title": "Globale Einstellungen",
+        "data": {
+          "global_sound": "Benachrichtigungston",
+          "notify_service": "Push-Benachrichtigungsdienst (optional, z. B. notify.mobile_app_handy)"
+        }
+      }
+    },
+    "error": {
+      "name_required": "Gib einen Namen ein",
+      "invalid_datetime": "Dieses Datum mit Uhrzeit kann nicht gelesen werden",
+      "end_before_start": "Das Ende muss nach dem Start liegen"
+    },
+    "abort": {
+      "no_schedules": "Noch keine Zeitpläne definiert"
+    }
+  },
+  "selector": {
+    "schedule_mode": {
+      "options": {
+        "fixed_times": "Feste Uhrzeiten am Tag",
+        "interval": "Alle X Stunden"
+      }
+    },
+    "schedule_action": {
+      "options": {
+        "edit": "Diesen Zeitplan bearbeiten",
+        "switch_active": "Ein- / ausschalten",
+        "remove": "Diesen Zeitplan und seine Entität entfernen"
+      }
+    },
+    "answer": {
+      "options": {
+        "already_done": "Es wurde zu dem Zeitpunkt erledigt, nur nicht erfasst",
+        "do_now": "Es wurde damals nicht erledigt – ich mache es jetzt",
+        "extra": "Es wurde damals erledigt, und dies ist eine zusätzliche Ausführung"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "schedule": {
+        "state": {
+          "pending": "Noch nicht gestartet",
+          "green": "Erledigt",
+          "transition": "Termin nähert sich",
+          "red": "Jetzt fällig",
+          "blinking_brown": "Überfällig",
+          "exceeded": "Heute zu oft",
+          "inactive": "Inaktiv"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "answer_required": {
+      "message": "Ein Druck außerhalb des Toleranzfensters bei noch offenem Termin braucht eine Antwort (already_done, do_now oder extra)."
+    },
+    "schedule_not_active": {
+      "message": "Dieser Zeitplan ist nicht aktiv (vor dem Start, nach dem Ende oder von Hand ausgeschaltet)."
+    }
+  },
+  "services": {
+    "press_schedule": {
+      "name": "Zeitplan bestätigen",
+      "description": "Bestätigt einen Zeitplan programmatisch (wie das Drücken seiner Taste auf der Karte).",
+      "fields": {
+        "answer": {
+          "name": "Antwort",
+          "description": "Erforderlich beim Drücken außerhalb des Toleranzfensters bei noch offenem Termin (Attribut answer_required ist wahr). Betrifft den ältesten offenen Termin."
+        }
+      }
+    },
+    "clear_history": {
+      "name": "Verlauf löschen",
+      "description": "Löscht den Druckverlauf eines Zeitplans, komplett oder für bestimmte ISO-Wochen.",
+      "fields": {
+        "weeks": {
+          "name": "Wochen",
+          "description": "ISO-Wochen (z. B. 2026-W41). Weglassen, um den ganzen Verlauf zu löschen."
+        }
+      }
+    },
+    "set_schedule_active": {
+      "name": "Zeitplan ein- oder ausschalten",
+      "description": "Schaltet einen Zeitplan von Hand aus (graue Taste, keine Hinweise, keine Versäumnis-Einträge) oder wieder ein.",
+      "fields": {
+        "active": {
+          "name": "Aktiv"
+        }
+      }
+    }
+  }
+}

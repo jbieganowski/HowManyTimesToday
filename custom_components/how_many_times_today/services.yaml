@@ -1,0 +1,51 @@
+press_schedule:
+  name: Press schedule
+  description: Confirm a schedule programmatically (the same as pressing its button on the card).
+  target:
+    entity:
+      integration: how_many_times_today
+      domain: sensor
+  fields:
+    answer:
+      name: Answer
+      description: >-
+        Needed when pressing outside the tolerance window while a term is still open
+        (the sensor attribute answer_required is true). It concerns the oldest open term.
+      required: false
+      selector:
+        select:
+          options:
+            - already_done
+            - do_now
+            - extra
+          translation_key: answer
+
+clear_history:
+  name: Clear history
+  description: Clear a schedule's press history, entirely or for specific ISO weeks.
+  target:
+    entity:
+      integration: how_many_times_today
+      domain: sensor
+  fields:
+    weeks:
+      name: Weeks
+      description: "ISO week strings (e.g. 2026-W41). Omit to clear the whole history."
+      required: false
+      selector:
+        object:
+
+set_schedule_active:
+  name: Switch schedule on or off
+  description: >-
+    Switch a schedule off by hand (grey button, no alerts, no missed entries) or back on.
+  target:
+    entity:
+      integration: how_many_times_today
+      domain: sensor
+  fields:
+    active:
+      name: Active
+      required: true
+      selector:
+        boolean:

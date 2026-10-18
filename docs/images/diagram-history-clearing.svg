@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 400" width="1000" height="400">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient></defs>
+  <rect x="1" y="1" width="998" height="398" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
+  <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">Clearing history by week</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">the clear_history service with weeks: ["2026-W02"]</text>
+  <text x="40" y="158" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#c62828" text-anchor="start">2026-W02</text>
+  <rect x="160" y="130" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <rect x="222" y="130" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="248" cy="152" r="11" fill="#e5b7b7"/>
+  <line x1="237" y1="141" x2="259" y2="163" stroke="#c62828" stroke-width="3"/>
+  <rect x="284" y="130" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <rect x="346" y="130" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="372" cy="152" r="11" fill="#e5b7b7"/>
+  <line x1="361" y1="141" x2="383" y2="163" stroke="#c62828" stroke-width="3"/>
+  <rect x="408" y="130" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="434" cy="152" r="11" fill="#e5b7b7"/>
+  <line x1="423" y1="141" x2="445" y2="163" stroke="#c62828" stroke-width="3"/>
+  <rect x="470" y="130" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <rect x="532" y="130" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="558" cy="152" r="11" fill="#e5b7b7"/>
+  <line x1="547" y1="141" x2="569" y2="163" stroke="#c62828" stroke-width="3"/>
+  <text x="614" y="158" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#c62828" text-anchor="start">removed</text>
+  <text x="40" y="234" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2b2b28" text-anchor="start">2026-W03</text>
+  <rect x="160" y="206" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="186" cy="228" r="11" fill="#2e7d32"/>
+  <rect x="222" y="206" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <rect x="284" y="206" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="310" cy="228" r="11" fill="#2e7d32"/>
+  <rect x="346" y="206" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="372" cy="228" r="11" fill="#2e7d32"/>
+  <rect x="408" y="206" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <rect x="470" y="206" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="496" cy="228" r="11" fill="#2e7d32"/>
+  <rect x="532" y="206" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="558" cy="228" r="11" fill="#2e7d32"/>
+  <text x="614" y="234" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#2e7d32" text-anchor="start">kept</text>
+  <text x="40" y="310" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2b2b28" text-anchor="start">2026-W04</text>
+  <rect x="160" y="282" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <rect x="222" y="282" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="248" cy="304" r="11" fill="#2e7d32"/>
+  <rect x="284" y="282" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="310" cy="304" r="11" fill="#2e7d32"/>
+  <rect x="346" y="282" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <rect x="408" y="282" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <circle cx="434" cy="304" r="11" fill="#2e7d32"/>
+  <rect x="470" y="282" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <rect x="532" y="282" width="52" height="44" rx="8" fill="#ffffff" stroke="#ddd8cc" stroke-width="1.5"/>
+  <text x="614" y="310" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#2e7d32" text-anchor="start">kept</text>
+  <text x="186" y="122" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">Mon</text>
+  <text x="248" y="122" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">Tue</text>
+  <text x="310" y="122" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">Wed</text>
+  <text x="372" y="122" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">Thu</text>
+  <text x="434" y="122" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">Fri</text>
+  <text x="496" y="122" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">Sat</text>
+  <text x="558" y="122" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">Sun</text>
+  <text x="40" y="372" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="start">The service targets a schedule's sensor (or all of them); without weeks the whole history is cleared.</text>
+</svg>

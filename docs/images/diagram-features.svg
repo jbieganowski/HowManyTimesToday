@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 590" width="1000" height="590">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient></defs>
+  <rect x="1" y="1" width="998" height="588" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
+  <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">What it does</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">a Home Assistant integration with its own Lovelace card</text>
+  <rect x="40" y="112" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="132" r="11" fill="#2e7d32"/>
+  <path d="M 58 132 L 62 137 L 71 126" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="138" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">Any number of schedules, set up in the UI</text>
+  <rect x="40" y="159" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="179" r="11" fill="#2e7d32"/>
+  <path d="M 58 179 L 62 184 L 71 173" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="185" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">Fixed times (1-24 a day) or every X hours</text>
+  <rect x="40" y="206" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="226" r="11" fill="#2e7d32"/>
+  <path d="M 58 226 L 62 231 L 71 220" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="232" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">Start and optional end date + time, switch off by hand</text>
+  <rect x="40" y="253" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="273" r="11" fill="#2e7d32"/>
+  <path d="M 58 273 L 62 278 L 71 267" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="279" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">One button per schedule with today's count</text>
+  <rect x="40" y="300" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="320" r="11" fill="#2e7d32"/>
+  <path d="M 58 320 L 62 325 L 71 314" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="326" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">Tolerance window, missed terms logged (MISSED)</text>
+  <rect x="40" y="347" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="367" r="11" fill="#2e7d32"/>
+  <path d="M 58 367 L 62 372 L 71 361" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="373" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">A/B/C question for presses outside the window</text>
+  <rect x="40" y="394" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="414" r="11" fill="#2e7d32"/>
+  <path d="M 58 414 L 62 419 L 71 408" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="420" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">In-app message, event and optional push</text>
+  <rect x="40" y="441" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="461" r="11" fill="#2e7d32"/>
+  <path d="M 58 461 L 62 466 L 71 455" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="467" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">State survives restarts; history per week</text>
+  <rect x="40" y="488" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="508" r="11" fill="#2e7d32"/>
+  <path d="M 58 508 L 62 513 L 71 502" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="514" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">Seven languages, in the viewer's language</text>
+  <rect x="40" y="535" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
+  <circle cx="64" cy="555" r="11" fill="#2e7d32"/>
+  <path d="M 58 555 L 62 560 L 71 549" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="86" y="561" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">114 unit tests and CI with hassfest / HACS checks</text>
+</svg>

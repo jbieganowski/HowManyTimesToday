@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" width="1000" height="540">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient><marker id="m2e7d32" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="m5c3d82" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c3d82"/></marker><marker id="m6b6859" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6859"/></marker></defs>
+  <rect x="1" y="1" width="998" height="538" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
+  <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">Jak testy jednostkowe działają bez Home Assistanta</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">114 testów; testowany kod pozostaje bez zmian</text>
+  <rect x="40" y="120" width="260" height="70" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="170.0" y="144" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_models.py</text>
+  <text x="170.0" y="162" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">53 testów: silnik</text>
+  <rect x="40" y="215" width="260" height="70" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="170.0" y="239" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_coordinator.py</text>
+  <text x="170.0" y="257" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">22 testów</text>
+  <rect x="40" y="310" width="260" height="70" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="170.0" y="334" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_validation.py</text>
+  <text x="170.0" y="352" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">39 testów: dane, tłumaczenia</text>
+  <rect x="40" y="430" width="260" height="70" rx="12" fill="#eee8f5" stroke="#5c3d82" stroke-width="1.8"/>
+  <text x="170.0" y="454" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#5c3d82" text-anchor="middle">conftest.py</text>
+  <text x="170.0" y="472" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">wczytuje moduły, instaluje atrapy</text>
+  <rect x="370" y="110" width="290" height="250" rx="16" fill="#ffffff" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="515" y="134" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#6b6859" text-anchor="middle">Prawdziwy kod pod testem</text>
+  <rect x="390" y="150" width="250" height="46" rx="12" fill="#e8f0e9" stroke="#7a9e7e" stroke-width="1.8"/>
+  <text x="515.0" y="177.9" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#7a9e7e" text-anchor="middle">models.py / legacy.py</text>
+  <rect x="390" y="208" width="250" height="46" rx="12" fill="#fbf0dc" stroke="#b26a00" stroke-width="1.8"/>
+  <text x="515.0" y="236.25" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#b26a00" text-anchor="middle">store.py</text>
+  <rect x="390" y="266" width="250" height="46" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="515.0" y="294.25" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2e7d32" text-anchor="middle">coordinator.py</text>
+  <text x="515" y="340" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">sensor.py, config flow: sprawdzane na żywo</text>
+  <rect x="370" y="400" width="290" height="110" rx="16" fill="#ffffff" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="515" y="424" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#6b6859" text-anchor="middle">Atrapy modułów homeassistant.*</text>
+  <text x="515" y="452" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#2b2b28" text-anchor="middle">FakeStore, FakeDataUpdateCoordinator</text>
+  <text x="515" y="474" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#2b2b28" text-anchor="middle">atrapa zegara, timera, zdarzeń, usług</text>
+  <line x1="300" y1="155" x2="390" y2="173" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
+  <line x1="300" y1="250" x2="390" y2="280" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
+  <line x1="300" y1="345" x2="390" y2="190" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
+  <line x1="300" y1="465" x2="370" y2="450" stroke="#5c3d82" stroke-width="2" marker-end="url(#m5c3d82)"/>
+  <line x1="515" y1="400" x2="515" y2="362" stroke="#6b6859" stroke-width="2" marker-end="url(#m6b6859)"/>
+  <rect x="720" y="150" width="240" height="120" rx="12" fill="#e6f0f8" stroke="#4a90c4" stroke-width="1.8"/>
+  <text x="840.0" y="174" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#4a90c4" text-anchor="middle">Sprawdzane na żywej instancji</text>
+  <text x="840.0" y="191" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">sensor.py, config flow,</text>
+  <text x="840.0" y="208" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">usługi, JS karty</text>
+  <text x="840.0" y="225" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">(instancja testowa Docker)</text>
+</svg>

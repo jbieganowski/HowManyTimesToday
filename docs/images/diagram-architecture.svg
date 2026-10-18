@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="1000" height="560">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient><marker id="m6b6859" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6859"/></marker><marker id="m4a90c4" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4a90c4"/></marker><marker id="mb26a00" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#b26a00"/></marker><marker id="m2e7d32" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="m5c3d82" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c3d82"/></marker></defs>
+  <rect x="1" y="1" width="998" height="558" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
+  <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">Architecture</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">one integration and one card; every schedule is one sensor</text>
+  <rect x="40" y="130" width="200" height="96" rx="12" fill="#e6f0f8" stroke="#4a90c4" stroke-width="1.8"/>
+  <text x="140.0" y="154" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#4a90c4" text-anchor="middle">Config / Options Flow</text>
+  <text x="140.0" y="172" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">UI wizard,</text>
+  <text x="140.0" y="190" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">no YAML editing</text>
+  <rect x="40" y="400" width="200" height="96" rx="12" fill="#fbf0dc" stroke="#b26a00" stroke-width="1.8"/>
+  <text x="140.0" y="424" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#b26a00" text-anchor="middle">Due moment</text>
+  <text x="140.0" y="442" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">event + optional push</text>
+  <rect x="280" y="120" width="440" height="400" rx="16" fill="#ffffff" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="500" y="146" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#6b6859" text-anchor="middle">Integration how_many_times_today (Python)</text>
+  <rect x="310" y="160" width="380" height="62" rx="12" fill="#e6f0f8" stroke="#4a90c4" stroke-width="1.8"/>
+  <text x="500.0" y="184" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#4a90c4" text-anchor="middle">Entity services</text>
+  <text x="500.0" y="201" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">press_schedule, clear_history, set_schedule_active</text>
+  <rect x="310" y="250" width="380" height="92" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="500.0" y="274" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">Coordinator</text>
+  <text x="500.0" y="292" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">moves time forward, opens and closes terms,</text>
+  <text x="500.0" y="310" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">timer at the exact moments + 30 s refresh</text>
+  <rect x="310" y="385" width="120" height="110" rx="12" fill="#e8f0e9" stroke="#7a9e7e" stroke-width="1.8"/>
+  <text x="370.0" y="409" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#7a9e7e" text-anchor="middle">models.py</text>
+  <text x="370.0" y="426" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">pure engine</text>
+  <text x="370.0" y="443" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">(no HA)</text>
+  <rect x="440" y="385" width="120" height="110" rx="12" fill="#fbf0dc" stroke="#b26a00" stroke-width="1.8"/>
+  <text x="500.0" y="409" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#b26a00" text-anchor="middle">ScheduleState</text>
+  <text x="500.0" y="426" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">last press,</text>
+  <text x="500.0" y="443" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">open terms</text>
+  <rect x="570" y="385" width="120" height="110" rx="12" fill="#fbf0dc" stroke="#b26a00" stroke-width="1.8"/>
+  <text x="630.0" y="409" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#b26a00" text-anchor="middle">HistoryStore</text>
+  <text x="630.0" y="426" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">press log</text>
+  <line x1="500" y1="222" x2="500" y2="250" stroke="#6b6859" stroke-width="2" marker-end="url(#m6b6859)"/>
+  <line x1="370" y1="342" x2="370" y2="385" stroke="#6b6859" stroke-width="2" marker-end="url(#m6b6859)"/>
+  <line x1="500" y1="342" x2="500" y2="385" stroke="#6b6859" stroke-width="2" marker-end="url(#m6b6859)"/>
+  <line x1="630" y1="342" x2="630" y2="385" stroke="#6b6859" stroke-width="2" marker-end="url(#m6b6859)"/>
+  <line x1="240" y1="178" x2="310" y2="280" stroke="#4a90c4" stroke-width="2" marker-end="url(#m4a90c4)"/>
+  <line x1="310" y1="330" x2="240" y2="430" stroke="#b26a00" stroke-width="2" marker-end="url(#mb26a00)"/>
+  <rect x="760" y="120" width="200" height="130" rx="16" fill="#ffffff" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="8 6"/>
+  <text x="860" y="146" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#6b6859" text-anchor="middle">HA entity (per schedule)</text>
+  <rect x="780" y="165" width="160" height="70" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="860.0" y="189" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2e7d32" text-anchor="middle">sensor</text>
+  <text x="860.0" y="206" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">state + attributes</text>
+  <line x1="690" y1="290" x2="780" y2="205" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
+  <rect x="760" y="390" width="200" height="110" rx="12" fill="#eee8f5" stroke="#5c3d82" stroke-width="1.8"/>
+  <text x="860.0" y="414" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#5c3d82" text-anchor="middle">Lovelace card</text>
+  <text x="860.0" y="431" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">one button with a big number,</text>
+  <text x="860.0" y="448" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">auto-registered</text>
+  <line x1="860" y1="390" x2="860" y2="250" stroke="#5c3d82" stroke-width="2" marker-end="url(#m5c3d82)" marker-start="url(#m5c3d82)"/>
+  <text x="870" y="330" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">reads state, presses</text>
+</svg>

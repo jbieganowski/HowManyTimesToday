@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="1000" height="520">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient></defs>
+  <rect x="1" y="1" width="998" height="518" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
+  <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">Jak harmonogram daje terminy</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">planowane na dobę: liczba godzin albo 24 ÷ interwał w górę</text>
+  <line x1="300" y1="112" x2="300" y2="408" stroke="#e4dfd2" stroke-width="1"/>
+  <text x="300" y="104" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">00:00</text>
+  <line x1="381" y1="112" x2="381" y2="408" stroke="#e4dfd2" stroke-width="1"/>
+  <text x="381" y="104" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">03:00</text>
+  <line x1="462" y1="112" x2="462" y2="408" stroke="#e4dfd2" stroke-width="1"/>
+  <text x="462" y="104" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">06:00</text>
+  <line x1="543" y1="112" x2="543" y2="408" stroke="#e4dfd2" stroke-width="1"/>
+  <text x="543" y="104" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">09:00</text>
+  <line x1="624" y1="112" x2="624" y2="408" stroke="#e4dfd2" stroke-width="1"/>
+  <text x="624" y="104" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">12:00</text>
+  <line x1="705" y1="112" x2="705" y2="408" stroke="#e4dfd2" stroke-width="1"/>
+  <text x="705" y="104" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">15:00</text>
+  <line x1="786" y1="112" x2="786" y2="408" stroke="#e4dfd2" stroke-width="1"/>
+  <text x="786" y="104" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">18:00</text>
+  <line x1="867" y1="112" x2="867" y2="408" stroke="#e4dfd2" stroke-width="1"/>
+  <text x="867" y="104" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">21:00</text>
+  <line x1="948" y1="112" x2="948" y2="408" stroke="#e4dfd2" stroke-width="1"/>
+  <text x="948" y="104" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#8a8777" text-anchor="middle">24:00</text>
+  <text x="40" y="152" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#5c3d82" text-anchor="start">Stałe godziny</text>
+  <text x="40" y="172" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">07:00, 16:00 → 2 dziennie</text>
+  <line x1="300" y1="150" x2="948" y2="150" stroke="#d9d5c8" stroke-width="3"/>
+  <rect x="475.5" y="141" width="27.0" height="18" rx="6" fill="#eee8f5" stroke="#5c3d82" stroke-width="1"/>
+  <circle cx="489" cy="150" r="8" fill="#5c3d82"/>
+  <text x="489" y="135" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#5c3d82" text-anchor="middle">07:00</text>
+  <rect x="718.5" y="141" width="27.0" height="18" rx="6" fill="#eee8f5" stroke="#5c3d82" stroke-width="1"/>
+  <circle cx="732" cy="150" r="8" fill="#5c3d82"/>
+  <text x="732" y="135" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#5c3d82" text-anchor="middle">16:00</text>
+  <text x="40" y="210" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#7a9e7e" text-anchor="start">Stałe godziny</text>
+  <text x="40" y="230" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">08:00, 14:00, 20:00 → 3 dziennie</text>
+  <line x1="300" y1="208" x2="948" y2="208" stroke="#d9d5c8" stroke-width="3"/>
+  <rect x="502.5" y="199" width="27.0" height="18" rx="6" fill="#e8f0e9" stroke="#7a9e7e" stroke-width="1"/>
+  <circle cx="516" cy="208" r="8" fill="#7a9e7e"/>
+  <text x="516" y="193" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#7a9e7e" text-anchor="middle">08:00</text>
+  <rect x="664.5" y="199" width="27.0" height="18" rx="6" fill="#e8f0e9" stroke="#7a9e7e" stroke-width="1"/>
+  <circle cx="678" cy="208" r="8" fill="#7a9e7e"/>
+  <text x="678" y="193" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#7a9e7e" text-anchor="middle">14:00</text>
+  <rect x="826.5" y="199" width="27.0" height="18" rx="6" fill="#e8f0e9" stroke="#7a9e7e" stroke-width="1"/>
+  <circle cx="840" cy="208" r="8" fill="#7a9e7e"/>
+  <text x="840" y="193" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#7a9e7e" text-anchor="middle">20:00</text>
+  <text x="40" y="268" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#4a90c4" text-anchor="start">Co 12 godzin</text>
+  <text x="40" y="288" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">od 09:30 → 2 dziennie</text>
+  <line x1="300" y1="266" x2="948" y2="266" stroke="#d9d5c8" stroke-width="3"/>
+  <rect x="543.0" y="257" width="27.0" height="18" rx="6" fill="#e6f0f8" stroke="#4a90c4" stroke-width="1"/>
+  <circle cx="556.5" cy="266" r="8" fill="#4a90c4"/>
+  <text x="556.5" y="251" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#4a90c4" text-anchor="middle">09:30</text>
+  <rect x="867.0" y="257" width="27.0" height="18" rx="6" fill="#e6f0f8" stroke="#4a90c4" stroke-width="1"/>
+  <circle cx="880.5" cy="266" r="8" fill="#4a90c4"/>
+  <text x="880.5" y="251" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#4a90c4" text-anchor="middle">21:30</text>
+  <text x="40" y="326" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#2e7d32" text-anchor="start">Co 8 godzin</text>
+  <text x="40" y="346" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">od 06:00 → 3 dziennie</text>
+  <line x1="300" y1="324" x2="948" y2="324" stroke="#d9d5c8" stroke-width="3"/>
+  <rect x="448.5" y="315" width="27.0" height="18" rx="6" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1"/>
+  <circle cx="462" cy="324" r="8" fill="#2e7d32"/>
+  <text x="462" y="309" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#2e7d32" text-anchor="middle">06:00</text>
+  <rect x="664.5" y="315" width="27.0" height="18" rx="6" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1"/>
+  <circle cx="678" cy="324" r="8" fill="#2e7d32"/>
+  <text x="678" y="309" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#2e7d32" text-anchor="middle">14:00</text>
+  <rect x="880.5" y="315" width="27.0" height="18" rx="6" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1"/>
+  <circle cx="894" cy="324" r="8" fill="#2e7d32"/>
+  <text x="894" y="309" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#2e7d32" text-anchor="middle">22:00</text>
+  <text x="40" y="384" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#b26a00" text-anchor="start">Co 5 godzin</text>
+  <text x="40" y="404" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">od 08:00 → 5 dziennie (24 ÷ 5 w górę)</text>
+  <line x1="300" y1="382" x2="948" y2="382" stroke="#d9d5c8" stroke-width="3"/>
+  <rect x="502.5" y="373" width="27.0" height="18" rx="6" fill="#fbf0dc" stroke="#b26a00" stroke-width="1"/>
+  <circle cx="516" cy="382" r="8" fill="#b26a00"/>
+  <text x="516" y="367" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#b26a00" text-anchor="middle">08:00</text>
+  <rect x="637.5" y="373" width="27.0" height="18" rx="6" fill="#fbf0dc" stroke="#b26a00" stroke-width="1"/>
+  <circle cx="651" cy="382" r="8" fill="#b26a00"/>
+  <text x="651" y="367" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#b26a00" text-anchor="middle">13:00</text>
+  <rect x="772.5" y="373" width="27.0" height="18" rx="6" fill="#fbf0dc" stroke="#b26a00" stroke-width="1"/>
+  <circle cx="786" cy="382" r="8" fill="#b26a00"/>
+  <text x="786" y="367" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#b26a00" text-anchor="middle">18:00</text>
+  <rect x="907.5" y="373" width="27.0" height="18" rx="6" fill="#fbf0dc" stroke="#b26a00" stroke-width="1"/>
+  <circle cx="921" cy="382" r="8" fill="#b26a00"/>
+  <text x="921" y="367" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" fill="#b26a00" text-anchor="middle">23:00</text>
+  <text x="40" y="462" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="start">Pasek wokół kropki to okno tolerancji (domyślnie 30 minut przed i po).</text>
+  <text x="40" y="484" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#2b2b28" text-anchor="start">Tryb interwałowy: pierwszy termin to dokładnie start; każdy kolejny jest o jeden interwał później, także po północy.</text>
+</svg>

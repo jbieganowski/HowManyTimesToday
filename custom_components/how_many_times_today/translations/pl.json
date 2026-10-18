@@ -1,0 +1,183 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "How Many Times Today",
+        "description": "Konfiguracja integracji. Harmonogramy (leki, karmienie, woda itp.) dodajesz później przyciskiem Konfiguruj."
+      }
+    },
+    "abort": {
+      "already_configured": "Już skonfigurowano"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_schedule": "Dodaj nowy harmonogram",
+          "manage_schedules": "Edytuj, włącz/wyłącz lub usuń harmonogram",
+          "global_settings": "Ustawienia globalne (dźwięk, powiadomienie push)"
+        }
+      },
+      "schedule_basics": {
+        "title": "Harmonogram",
+        "data": {
+          "name": "Nazwa (np. Lek na serce)",
+          "description": "Opis (pokazywany w powiadomieniu i nad historią)",
+          "mode": "Tryb harmonogramu"
+        }
+      },
+      "schedule_count": {
+        "title": "Ile razy dziennie",
+        "description": "Ile razy w ciągu dnia to ma być wykonane. Następny krok zapyta o każdą godzinę.",
+        "data": {
+          "count": "Liczba wykonań na dobę (1-24)"
+        }
+      },
+      "schedule_times": {
+        "title": "Godziny",
+        "description": "Ustaw godzinę każdego wykonania.",
+        "data": {
+          "time_1": "Godzina 1",
+          "time_2": "Godzina 2",
+          "time_3": "Godzina 3",
+          "time_4": "Godzina 4",
+          "time_5": "Godzina 5",
+          "time_6": "Godzina 6",
+          "time_7": "Godzina 7",
+          "time_8": "Godzina 8",
+          "time_9": "Godzina 9",
+          "time_10": "Godzina 10",
+          "time_11": "Godzina 11",
+          "time_12": "Godzina 12",
+          "time_13": "Godzina 13",
+          "time_14": "Godzina 14",
+          "time_15": "Godzina 15",
+          "time_16": "Godzina 16",
+          "time_17": "Godzina 17",
+          "time_18": "Godzina 18",
+          "time_19": "Godzina 19",
+          "time_20": "Godzina 20",
+          "time_21": "Godzina 21",
+          "time_22": "Godzina 22",
+          "time_23": "Godzina 23",
+          "time_24": "Godzina 24"
+        }
+      },
+      "schedule_interval": {
+        "title": "Co X godzin",
+        "description": "Pierwszy termin to dokładnie start ustawiony w następnym kroku; każdy kolejny następuje tyle godzin po poprzednim.",
+        "data": {
+          "interval_hours": "Interwał (godziny)"
+        }
+      },
+      "schedule_range": {
+        "title": "Start, koniec i tolerancja",
+        "description": "Harmonogram działa między startem a opcjonalnym końcem. Naciśnięcie na tyle minut przed lub po terminie liczy się jako zgodne z harmonogramem.",
+        "data": {
+          "start_at": "Start (data i godzina)",
+          "end_at": "Koniec (data i godzina, opcjonalnie)",
+          "window_minutes": "Okno tolerancji (minuty przed i po)"
+        }
+      },
+      "manage_schedules": {
+        "title": "Wybierz harmonogram",
+        "data": {
+          "schedule_id": "Harmonogram",
+          "action": "Akcja"
+        }
+      },
+      "global_settings": {
+        "title": "Ustawienia globalne",
+        "data": {
+          "global_sound": "Dźwięk powiadomienia",
+          "notify_service": "Usługa powiadomień push (opcjonalnie, np. notify.mobile_app_telefon)"
+        }
+      }
+    },
+    "error": {
+      "name_required": "Podaj nazwę",
+      "invalid_datetime": "Nie można odczytać tej daty i godziny",
+      "end_before_start": "Koniec musi być późniejszy niż start"
+    },
+    "abort": {
+      "no_schedules": "Nie zdefiniowano jeszcze żadnych harmonogramów"
+    }
+  },
+  "selector": {
+    "schedule_mode": {
+      "options": {
+        "fixed_times": "Stałe godziny w ciągu dnia",
+        "interval": "Co X godzin"
+      }
+    },
+    "schedule_action": {
+      "options": {
+        "edit": "Edytuj ten harmonogram",
+        "switch_active": "Włącz / wyłącz",
+        "remove": "Usuń ten harmonogram i jego encję"
+      }
+    },
+    "answer": {
+      "options": {
+        "already_done": "Było zrobione w tym terminie, tylko nie zapisano",
+        "do_now": "Nie zrobiono wtedy - robię to teraz",
+        "extra": "Zrobiono wtedy, a to jest dodatkowe wykonanie"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "schedule": {
+        "state": {
+          "pending": "Jeszcze nie ruszył",
+          "green": "Zrobione",
+          "transition": "Zbliża się termin",
+          "red": "Czas teraz",
+          "blinking_brown": "Po terminie",
+          "exceeded": "Za dużo dzisiaj",
+          "inactive": "Nieaktywny"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "answer_required": {
+      "message": "Naciśnięcie poza oknem tolerancji, gdy termin jest jeszcze otwarty, wymaga odpowiedzi (already_done, do_now lub extra)."
+    },
+    "schedule_not_active": {
+      "message": "Ten harmonogram nie jest aktywny (przed startem, po końcu lub wyłączony ręcznie)."
+    }
+  },
+  "services": {
+    "press_schedule": {
+      "name": "Potwierdź harmonogram",
+      "description": "Potwierdza harmonogram programowo (tak samo jak naciśnięcie jego przycisku na karcie).",
+      "fields": {
+        "answer": {
+          "name": "Odpowiedź",
+          "description": "Wymagana przy naciśnięciu poza oknem tolerancji, gdy termin jest jeszcze otwarty (atrybut answer_required jest prawdą). Dotyczy najstarszego otwartego terminu."
+        }
+      }
+    },
+    "clear_history": {
+      "name": "Wyczyść historię",
+      "description": "Czyści historię naciśnięć harmonogramu, całą lub dla wybranych tygodni ISO.",
+      "fields": {
+        "weeks": {
+          "name": "Tygodnie",
+          "description": "Tygodnie ISO (np. 2026-W41). Pomiń, aby wyczyścić całą historię."
+        }
+      }
+    },
+    "set_schedule_active": {
+      "name": "Włącz lub wyłącz harmonogram",
+      "description": "Wyłącza harmonogram ręcznie (szary przycisk, bez alertów i wpisów o pominięciu) lub włącza go z powrotem.",
+      "fields": {
+        "active": {
+          "name": "Aktywny"
+        }
+      }
+    }
+  }
+}

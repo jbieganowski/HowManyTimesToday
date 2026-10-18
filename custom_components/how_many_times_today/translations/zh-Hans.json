@@ -1,0 +1,183 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "How Many Times Today",
+        "description": "设置集成。日程（用药、喂食、喝水等）稍后通过“配置”按钮添加。"
+      }
+    },
+    "abort": {
+      "already_configured": "已配置"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "menu_options": {
+          "add_schedule": "添加新日程",
+          "manage_schedules": "编辑、开关或删除日程",
+          "global_settings": "全局设置（声音、推送通知）"
+        }
+      },
+      "schedule_basics": {
+        "title": "日程",
+        "data": {
+          "name": "名称（例如：心脏药）",
+          "description": "说明（显示在通知中和历史记录上方）",
+          "mode": "日程模式"
+        }
+      },
+      "schedule_count": {
+        "title": "每天几次",
+        "description": "每天需要执行几次。下一步会询问每个时间。",
+        "data": {
+          "count": "每天执行次数（1-24）"
+        }
+      },
+      "schedule_times": {
+        "title": "时间",
+        "description": "设置每次执行的时间。",
+        "data": {
+          "time_1": "时间 1",
+          "time_2": "时间 2",
+          "time_3": "时间 3",
+          "time_4": "时间 4",
+          "time_5": "时间 5",
+          "time_6": "时间 6",
+          "time_7": "时间 7",
+          "time_8": "时间 8",
+          "time_9": "时间 9",
+          "time_10": "时间 10",
+          "time_11": "时间 11",
+          "time_12": "时间 12",
+          "time_13": "时间 13",
+          "time_14": "时间 14",
+          "time_15": "时间 15",
+          "time_16": "时间 16",
+          "time_17": "时间 17",
+          "time_18": "时间 18",
+          "time_19": "时间 19",
+          "time_20": "时间 20",
+          "time_21": "时间 21",
+          "time_22": "时间 22",
+          "time_23": "时间 23",
+          "time_24": "时间 24"
+        }
+      },
+      "schedule_interval": {
+        "title": "每 X 小时",
+        "description": "第一个时间点正是下一步设置的开始时间；之后每个时间点在上一个之后相隔这么多小时。",
+        "data": {
+          "interval_hours": "间隔（小时）"
+        }
+      },
+      "schedule_range": {
+        "title": "开始、结束与容差",
+        "description": "日程在开始与可选的结束之间生效。在时间点前后这么多分钟内按下，算作按计划执行。",
+        "data": {
+          "start_at": "开始（日期和时间）",
+          "end_at": "结束（日期和时间，可选）",
+          "window_minutes": "容差窗口（前后分钟数）"
+        }
+      },
+      "manage_schedules": {
+        "title": "选择日程",
+        "data": {
+          "schedule_id": "日程",
+          "action": "操作"
+        }
+      },
+      "global_settings": {
+        "title": "全局设置",
+        "data": {
+          "global_sound": "通知声音",
+          "notify_service": "推送通知服务（可选，例如 notify.mobile_app_phone）"
+        }
+      }
+    },
+    "error": {
+      "name_required": "请输入名称",
+      "invalid_datetime": "无法读取该日期和时间",
+      "end_before_start": "结束时间必须晚于开始时间"
+    },
+    "abort": {
+      "no_schedules": "尚未定义任何日程"
+    }
+  },
+  "selector": {
+    "schedule_mode": {
+      "options": {
+        "fixed_times": "每天固定时间",
+        "interval": "每 X 小时"
+      }
+    },
+    "schedule_action": {
+      "options": {
+        "edit": "编辑此日程",
+        "switch_active": "开启 / 关闭",
+        "remove": "删除此日程及其实体"
+      }
+    },
+    "answer": {
+      "options": {
+        "already_done": "当时已经做了，只是没有记录",
+        "do_now": "当时没做——现在补做",
+        "extra": "当时做了，这是额外的一次"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "schedule": {
+        "state": {
+          "pending": "尚未开始",
+          "green": "已完成",
+          "transition": "时间临近",
+          "red": "现在到点",
+          "blinking_brown": "已逾期",
+          "exceeded": "今天次数过多",
+          "inactive": "未启用"
+        }
+      }
+    }
+  },
+  "exceptions": {
+    "answer_required": {
+      "message": "时间点仍未处理时，在容差窗口之外按下需要给出回答（already_done、do_now 或 extra）。"
+    },
+    "schedule_not_active": {
+      "message": "此日程未启用（未到开始时间、已过结束时间或被手动关闭）。"
+    }
+  },
+  "services": {
+    "press_schedule": {
+      "name": "确认日程",
+      "description": "以编程方式确认日程（与在卡片上按下其按钮相同）。",
+      "fields": {
+        "answer": {
+          "name": "回答",
+          "description": "在时间点仍未处理时于容差窗口之外按下需要此项（属性 answer_required 为真）。针对最早的未处理时间点。"
+        }
+      }
+    },
+    "clear_history": {
+      "name": "清除历史",
+      "description": "清除日程的按下历史，可全部清除或仅清除指定的 ISO 周。",
+      "fields": {
+        "weeks": {
+          "name": "周",
+          "description": "ISO 周字符串（例如 2026-W41）。省略则清除全部历史。"
+        }
+      }
+    },
+    "set_schedule_active": {
+      "name": "开启或关闭日程",
+      "description": "手动关闭日程（灰色按钮、无提醒、无漏做记录）或重新开启。",
+      "fields": {
+        "active": {
+          "name": "启用"
+        }
+      }
+    }
+  }
+}
