@@ -2,8 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "How Many Times Today",
-        "description": "Konfiguracja integracji. Harmonogramy (leki, karmienie, woda itp.) dodajesz później przyciskiem Konfiguruj.\n\nWersja {version} · Autor: {author}"
+        "title": "How Many Times Today"
       }
     },
     "abort": {

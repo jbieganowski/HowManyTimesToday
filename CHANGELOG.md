@@ -2,6 +2,20 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.1.0] - 2026-10-18
+
+### Integration
+
+- **Tile look for the card.** `layout: tile` (or **Appearance** in the card editor) shows a
+  schedule as a compact tile: the coloured circle with the number, the name and the state
+  sentence. A tap presses the button; a long press (or a right click, or Shift+Enter)
+  opens the history. The default stays the large card, so existing cards look the same.
+- **Adding the integration needs no dialog:** choosing it in **Add integration** creates
+  it at once; schedules are added afterwards with **Configure**.
+- **Optional YAML line:** a bare `how_many_times_today:` in `configuration.yaml` adds the
+  integration by itself on the next start (once; the line can stay or be removed).
+- The card elements are registered only once, even if the script is loaded twice.
+
 ## [1.0.1] - 2026-10-18
 
 ### Integration

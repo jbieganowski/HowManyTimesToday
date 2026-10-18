@@ -56,7 +56,15 @@ Skopiuj folder `custom_components/how_many_times_today` do katalogu `custom_comp
 konfiguracji Home Assistant i zrestartuj Home Assistant. Karta Lovelace jest dołączona do
 integracji i rejestruje się sama — bez ręcznego dodawania zasobu.
 
-Potem dodaj integrację w **Ustawienia → Urządzenia i usługi → Dodaj integrację**.
+Potem dodaj integrację w **Ustawienia → Urządzenia i usługi → Dodaj integrację** — powstaje
+od razu, bez okna; harmonogramy dodajesz potem przyciskiem **Konfiguruj**.
+
+Żeby dodać ją bez interfejsu, wpisz tę jedną linię do `configuration.yaml` i zrestartuj
+(dodaje integrację raz, linia może zostać):
+
+```yaml
+how_many_times_today:
+```
 
 ## Konfiguracja
 
@@ -106,8 +114,7 @@ Wersje podlegają wersjonowaniu semantycznemu, `MAJOR.MINOR.PATCH` (numer jest w
 `custom_components/how_many_times_today/manifest.json`; każde wydanie to commit
 „Release X.Y.Z: …” z tagiem git `vX.Y.Z` i sekcją w changelogu). Nowa funkcja podnosi
 numer środkowy, poprawka ostatni. Wersja i autor, Jacek Bieganowski, są widoczne na
-stronie urządzenia integracji (producent i oprogramowanie), w oknie dodawania integracji
-oraz na górze menu **Konfiguruj**.
+stronie urządzenia integracji (producent i oprogramowanie), oraz na górze menu **Konfiguruj**.
 
 ## Regenerowanie diagramów
 

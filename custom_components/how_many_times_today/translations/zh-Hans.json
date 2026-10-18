@@ -2,8 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "How Many Times Today",
-        "description": "设置集成。日程（用药、喂食、喝水等）稍后通过“配置”按钮添加。\n\n版本 {version} · 作者：{author}"
+        "title": "How Many Times Today"
       }
     },
     "abort": {

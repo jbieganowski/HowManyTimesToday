@@ -129,6 +129,11 @@ const CARD_STRINGS = {
     kind_outside: "OUTSIDE SCHEDULE",
     kind_extra: "OUTSIDE SCHEDULE",
     kind_missed: "MISSED",
+    editor_layout_label: "Appearance",
+    layout_card: "Card (large)",
+    layout_tile: "Tile (compact)",
+    history_dialog_title: "History — {name}",
+    close_label: "Close",
   },
   pl: {
     show_history: "▶ pokaż historię",
@@ -191,6 +196,11 @@ const CARD_STRINGS = {
     kind_outside: "POZA HARMONOGRAMEM",
     kind_extra: "POZA HARMONOGRAMEM",
     kind_missed: "POMINIĘTE",
+    editor_layout_label: "Wygląd",
+    layout_card: "Karta (duża)",
+    layout_tile: "Kafelek (kompaktowy)",
+    history_dialog_title: "Historia — {name}",
+    close_label: "Zamknij",
   },
   de: {
     show_history: "▶ Verlauf anzeigen",
@@ -253,6 +263,11 @@ const CARD_STRINGS = {
     kind_outside: "AUSSERHALB DES ZEITPLANS",
     kind_extra: "AUSSERHALB DES ZEITPLANS",
     kind_missed: "VERPASST",
+    editor_layout_label: "Darstellung",
+    layout_card: "Karte (groß)",
+    layout_tile: "Kachel (kompakt)",
+    history_dialog_title: "Verlauf — {name}",
+    close_label: "Schließen",
   },
   ru: {
     show_history: "▶ показать историю",
@@ -315,6 +330,11 @@ const CARD_STRINGS = {
     kind_outside: "ВНЕ РАСПИСАНИЯ",
     kind_extra: "ВНЕ РАСПИСАНИЯ",
     kind_missed: "ПРОПУЩЕНО",
+    editor_layout_label: "Внешний вид",
+    layout_card: "Карточка (большая)",
+    layout_tile: "Плитка (компактная)",
+    history_dialog_title: "История — {name}",
+    close_label: "Закрыть",
   },
   uk: {
     show_history: "▶ показати історію",
@@ -377,6 +397,11 @@ const CARD_STRINGS = {
     kind_outside: "ПОЗА РОЗКЛАДОМ",
     kind_extra: "ПОЗА РОЗКЛАДОМ",
     kind_missed: "ПРОПУЩЕНО",
+    editor_layout_label: "Вигляд",
+    layout_card: "Картка (велика)",
+    layout_tile: "Плитка (компактна)",
+    history_dialog_title: "Історія — {name}",
+    close_label: "Закрити",
   },
   "zh-hans": {
     show_history: "▶ 显示历史",
@@ -439,6 +464,11 @@ const CARD_STRINGS = {
     kind_outside: "计划外",
     kind_extra: "计划外",
     kind_missed: "已错过",
+    editor_layout_label: "外观",
+    layout_card: "卡片（大）",
+    layout_tile: "方块（紧凑）",
+    history_dialog_title: "历史记录 — {name}",
+    close_label: "关闭",
   },
 };
 
@@ -521,7 +551,17 @@ class HowManyTimesTodayCard extends HTMLElement {
   }
 
   getCardSize() {
-    return 3;
+    return this._config && this._config.layout === "tile" ? 1 : 3;
+  }
+
+  // Sizing hint for the "sections" dashboard layout when the card is first placed -
+  // a tile is meant to sit compactly among other tiles, the big card wants the
+  // full width it already had before this option existed.
+  getGridOptions() {
+    if (this._config && this._config.layout === "tile") {
+      return { columns: 6, rows: 2, min_columns: 3, min_rows: 2 };
+    }
+    return { columns: 12, rows: 4, min_columns: 6, min_rows: 3 };
   }
 
   static getConfigElement() {
@@ -554,6 +594,7 @@ class HowManyTimesTodayCard extends HTMLElement {
 
   disconnectedCallback() {
     clearInterval(this._interval);
+    this._closeModal();
   }
 
   _tick() {
@@ -651,18 +692,87 @@ class HowManyTimesTodayCard extends HTMLElement {
   async _onAnswer(answer) {
     await this._hass.callService(DOMAIN, "press_schedule", { answer }, { entity_id: this._config.entity });
     this._stateObj = this._hass.states[this._config.entity] || this._stateObj;
-    this._answerDialogOpen = false;
+    if (this._config.layout === "tile") {
+      this._closeModal();
+    } else {
+      this._answerDialogOpen = false;
+    }
     this._tick();
   }
 
+  // The big card has room to show a dialog positioned over itself; a tile does not,
+  // so its dialogs (answer + history) are appended to the document body instead -
+  // see _openModal(). Both share the exact same answer/press logic either way.
   _openAnswerDialog() {
+    if (this._config.layout === "tile") {
+      const attrs = this._stateObj.attributes;
+      const oldestOpenSlot = (attrs.open_slots && attrs.open_slots[0]) || null;
+      const time = oldestOpenSlot ? formatTime(oldestOpenSlot.scheduled_at, this._hass?.language) : "?";
+      const box = this._openModal(`
+        <h3>${this._t("answer_dialog_title", { time })}</h3>
+        <button id="answer-already-done">${this._t("answer_already_done", { time })}</button>
+        <button id="answer-do-now">${this._t("answer_do_now", { time })}</button>
+        <button id="answer-extra">${this._t("answer_extra", { time })}</button>
+        <button id="answer-cancel">${this._t("answer_cancel")}</button>
+      `);
+      box.querySelector("#answer-already-done").addEventListener("click", () => this._onAnswer("already_done"));
+      box.querySelector("#answer-do-now").addEventListener("click", () => this._onAnswer("do_now"));
+      box.querySelector("#answer-extra").addEventListener("click", () => this._onAnswer("extra"));
+      box.querySelector("#answer-cancel").addEventListener("click", () => this._closeModal());
+      return;
+    }
     this._answerDialogOpen = true;
     this._render();
   }
 
   _closeAnswerDialog() {
+    if (this._config.layout === "tile") {
+      this._closeModal();
+      return;
+    }
     this._answerDialogOpen = false;
     this._render();
+  }
+
+  // A dialog appended straight to <body> (outside both the card's shadow root and
+  // the dashboard's own card wrapper) so it isn't clipped to the tile's own small
+  // height and isn't affected by a transformed ancestor breaking position:fixed.
+  _openModal(innerHtml) {
+    this._closeModal();
+    const overlay = document.createElement("div");
+    overlay.style.cssText =
+      "position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; " +
+      "align-items:center; justify-content:center; z-index:1000;";
+    overlay.innerHTML = `
+      <style>
+        .hmtt-modal-box {
+          background: var(--card-background-color, white); color: var(--primary-text-color, black);
+          padding: 16px; border-radius: 8px; max-width: 320px; max-height: 80vh; overflow-y: auto;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.4); font-family: var(--paper-font-body1_-_font-family, inherit);
+        }
+        .hmtt-modal-box h3 { margin: 0 0 12px 0; font-size: 1em; }
+        .hmtt-modal-box button {
+          display: block; width: 100%; text-align: left; padding: 8px; margin-bottom: 6px; cursor: pointer;
+        }
+        .hmtt-modal-box .history ul { max-height: 160px; overflow-y: auto; margin: 4px 0; padding-left: 16px; }
+        .hmtt-modal-box .week-list label { display: block; }
+        .hmtt-modal-box .outside { font-weight: 700; }
+      </style>
+      <div class="hmtt-modal-box">${innerHtml}</div>
+    `;
+    overlay.addEventListener("click", (ev) => {
+      if (ev.target === overlay) this._closeModal();
+    });
+    document.body.appendChild(overlay);
+    this._modalEl = overlay;
+    return overlay.querySelector(".hmtt-modal-box");
+  }
+
+  _closeModal() {
+    if (this._modalEl) {
+      this._modalEl.remove();
+      this._modalEl = null;
+    }
   }
 
   _onClearAll() {
@@ -680,6 +790,154 @@ class HowManyTimesTodayCard extends HTMLElement {
     this._render();
   }
 
+  _openHistoryDialog() {
+    const attrs = this._stateObj.attributes;
+    const name = attrs.name || attrs.friendly_name || this._config.entity;
+    const history = attrs.history || [];
+    const weeks = [...new Set(history.map((h) => isoWeekOf(new Date(h.timestamp))))].reverse();
+    const box = this._openModal(`
+      <h3>${this._t("history_dialog_title", { name })}</h3>
+      ${this._renderHistory(history, weeks, this._hass?.language)}
+      <button id="modal-close">${this._t("close_label")}</button>
+    `);
+    box.querySelector("#modal-close").addEventListener("click", () => this._closeModal());
+    const clearAllBtn = box.querySelector("#clear-all");
+    if (clearAllBtn) {
+      clearAllBtn.addEventListener("click", () => {
+        this._onClearAll();
+        this._closeModal();
+      });
+    }
+    const clearWeeksBtn = box.querySelector("#clear-weeks");
+    if (clearWeeksBtn) {
+      clearWeeksBtn.addEventListener("click", () => {
+        const checked = [...box.querySelectorAll(".week-list input:checked")].map((el) => el.value);
+        this._onClearWeeks(checked);
+        this._closeModal();
+      });
+    }
+  }
+
+  _closeHistoryDialog() {
+    this._closeModal();
+  }
+
+  // Compact "tile" layout (opt-in via layout: tile): a single row - colour circle,
+  // name, plain-language status - sized to sit among native HA tiles in a sections
+  // dashboard. Tap presses the schedule (same answer dialog as the big card); a
+  // long press/hold, right-click, or Shift+Enter opens the history as a dialog
+  // instead of the big card's inline expandable list, since there isn't room for it.
+  _renderTile(state) {
+    const root = this.shadowRoot;
+    const attrs = this._stateObj.attributes;
+    const name = attrs.name || attrs.friendly_name || this._config.entity;
+    const color = this._colorFor(state, attrs);
+    const numberColor = state === "exceeded" ? "#000" : "#fff";
+    const bigNumber = state === "inactive" ? null : attrs.count_today ?? 0;
+    const plainStatusKey = {
+      pending: "status_pending",
+      green: "status_green",
+      transition: "status_transition",
+      red: "status_red",
+      blinking_brown: "status_blinking_brown",
+      exceeded: "status_exceeded",
+      inactive: "status_inactive",
+    }[state] || "status_green";
+    const plainStatus = this._t(plainStatusKey);
+    const notClickable = state === "inactive" || state === "pending";
+    const ariaLabel = `${name}: ${plainStatus}`;
+
+    root.innerHTML = `
+      <style>
+        ha-card.tile { padding: 8px 12px; position: relative; box-sizing: border-box; height: 100%; display: flex; align-items: center; }
+        .tile-tap-target {
+          display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;
+          cursor: pointer; outline: none; border-radius: 8px; padding: 4px;
+        }
+        .tile-tap-target.not-clickable { cursor: default; }
+        .tile-tap-target:focus-visible { outline: 2px solid var(--primary-color, #03a9f4); outline-offset: 2px; }
+        .tile-circle {
+          width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          border: 2px solid rgba(255,255,255,0.5); background: ${color};
+        }
+        .tile-circle.blinking-bg { animation: tile-blink-bg 1s step-start infinite; }
+        @keyframes tile-blink-bg { 50% { background: #8d5a4a; } }
+        .tile-number { font-size: 1em; font-weight: 700; color: ${numberColor}; line-height: 1; }
+        .tile-number.blinking-num { animation: tile-blink-num 0.8s step-start infinite; }
+        @keyframes tile-blink-num { 50% { opacity: 0.15; } }
+        .tile-inactive-label { font-size: 0.5em; font-weight: 600; color: #fff; text-align: center; line-height: 1.1; }
+        .tile-info { flex: 1; min-width: 0; }
+        .tile-name { font-size: 0.95em; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tile-status { font-size: 0.85em; opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tile-status.state-red, .tile-status.state-blinking_brown, .tile-status.state-exceeded { color: #c62828; }
+        .tile-status.state-green { color: #2e7d32; }
+      </style>
+      <ha-card class="tile">
+        <div class="tile-tap-target ${notClickable ? "not-clickable" : ""}" id="tap-target" tabindex="0" role="button" aria-label="${ariaLabel}">
+          <div class="tile-circle ${state === "blinking_brown" ? "blinking-bg" : ""}">
+            ${
+              bigNumber === null
+                ? `<div class="tile-inactive-label">${this._t("inactive_label")}</div>`
+                : `<div class="tile-number ${attrs.number_blinking ? "blinking-num" : ""}">${bigNumber}</div>`
+            }
+          </div>
+          <div class="tile-info">
+            <div class="tile-name">${name}</div>
+            <div class="tile-status state-${state}">${plainStatus}</div>
+          </div>
+        </div>
+      </ha-card>
+    `;
+
+    const tapTarget = root.getElementById("tap-target");
+    const HOLD_MS = 550;
+    let holdTimer = null;
+    let holdTriggered = false;
+    const clearHoldTimer = () => {
+      if (holdTimer) {
+        clearTimeout(holdTimer);
+        holdTimer = null;
+      }
+    };
+    const startHold = () => {
+      holdTriggered = false;
+      clearHoldTimer();
+      holdTimer = setTimeout(() => {
+        holdTriggered = true;
+        this._openHistoryDialog();
+      }, HOLD_MS);
+    };
+    tapTarget.addEventListener("pointerdown", (ev) => {
+      if (ev.pointerType === "mouse" && ev.button !== 0) return;
+      startHold();
+    });
+    tapTarget.addEventListener("pointerup", (ev) => {
+      if (ev.pointerType === "mouse" && ev.button !== 0) {
+        clearHoldTimer();
+        return;
+      }
+      const wasHold = holdTriggered;
+      clearHoldTimer();
+      if (!wasHold) this._onPress();
+    });
+    tapTarget.addEventListener("pointerleave", clearHoldTimer);
+    tapTarget.addEventListener("pointercancel", clearHoldTimer);
+    tapTarget.addEventListener("contextmenu", (ev) => {
+      ev.preventDefault();
+      this._openHistoryDialog();
+    });
+    tapTarget.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter" && ev.shiftKey) {
+        ev.preventDefault();
+        this._openHistoryDialog();
+      } else if (ev.key === "Enter" || ev.key === " " || ev.key === "Spacebar") {
+        ev.preventDefault();
+        this._onPress();
+      }
+    });
+  }
+
   _render() {
     const root = this.shadowRoot;
     if (!this._stateObj) {
@@ -694,6 +952,11 @@ class HowManyTimesTodayCard extends HTMLElement {
     // While the dashboard itself is being edited (cards moved/resized), the card
     // must stay visible as a grey placeholder so it remains selectable.
     this.hidden = state === "inactive" && !this._editMode;
+
+    if (this._config.layout === "tile") {
+      this._renderTile(state);
+      return;
+    }
 
     const locale = this._hass?.language;
     const attrs = this._stateObj.attributes;
@@ -880,7 +1143,9 @@ class HowManyTimesTodayCard extends HTMLElement {
   }
 }
 
-customElements.define("how-many-times-today-card", HowManyTimesTodayCard);
+if (!customElements.get("how-many-times-today-card")) {
+  customElements.define("how-many-times-today-card", HowManyTimesTodayCard);
+}
 
 // --- visual card editor: entity picker restricted to this integration's own
 // schedule sensors (identified by the schedule_id attribute), filled with the
@@ -926,7 +1191,7 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
         .hint-link { color: var(--primary-color); font-weight: 500; }
         .field { margin: 12px 0; }
         .field label { display: block; font-size: 0.9em; margin-bottom: 4px; color: var(--secondary-text-color); }
-        .field input {
+        .field input, .field select {
           width: 100%; box-sizing: border-box; padding: 8px; font-size: 1em;
           border: 1px solid var(--divider-color, #ccc); border-radius: 4px;
           background: var(--card-background-color, white); color: var(--primary-text-color, black);
@@ -988,6 +1253,33 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
 
     this._picker = picker;
     wrap.appendChild(picker);
+
+    // Appearance (big card vs compact tile) is true card config, like the entity
+    // above - unlike everything below the hint, which is live schedule data.
+    const layoutField = document.createElement("div");
+    layoutField.className = "field";
+    const layoutLabel = document.createElement("label");
+    layoutLabel.textContent = this._t("editor_layout_label");
+    const layoutSelect = document.createElement("select");
+    layoutSelect.id = "f-layout";
+    layoutSelect.innerHTML = `
+      <option value="card">${this._t("layout_card")}</option>
+      <option value="tile">${this._t("layout_tile")}</option>
+    `;
+    layoutSelect.value = this._config.layout === "tile" ? "tile" : "card";
+    layoutSelect.addEventListener("change", (ev) => {
+      this._config = { ...this._config, layout: ev.target.value };
+      this.dispatchEvent(
+        new CustomEvent("config-changed", {
+          detail: { config: this._config },
+          bubbles: true,
+          composed: true,
+        })
+      );
+    });
+    layoutField.appendChild(layoutLabel);
+    layoutField.appendChild(layoutSelect);
+    wrap.appendChild(layoutField);
 
     // Only the schedule's TYPE (fixed times vs interval) still requires the
     // integration's own settings - everything else is editable right here below
@@ -1211,7 +1503,9 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
   }
 }
 
-customElements.define("how-many-times-today-card-editor", HowManyTimesTodayCardEditor);
+if (!customElements.get("how-many-times-today-card-editor")) {
+  customElements.define("how-many-times-today-card-editor", HowManyTimesTodayCardEditor);
+}
 
 window.customCards = window.customCards || [];
 window.customCards.push({

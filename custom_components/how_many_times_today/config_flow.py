@@ -49,13 +49,15 @@ class HowManyTimesTodayConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 2
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None):
+        # nothing to ask: the entry is created at once and the schedules are added
+        # afterwards with the Configure button
         await self.async_set_unique_id(DOMAIN)
         self._abort_if_unique_id_configured()
-        if user_input is not None:
-            return self.async_create_entry(title="How Many Times Today", data={})
-        return self.async_show_form(
-            step_id="user", description_placeholders=await _about_placeholders(self.hass)
-        )
+        return self.async_create_entry(title="How Many Times Today", data={})
+
+    async def async_step_import(self, import_data: dict[str, Any] | None = None):
+        """The `how_many_times_today:` line in configuration.yaml adds the integration."""
+        return await self.async_step_user()
 
     @staticmethod
     @callback

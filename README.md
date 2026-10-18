@@ -57,7 +57,15 @@ directory of your Home Assistant configuration and restart Home Assistant. The L
 card is bundled inside the integration and registers itself automatically — no manual
 Resource step required.
 
-Then add the integration under **Settings → Devices & services → Add integration**.
+Then add the integration under **Settings → Devices & services → Add integration** — it is
+created at once, with no dialog; you add schedules afterwards with **Configure**.
+
+To have it added without the UI, put this single line in `configuration.yaml` and restart
+(it adds the integration once, and the line may stay):
+
+```yaml
+how_many_times_today:
+```
 
 ## Configuration
 
@@ -108,7 +116,7 @@ Versions follow semantic versioning, `MAJOR.MINOR.PATCH` (the number lives in
 "Release X.Y.Z: ..." with the git tag `vX.Y.Z` and a section in the changelog). A
 feature raises the minor number, a fix the patch number. The version and the author,
 Jacek Bieganowski, are shown on the integration's device page (manufacturer and
-firmware), in the dialog that adds the integration and at the top of the **Configure**
+firmware), and at the top of the **Configure**
 menu.
 
 ## Regenerating the diagrams

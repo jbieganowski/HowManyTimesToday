@@ -15,7 +15,10 @@ powiadomienia oraz umieszczenie harmonogramu na dashboardzie.
 1. Skopiuj folder `custom_components/how_many_times_today` do folderu
    `custom_components` w konfiguracji Home Assistant i zrestartuj Home Assistant.
 2. Wejdź w **Ustawienia → Urządzenia i usługi → Dodaj integrację**, wyszukaj
-   **How Many Times Today** i zatwierdź okno.
+   **How Many Times Today**. Powstaje od razu; nie ma nic do wypełnienia.
+
+   Albo bez interfejsu: wpisz samą linię `how_many_times_today:` w `configuration.yaml` i
+   zrestartuj — integracja doda się sama (raz; linia może zostać).
 
 Integracja jest **pojedyncza**: istnieje dokładnie jeden wpis, a wszystkie harmonogramy
 są w jego wnętrzu. Dodanie jej drugi raz pokazuje „Już skonfigurowano”.
@@ -256,7 +259,25 @@ nazwę i opis, godziny (ile razy dziennie i każdą godzinę) albo interwał, a 
 **Zapisz zmiany harmonogramu** stosuje je od razu, podgląd się odświeża, a komunikat pod
 przyciskiem mówi „Zapisano” albo dlaczego zmiana została odrzucona. Postęp i historia
 zostają. Tylko rodzaj harmonogramu (stałe godziny / co X godzin) zmienia się w ustawieniach
-integracji (sekcja 5), do których edytor linkuje. Albo w YAML:
+integracji (sekcja 5), do których edytor linkuje. Pole **Wygląd** przełącza kartę między **Karta (duża)**, domyślną, a **Kafelek (kompaktowy)**.
+Każda karta wybiera osobno, więc duże karty i kafelki mogą stać obok siebie, a ten sam
+harmonogram może mieć oba.
+
+```yaml
+type: custom:how-many-times-today-card
+entity: sensor.lek_na_serce
+layout: tile      # card (domyślnie) albo tile
+```
+
+![Kafelek (mały) obok dużej karty](images/screenshot-tile.jpg)
+
+Na kafelku **dotknięcie** naciska klawisz (z tym samym pytaniem, gdy jest potrzebne), a
+**długie przytrzymanie**, prawy klik lub Shift+Enter otwiera historię z opcjami jej
+czyszczenia:
+
+![Historia otwarta z kafelka](images/screenshot-tile-history.jpg)
+
+Albo w YAML:
 
 ```yaml
 type: custom:how-many-times-today-card

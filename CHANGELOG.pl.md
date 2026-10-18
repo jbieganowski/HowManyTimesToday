@@ -2,6 +2,20 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.1.0] - 2026-10-18
+
+### Integracja
+
+- **Wygląd „kafelek” karty.** `layout: tile` (albo pole **Wygląd** w edytorze karty) pokazuje
+  harmonogram jako zwarty kafelek: kolorowe kółko z liczbą, nazwa i zdanie stanu. Dotknięcie
+  naciska klawisz; długie przytrzymanie (albo prawy klik, albo Shift+Enter) otwiera historię.
+  Domyślnie zostaje duża karta, więc istniejące karty wyglądają tak samo.
+- **Dodanie integracji nie wymaga okna:** wybranie jej w **Dodaj integrację** tworzy ją od
+  razu; harmonogramy dodaje się potem przyciskiem **Konfiguruj**.
+- **Opcjonalna linia YAML:** samo `how_many_times_today:` w `configuration.yaml` dodaje
+  integrację automatycznie przy następnym starcie (raz; linię można zostawić lub usunąć).
+- Elementy karty rejestrują się tylko raz, nawet gdy skrypt załaduje się dwa razy.
+
 ## [1.0.1] - 2026-10-18
 
 ### Integracja

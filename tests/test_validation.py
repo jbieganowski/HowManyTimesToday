@@ -230,11 +230,11 @@ def test_the_version_is_semver_and_matches_both_changelogs():
         assert f"## [{version}]" in text, f"{name} has no section for {version}"
 
 
-def test_every_language_shows_the_version_and_the_author_in_the_dialogs():
+def test_every_language_shows_the_version_and_the_author_at_the_top_of_the_menu():
     for lang in ("en", "pl", "de", "ru", "uk", "zh-Hans"):
         data = _load(INTEGRATION / "translations" / f"{lang}.json")
-        for text in (data["options"]["step"]["init"]["description"], data["config"]["step"]["user"]["description"]):
-            assert "{version}" in text and "{author}" in text, f"{lang}: {text!r}"
+        text = data["options"]["step"]["init"]["description"]
+        assert "{version}" in text and "{author}" in text, f"{lang}: {text!r}"
     assert const.AUTHOR == "Jacek Bieganowski"
 
 

@@ -16,7 +16,10 @@ put a schedule on a dashboard.
    `custom_components` folder of your Home Assistant configuration and restart Home
    Assistant.
 2. Go to **Settings → Devices & services → Add integration**, search for
-   **How Many Times Today** and confirm the dialog.
+   **How Many Times Today**. It is created at once; there is nothing to fill in.
+
+   Or, without the UI: put a bare `how_many_times_today:` line in `configuration.yaml`
+   and restart — the integration adds itself once (the line may stay).
 
 The integration is a **singleton**: there is exactly one entry and all schedules live
 inside it. Adding it a second time shows "Already configured".
@@ -259,6 +262,24 @@ remove it) and the tolerance window. **Save schedule changes** applies them at o
 preview updates, and a message under the button says "Saved" or why the change was
 refused. Progress and history are kept. Only the kind of schedule (fixed times / every
 X hours) is changed in the integration settings (section 5), which the editor links to.
+The **Appearance** field switches the card between **Card (large)**, the default, and
+**Tile (compact)**. Each card chooses on its own, so large cards and tiles can sit side by
+side, and the same schedule can have both.
+
+```yaml
+type: custom:how-many-times-today-card
+entity: sensor.heart_medication
+layout: tile      # card (default) or tile
+```
+
+![A tile (the small one) next to a large card](images/screenshot-tile.jpg)
+
+On a tile, a **tap** presses the button (with the same question when one is needed), and
+a **long press**, a right click or Shift+Enter opens the history with the options to
+clear it:
+
+![The history opened from a tile](images/screenshot-tile-history.jpg)
+
 Or in YAML:
 
 ```yaml

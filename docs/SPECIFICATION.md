@@ -218,6 +218,16 @@ sensor attributes and the due event are described in the
 [configuration guide](CONFIGURATION.md). A press that needs an answer and has none fails
 with a validation error whose translation key is `answer_required`.
 
+## Card layouts and adding the integration
+
+The card has two looks chosen per card with `layout: card | tile` (default `card`): the
+large card with the description and the expandable history, and a compact tile (circle
+with the number, name, state sentence). A tile presses on a tap and opens the history on
+a long press, a right click or Shift+Enter; its dialogs are attached to the page body so
+they do not depend on the tile's height. The config flow creates the single entry at once
+(no form) and accepts an import, which is triggered by a bare `how_many_times_today:` line
+in `configuration.yaml` when no entry exists yet.
+
 ## Reset to "all on time"
 
 `models.reset_to_on_schedule` puts a switched-on schedule in the state where everything

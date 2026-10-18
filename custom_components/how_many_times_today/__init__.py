@@ -7,10 +7,12 @@ from pathlib import Path
 
 from aiohttp import web
 from homeassistant.components.http import HomeAssistantView
-from homeassistant.config_entries import ConfigEntry
+from homeassistant.config_entries import SOURCE_IMPORT, ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.storage import Store
+from homeassistant.helpers.typing import ConfigType
 from homeassistant.loader import async_get_integration
 from homeassistant.util import dt as dt_util
 
@@ -72,6 +74,20 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.config_entries.async_update_entry(entry, options=options, version=2)
     _LOGGER.info("Migrated %d task(s) to schedules", len(schedules))
+    return True
+
+
+# a bare `how_many_times_today:` line in configuration.yaml is all the YAML there is
+CONFIG_SCHEMA = cv.empty_config_schema(DOMAIN)
+
+
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """With the line above in configuration.yaml the integration adds itself (once) on
+    the next start; without it nothing happens here and it is added in the UI."""
+    if DOMAIN in config and not hass.config_entries.async_entries(DOMAIN):
+        hass.async_create_task(
+            hass.config_entries.flow.async_init(DOMAIN, context={"source": SOURCE_IMPORT}, data={})
+        )
     return True
 
 

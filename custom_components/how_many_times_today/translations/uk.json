@@ -2,8 +2,7 @@
   "config": {
     "step": {
       "user": {
-        "title": "How Many Times Today",
-        "description": "Налаштування інтеграції. Розклади (ліки, годування, вода тощо) додаються пізніше кнопкою «Налаштувати».\n\nВерсія {version} · Автор: {author}"
+        "title": "How Many Times Today"
       }
     },
     "abort": {

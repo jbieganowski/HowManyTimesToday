@@ -220,6 +220,16 @@ sensora i zdarzenie terminu opisuje [przewodnik konfiguracji](CONFIGURATION.pl.m
 Naciśnięcie, które wymaga odpowiedzi, a jej nie ma, kończy się błędem walidacji z kluczem
 tłumaczenia `answer_required`.
 
+## Wygląd karty i dodawanie integracji
+
+Karta ma dwa wyglądy wybierane osobno dla każdej karty przez `layout: card | tile`
+(domyślnie `card`): dużą kartę z opisem i rozwijaną historią oraz zwarty kafelek (kółko z
+liczbą, nazwa, zdanie stanu). Kafelek naciska po dotknięciu, a historię otwiera po długim
+przytrzymaniu, prawym kliku lub Shift+Enter; jego okna są doczepione do body strony, więc
+nie zależą od wysokości kafelka. Przepływ konfiguracji tworzy jedyny wpis od razu (bez
+formularza) i przyjmuje import, który uruchamia samo `how_many_times_today:` w
+`configuration.yaml`, gdy wpisu jeszcze nie ma.
+
 ## Reset do „wszystko na czas”
 
 `models.reset_to_on_schedule` ustawia włączony harmonogram w stan, w którym wszystko, co
