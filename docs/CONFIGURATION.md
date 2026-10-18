@@ -273,6 +273,8 @@ and can be cleared entirely or by week:
 
 ![An expanded history](images/screenshot-card-history.jpg)
 
+Weeks are listed as date ranges in the viewer's language ("Week 12–18 Oct"), not as week numbers.
+
 ## 9. Services
 
 All five are entity services: pick the schedule's sensor as the target.

@@ -49,6 +49,22 @@ function isoWeekOf(date) {
   return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
 }
 
+// "2026-W42" -> "12-18 Oct" (Monday to Sunday of that ISO week, in the viewer's language),
+// because nobody reads week numbers; the ISO string stays the value sent to the service.
+function formatIsoWeek(iso, locale) {
+  const m = /^(\d{4})-W(\d{2})$/.exec(iso);
+  if (!m) return iso;
+  const jan4 = new Date(Date.UTC(Number(m[1]), 0, 4));
+  const monday = new Date(jan4);
+  monday.setUTCDate(jan4.getUTCDate() - ((jan4.getUTCDay() || 7) - 1) + (Number(m[2]) - 1) * 7);
+  const sunday = new Date(monday);
+  sunday.setUTCDate(monday.getUTCDate() + 6);
+  const fmt = new Intl.DateTimeFormat(locale || undefined, { day: "numeric", month: "short", timeZone: "UTC" });
+  return typeof fmt.formatRange === "function"
+    ? fmt.formatRange(monday, sunday)
+    : `${fmt.format(monday)} - ${fmt.format(sunday)}`;
+}
+
 // --- UI strings for the supported languages (see docs/SPECIFICATION.md): pl, en, de,
 // ru, uk, zh-hans; unsupported languages fall back to English. ---
 const CARD_STRINGS = {
@@ -57,6 +73,7 @@ const CARD_STRINGS = {
     hide_history: "▼ hide history",
     clear_all: "Clear all history",
     clear_selected_weeks: "Clear selected weeks",
+    week_word: "Week",
     no_presses: "No presses yet",
     last: "Last",
     total: "total",
@@ -118,6 +135,7 @@ const CARD_STRINGS = {
     hide_history: "▼ ukryj historię",
     clear_all: "Wyczyść całą historię",
     clear_selected_weeks: "Wyczyść wybrane tygodnie",
+    week_word: "Tydzień",
     no_presses: "Brak naciśnięć",
     last: "Ostatnio",
     total: "łącznie",
@@ -179,6 +197,7 @@ const CARD_STRINGS = {
     hide_history: "▼ Verlauf ausblenden",
     clear_all: "Gesamten Verlauf löschen",
     clear_selected_weeks: "Ausgewählte Wochen löschen",
+    week_word: "Woche",
     no_presses: "Noch keine Bestätigungen",
     last: "Zuletzt",
     total: "gesamt",
@@ -240,6 +259,7 @@ const CARD_STRINGS = {
     hide_history: "▼ скрыть историю",
     clear_all: "Очистить всю историю",
     clear_selected_weeks: "Очистить выбранные недели",
+    week_word: "Неделя",
     no_presses: "Пока нет нажатий",
     last: "Последнее",
     total: "всего",
@@ -301,6 +321,7 @@ const CARD_STRINGS = {
     hide_history: "▼ приховати історію",
     clear_all: "Очистити всю історію",
     clear_selected_weeks: "Очистити вибрані тижні",
+    week_word: "Тиждень",
     no_presses: "Поки немає натискань",
     last: "Останнє",
     total: "всього",
@@ -362,6 +383,7 @@ const CARD_STRINGS = {
     hide_history: "▼ 隐藏历史",
     clear_all: "清除全部历史",
     clear_selected_weeks: "清除所选周",
+    week_word: "周",
     no_presses: "尚无记录",
     last: "上次",
     total: "共计",
@@ -835,7 +857,7 @@ class HowManyTimesTodayCard extends HTMLElement {
       })
       .join("");
     const weekCheckboxes = weeks
-      .map((w) => `<label><input type="checkbox" value="${w}"> ${w}</label>`)
+      .map((w) => `<label><input type="checkbox" value="${w}"> ${this._t("week_word")} ${formatIsoWeek(w, locale)}</label>`)
       .join("");
     return `
       <div class="history">

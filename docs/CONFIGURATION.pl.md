@@ -270,6 +270,8 @@ je wyczyścić w całości lub po tygodniach:
 
 ![Rozwinięta historia](images/screenshot-card-history.jpg)
 
+Tygodnie są wypisane jako zakresy dat w języku oglądającego („Tydzień 12–18 paź”), a nie jako numery tygodni.
+
 ## 9. Usługi
 
 Wszystkie trzy to usługi encji: jako cel wskaż sensor harmonogramu.
