@@ -4,7 +4,7 @@
 
 ## Testy jednostkowe (pytest)
 
-145 testów, bez instalacji Home Assistanta:
+146 testów, bez instalacji Home Assistanta:
 
 ```sh
 pip install -r requirements-test.txt
@@ -18,13 +18,13 @@ python -m pytest tests/ -v
   A/B/C, najstarszy otwarty termin najpierw, wykonania dodatkowe, migająca liczba, stan
   przekroczenia, priorytet stanów, postęp koloru, pending / inactive / wyłączony, świeżość
   zdarzenia terminu, długie przestoje, serializacja stanu oraz walidacja zmiany zapisanego harmonogramu (`update_schedule`) i reset do „wszystko na czas”.
-- `tests/test_coordinator.py` (26): koordynator i magazyny na atrapach elementów Home
+- `tests/test_coordinator.py` (27): koordynator i magazyny na atrapach elementów Home
   Assistanta — stan i historia przeżywające symulowany restart (otwarty termin pozostaje
   otwarty), pominięcie uszkodzonego zapisu, naciśnięcia (potrzebna odpowiedź, nadrabianie
   terminów, które przypadły), włączanie/wyłączanie, czyszczenie historii (jeden
   harmonogram, wszystkie, po tygodniach), payload zdarzenia terminu i jego jednokrotne
   dostarczenie, opcjonalny push (i zepsuty powiadamiacz), timer na dokładną chwilę wraz z
-  anulowaniem oraz harmonogramy dodawane, edytowane i usuwane przez opcje zmiana harmonogramu przez usługę oraz reset (dzisiejsza historia zastępowana, wcześniejsze dni zostają, wyłączone pomijane).
+  anulowaniem oraz harmonogramy dodawane, edytowane i usuwane przez opcje zmiana harmonogramu przez usługę oraz reset (dzisiejsza historia zastępowana, niepotrzebne naciśnięcia cofane, wcześniejsze dni zostają, wyłączone pomijane).
 - `tests/test_validation.py` (40): pomocnicze funkcje wejścia formularza
   (`normalize_hhmm`, `normalize_local_datetime`, `default_times`), jednorazowa konwersja
   danych z poprzedniego modelu zadań i slotów (`legacy.py`) oraz kompletność tłumaczeń —

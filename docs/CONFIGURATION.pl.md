@@ -161,6 +161,10 @@ nacisnął klawisza. Zaznacz harmonogramy (domyślnie wszystkie) i potwierdź:
   wpisy tych harmonogramów są zastępowane; wcześniejsze dni zostają bez zmian;
 - harmonogramy wyłączone lub jeszcze niezaczęte są pomijane.
 
+To także cofa niepotrzebne naciśnięcia: jeśli klawisz wciśnięto przez pomyłkę (licznik
+pokazuje 4 z 2, a stan to `exceeded`), reset sprowadza licznik z powrotem do terminów, które
+już przypadły, i usuwa nadmiarowe wpisy z dzisiejszej historii.
+
 To samo jest dostępne jako usługa `reset_schedule` (sekcja 9).
 
 ## 6. Ustawienia globalne

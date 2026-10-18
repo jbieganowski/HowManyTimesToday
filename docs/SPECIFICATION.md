@@ -230,5 +230,5 @@ offered as a step of the Configure dialog and as the `reset_schedule` entity ser
 
 ## Testing
 
-145 unit tests run without a Home Assistant installation; see
+146 unit tests run without a Home Assistant installation; see
 [TESTING.md](TESTING.md).

@@ -85,7 +85,7 @@ zdarzenie `how_many_times_today_due`, a opcjonalny push idzie do aplikacji mobil
 
 ## Rozwój
 
-145 testów jednostkowych pokrywa silnik harmonogramów, magazyny i koordynator bez potrzeby
+146 testów jednostkowych pokrywa silnik harmonogramów, magazyny i koordynator bez potrzeby
 realnej instalacji Home Assistant (szczegóły w [docs/TESTING.pl.md](docs/TESTING.pl.md)):
 
 ```sh

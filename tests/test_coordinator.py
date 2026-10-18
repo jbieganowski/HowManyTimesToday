@@ -457,3 +457,22 @@ def test_reset_of_a_named_inactive_schedule_raises_unless_skipped():
         assert await coord.async_reset_to_on_schedule(["a"], skip_inactive=True) == []
 
     run(go())
+
+
+def test_reset_undoes_pointless_presses_the_counter_is_back_to_the_terms_due():
+    async def go():
+        entry = make_entry([cfg_fixed("a", times=("07:00", "20:00"))])
+        CLOCK["now"] = at(6, 50)
+        coord = await start(entry)
+        await coord.async_press("a")  # 07:00, in advance: correct
+        CLOCK["now"] = at(14)
+        for _ in range(3):  # pressed by mistake
+            await coord.async_press("a", const.ANSWER_DO_NOW)
+        assert coord.status("a").count_exceeded and coord.status("a").state == const.STATE_EXCEEDED
+        await coord.async_reset_to_on_schedule(["a"])
+        status = coord.status("a")
+        assert status.count_today == 1 and not status.count_exceeded and not status.number_blinking
+        assert status.state in (const.STATE_GREEN, const.STATE_TRANSITION)
+        assert [(e["scheduled_at"], e["count_delta"]) for e in coord.history.get("a")] == [(at(7).isoformat(), 1)]
+
+    run(go())

@@ -162,6 +162,10 @@ button. Tick the schedules (all are ticked by default) and confirm:
   schedules are replaced; earlier days stay as they are;
 - schedules that are switched off or have not started yet are skipped.
 
+This also undoes pointless presses: if the button was pressed by mistake (the counter shows
+4 of 2 and the state is `exceeded`), the reset brings the counter back to the terms already
+due and removes the surplus entries from today's history.
+
 The same is available as the `reset_schedule` service (section 9).
 
 ## 6. Global settings
