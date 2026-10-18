@@ -476,3 +476,24 @@ def test_reset_undoes_pointless_presses_the_counter_is_back_to_the_terms_due():
         assert [(e["scheduled_at"], e["count_delta"]) for e in coord.history.get("a")] == [(at(7).isoformat(), 1)]
 
     run(go())
+
+
+# --- removing the integration ----------------------------------------------------------------
+
+
+def test_removing_the_entry_deletes_its_stored_state_and_history_and_nothing_else():
+    from how_many_times_today import store
+
+    async def go():
+        entry = make_entry([cfg_fixed("a")])
+        coord = await start(entry)
+        await coord.history.async_append("a", [models.make_entry(at(7), const.KIND_ON_SCHEDULE, at(7), False, 1)])
+        await coord.state_store.async_save(coord.runtime)
+        FakeStore.saved["other_integration_data"] = {"keep": True}
+        assert f"{const.STORAGE_KEY_STATE_PREFIX}_e1" in FakeStore.saved
+        assert f"{const.STORAGE_KEY_HISTORY_PREFIX}_e1" in FakeStore.saved
+        await store.async_remove_all(FakeHass(), "e1")
+        assert not [k for k in FakeStore.saved if "e1" in k]
+        assert FakeStore.saved["other_integration_data"] == {"keep": True}
+
+    run(go())

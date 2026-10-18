@@ -43,6 +43,9 @@ class FakeStore:
     async def async_load(self):
         return FakeStore.saved.get(self.key)
 
+    async def async_remove(self):
+        FakeStore.saved.pop(self.key, None)
+
     async def async_save(self, data):
         # round-trip through JSON like the real Store, to catch non-serializable data
         FakeStore.saved[self.key] = json.loads(json.dumps(data))

@@ -8,7 +8,13 @@ from datetime import datetime
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.storage import Store
 
-from .const import STORAGE_KEY_HISTORY_PREFIX, STORAGE_KEY_STATE_PREFIX, STORAGE_VERSION
+from .const import (
+    LEGACY_STORAGE_HISTORY_PREFIX,
+    LEGACY_STORAGE_STATE_PREFIX,
+    STORAGE_KEY_HISTORY_PREFIX,
+    STORAGE_KEY_STATE_PREFIX,
+    STORAGE_VERSION,
+)
 
 
 class ScheduleStateStore:
@@ -96,3 +102,15 @@ class HistoryStore:
             changed = True
         if changed:
             await self._async_save()
+
+
+async def async_remove_all(hass: HomeAssistant, entry_id: str) -> None:
+    """Delete every file the integration keeps for a config entry (runtime state, press
+    history and what an older version left behind); called when the entry is removed."""
+    for prefix in (
+        STORAGE_KEY_STATE_PREFIX,
+        STORAGE_KEY_HISTORY_PREFIX,
+        LEGACY_STORAGE_STATE_PREFIX,
+        LEGACY_STORAGE_HISTORY_PREFIX,
+    ):
+        await Store(hass, STORAGE_VERSION, f"{prefix}_{entry_id}").async_remove()

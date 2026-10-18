@@ -26,6 +26,7 @@ from .const import (
     STORAGE_VERSION,
 )
 from .coordinator import HowManyTimesTodayCoordinator
+from .store import async_remove_all
 from .models import ScheduleRuntime
 
 PLATFORMS = ["sensor"]
@@ -72,6 +73,11 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.config_entries.async_update_entry(entry, options=options, version=2)
     _LOGGER.info("Migrated %d task(s) to schedules", len(schedules))
     return True
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """The integration was deleted: remove its stored state and history with it."""
+    await async_remove_all(hass, entry.entry_id)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

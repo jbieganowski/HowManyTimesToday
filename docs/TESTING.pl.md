@@ -4,7 +4,7 @@
 
 ## Testy jednostkowe (pytest)
 
-149 testów, bez instalacji Home Assistanta:
+150 testów, bez instalacji Home Assistanta:
 
 ```sh
 pip install -r requirements-test.txt
@@ -18,7 +18,7 @@ python -m pytest tests/ -v
   A/B/C, najstarszy otwarty termin najpierw, wykonania dodatkowe, migająca liczba, stan
   przekroczenia, priorytet stanów, postęp koloru, pending / inactive / wyłączony, świeżość
   zdarzenia terminu, długie przestoje, serializacja stanu oraz walidacja zmiany zapisanego harmonogramu (`update_schedule`) i reset do „wszystko na czas”.
-- `tests/test_coordinator.py` (27): koordynator i magazyny na atrapach elementów Home
+- `tests/test_coordinator.py` (28): koordynator i magazyny na atrapach elementów Home
   Assistanta — stan i historia przeżywające symulowany restart (otwarty termin pozostaje
   otwarty), pominięcie uszkodzonego zapisu, naciśnięcia (potrzebna odpowiedź, nadrabianie
   terminów, które przypadły), włączanie/wyłączanie, czyszczenie historii (jeden

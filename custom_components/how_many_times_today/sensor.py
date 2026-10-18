@@ -16,6 +16,7 @@ from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import slugify
 
 from .const import (
     ANSWERS,
@@ -108,6 +109,9 @@ class ScheduleSensor(CoordinatorEntity[HowManyTimesTodayCoordinator], SensorEnti
         super().__init__(coordinator)
         self._schedule_id = schedule_id
         self._attr_unique_id = _unique_id(schedule_id)
+        # the entity id is the schedule's name alone (sensor.lek_na_serce): once the sensor
+        # belongs to a device Home Assistant would otherwise prefix it with the device name
+        self.entity_id = f"sensor.{slugify(coordinator.schedules[schedule_id].name)}"
         # one device for the whole integration: its page shows the author and the version
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, coordinator.entry.entry_id)},

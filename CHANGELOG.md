@@ -2,6 +2,15 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.0.1] - 2026-10-18
+
+### Integration
+
+- **Fixed:** on a fresh install the sensors got an entity id prefixed with the device name
+  (`sensor.how_many_times_today_heart_medication`); they are `sensor.heart_medication` again.
+- **Fixed:** deleting the integration now also deletes its stored state and press history
+  instead of leaving files in `.storage`.
+
 ## [1.0.0] - 2026-10-18
 
 ### Integration

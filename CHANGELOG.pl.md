@@ -2,6 +2,15 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.0.1] - 2026-10-18
+
+### Integracja
+
+- **Poprawka:** przy świeżej instalacji sensory dostawały identyfikator z prefiksem nazwy
+  urządzenia (`sensor.how_many_times_today_lek_na_serce`); znów jest to `sensor.lek_na_serce`.
+- **Poprawka:** usunięcie integracji usuwa teraz także zapisany stan i historię naciśnięć,
+  zamiast zostawiać pliki w `.storage`.
+
 ## [1.0.0] - 2026-10-18
 
 ### Integracja
