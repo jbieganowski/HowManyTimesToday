@@ -622,6 +622,12 @@ class HowManyTimesTodayCard extends HTMLElement {
     }
     try {
       await this._hass.callService(DOMAIN, "press_schedule", {}, { entity_id: this._config.entity });
+      // The service call only resolves once the backend has already written the new
+      // state, but the dashboard's own "hass" push to this card can lag a tick behind -
+      // pull the fresh state straight from the same hass object instead of waiting for
+      // it, so the press (and an already-open history list) shows up immediately.
+      this._stateObj = this._hass.states[this._config.entity] || this._stateObj;
+      this._tick();
     } catch (err) {
       const code = err?.code || err?.error?.code;
       const key = err?.translation_key || err?.error?.translation_key;
@@ -644,8 +650,9 @@ class HowManyTimesTodayCard extends HTMLElement {
 
   async _onAnswer(answer) {
     await this._hass.callService(DOMAIN, "press_schedule", { answer }, { entity_id: this._config.entity });
+    this._stateObj = this._hass.states[this._config.entity] || this._stateObj;
     this._answerDialogOpen = false;
-    this._render();
+    this._tick();
   }
 
   _openAnswerDialog() {
