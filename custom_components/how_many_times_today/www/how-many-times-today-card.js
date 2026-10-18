@@ -49,9 +49,8 @@ function isoWeekOf(date) {
   return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
 }
 
-// --- UI strings, supported language set matches Buy The Way (see
-// docs/SPECIFICATION.md): pl, en, de, ru, uk, zh-hans; unsupported languages fall
-// back to English. ---
+// --- UI strings for the supported languages (see docs/SPECIFICATION.md): pl, en, de,
+// ru, uk, zh-hans; unsupported languages fall back to English. ---
 const CARD_STRINGS = {
   en: {
     show_history: "▶ show history",
