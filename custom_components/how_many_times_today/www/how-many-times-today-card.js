@@ -502,6 +502,7 @@ class HowManyTimesTodayCard extends HTMLElement {
             <div class="name">${name}</div>
             ${attrs.description ? `<div class="description">${attrs.description}</div>` : ""}
             <div class="plain-status state-${state}">${plainStatus}</div>
+            ${attrs.number_blinking ? `<div class="number-blink-note">${this._t("status_number_blinking")}</div>` : ""}
             ${countdownLabel ? `<div class="countdown">${countdownLabel}</div>` : ""}
             <div class="last">${this._t("last")}: ${formatTime(attrs.last_pressed_at, locale)} · ${this._t("total")}: ${attrs.count_today ?? 0}/${attrs.planned_count ?? "?"}</div>
           </div>

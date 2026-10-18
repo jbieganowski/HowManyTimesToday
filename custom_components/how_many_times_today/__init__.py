@@ -29,7 +29,7 @@ PLATFORMS = ["sensor"]
 _LOGGER = logging.getLogger(__name__)
 
 CARD_URL_PATH = f"/{DOMAIN}_files/how-many-times-today-card.js"
-CARD_VERSION = 5  # bump to bust browser/frontend caches whenever the card JS changes
+CARD_VERSION = 6  # bump to bust browser/frontend caches whenever the card JS changes
 
 
 async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
