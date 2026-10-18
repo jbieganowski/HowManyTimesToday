@@ -18,7 +18,7 @@ from svglib import (  # noqa: E402
 )
 
 OUT = Path(__file__).resolve().parents[1] / "docs" / "images"
-TESTS = {"models": 53, "coordinator": 22, "validation": 40}
+TESTS = {"models": 53, "coordinator": 22, "validation": 40, "card": 3}
 TESTS_TOTAL = sum(TESTS.values())
 
 
@@ -380,10 +380,11 @@ def diagrams(lang: str):
     # 14 --------------------------------------------------------------- test architecture
     s = new("test-architecture", 1000, 540, L("How the unit tests run without Home Assistant", "Jak testy jednostkowe działają bez Home Assistanta"),
             L(f"{TESTS_TOTAL} tests; the code under test is unchanged", f"{TESTS_TOTAL} testów; testowany kod pozostaje bez zmian"))
-    s.box(40, 120, 260, 70, "test_models.py", [L(f"{TESTS['models']} tests: the engine", f"{TESTS['models']} testów: silnik")], GREEN)
-    s.box(40, 215, 260, 70, "test_coordinator.py", [L(f"{TESTS['coordinator']} tests", f"{TESTS['coordinator']} testów")], GREEN)
-    s.box(40, 310, 260, 70, "test_validation.py", [L(f"{TESTS['validation']} tests: input, translations", f"{TESTS['validation']} testów: dane, tłumaczenia")], GREEN)
-    s.box(40, 430, 260, 70, "conftest.py", [L("loads modules, installs fakes", "wczytuje moduły, instaluje atrapy")], PURPLE)
+    s.box(40, 105, 260, 66, "test_models.py", [L(f"{TESTS['models']} tests: the engine", f"{TESTS['models']} testów: silnik")], GREEN)
+    s.box(40, 183, 260, 66, "test_coordinator.py", [L(f"{TESTS['coordinator']} tests", f"{TESTS['coordinator']} testów")], GREEN)
+    s.box(40, 261, 260, 66, "test_validation.py", [L(f"{TESTS['validation']} tests: input, translations", f"{TESTS['validation']} testów: dane, tłumaczenia")], GREEN)
+    s.box(40, 339, 260, 66, "test_card.py", [L(f"{TESTS['card']} tests: the card JS, static", f"{TESTS['card']} testy: JS karty, statycznie")], BLUE)
+    s.box(40, 440, 260, 66, "conftest.py", [L("loads modules, installs fakes", "wczytuje moduły, instaluje atrapy")], PURPLE)
     s.rect(370, 110, 290, 250, "#ffffff", LINE, 2, 16, "8 6")
     s.text(515, 134, L("Real code under test", "Prawdziwy kod pod testem"), 14, 700, MUTED, "middle", 270)
     s.box(390, 150, 250, 46, "models.py / legacy.py", [], SAGE, 14)
@@ -394,10 +395,10 @@ def diagrams(lang: str):
     s.text(515, 424, L("Fake homeassistant.* modules", "Atrapy modułów homeassistant.*"), 14, 700, MUTED, "middle", 270)
     s.text(515, 452, "FakeStore, FakeDataUpdateCoordinator", 12, 600, INK, "middle", 270)
     s.text(515, 474, L("fake clock, timer, event bus, services", "atrapa zegara, timera, zdarzeń, usług"), 12, 600, INK, "middle", 270)
-    s.arrow(300, 155, 390, 173, GREEN)
-    s.arrow(300, 250, 390, 280, GREEN)
-    s.arrow(300, 345, 390, 190, GREEN)
-    s.arrow(300, 465, 370, 450, PURPLE)
+    s.arrow(300, 138, 390, 173, GREEN)
+    s.arrow(300, 216, 390, 280, GREEN)
+    s.arrow(300, 294, 390, 190, GREEN)
+    s.arrow(300, 473, 370, 450, PURPLE)
     s.arrow(515, 400, 515, 362, MUTED)
     s.box(720, 150, 240, 120, L("Checked on a live instance", "Sprawdzane na żywej instancji"),
           ["sensor.py, config flow,", L("services, card JS", "usługi, JS karty"), L("(Docker test instance)", "(instancja testowa Docker)")], BLUE, 14, 12)

@@ -2,19 +2,22 @@
   <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient><marker id="m2e7d32" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="m5c3d82" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c3d82"/></marker><marker id="m6b6859" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6859"/></marker></defs>
   <rect x="1" y="1" width="998" height="538" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
   <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">How the unit tests run without Home Assistant</text>
-  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">115 tests; the code under test is unchanged</text>
-  <rect x="40" y="120" width="260" height="70" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
-  <text x="170.0" y="144" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_models.py</text>
-  <text x="170.0" y="162" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">53 tests: the engine</text>
-  <rect x="40" y="215" width="260" height="70" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
-  <text x="170.0" y="239" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_coordinator.py</text>
-  <text x="170.0" y="257" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">22 tests</text>
-  <rect x="40" y="310" width="260" height="70" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
-  <text x="170.0" y="334" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_validation.py</text>
-  <text x="170.0" y="352" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">40 tests: input, translations</text>
-  <rect x="40" y="430" width="260" height="70" rx="12" fill="#eee8f5" stroke="#5c3d82" stroke-width="1.8"/>
-  <text x="170.0" y="454" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#5c3d82" text-anchor="middle">conftest.py</text>
-  <text x="170.0" y="472" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">loads modules, installs fakes</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">118 tests; the code under test is unchanged</text>
+  <rect x="40" y="105" width="260" height="66" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="170.0" y="129" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_models.py</text>
+  <text x="170.0" y="147" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">53 tests: the engine</text>
+  <rect x="40" y="183" width="260" height="66" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="170.0" y="207" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_coordinator.py</text>
+  <text x="170.0" y="225" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">22 tests</text>
+  <rect x="40" y="261" width="260" height="66" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
+  <text x="170.0" y="285" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_validation.py</text>
+  <text x="170.0" y="303" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">40 tests: input, translations</text>
+  <rect x="40" y="339" width="260" height="66" rx="12" fill="#e6f0f8" stroke="#4a90c4" stroke-width="1.8"/>
+  <text x="170.0" y="363" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#4a90c4" text-anchor="middle">test_card.py</text>
+  <text x="170.0" y="381" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">3 tests: the card JS, static</text>
+  <rect x="40" y="440" width="260" height="66" rx="12" fill="#eee8f5" stroke="#5c3d82" stroke-width="1.8"/>
+  <text x="170.0" y="464" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#5c3d82" text-anchor="middle">conftest.py</text>
+  <text x="170.0" y="482" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">loads modules, installs fakes</text>
   <rect x="370" y="110" width="290" height="250" rx="16" fill="#ffffff" stroke="#b8b2a0" stroke-width="2" stroke-dasharray="8 6"/>
   <text x="515" y="134" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#6b6859" text-anchor="middle">Real code under test</text>
   <rect x="390" y="150" width="250" height="46" rx="12" fill="#e8f0e9" stroke="#7a9e7e" stroke-width="1.8"/>
@@ -28,10 +31,10 @@
   <text x="515" y="424" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#6b6859" text-anchor="middle">Fake homeassistant.* modules</text>
   <text x="515" y="452" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#2b2b28" text-anchor="middle">FakeStore, FakeDataUpdateCoordinator</text>
   <text x="515" y="474" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#2b2b28" text-anchor="middle">fake clock, timer, event bus, services</text>
-  <line x1="300" y1="155" x2="390" y2="173" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
-  <line x1="300" y1="250" x2="390" y2="280" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
-  <line x1="300" y1="345" x2="390" y2="190" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
-  <line x1="300" y1="465" x2="370" y2="450" stroke="#5c3d82" stroke-width="2" marker-end="url(#m5c3d82)"/>
+  <line x1="300" y1="138" x2="390" y2="173" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
+  <line x1="300" y1="216" x2="390" y2="280" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
+  <line x1="300" y1="294" x2="390" y2="190" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>
+  <line x1="300" y1="473" x2="370" y2="450" stroke="#5c3d82" stroke-width="2" marker-end="url(#m5c3d82)"/>
   <line x1="515" y1="400" x2="515" y2="362" stroke="#6b6859" stroke-width="2" marker-end="url(#m6b6859)"/>
   <rect x="720" y="150" width="240" height="120" rx="12" fill="#e6f0f8" stroke="#4a90c4" stroke-width="1.8"/>
   <text x="840.0" y="174" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#4a90c4" text-anchor="middle">Checked on a live instance</text>

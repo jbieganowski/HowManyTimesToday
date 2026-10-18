@@ -49,7 +49,7 @@
 
 ### Jakość i dokumentacja
 
-- 115 testów jednostkowych (silnik, koordynator i magazyny, dane wejściowe i tłumaczenia)
+- 118 testów jednostkowych (silnik, koordynator i magazyny, dane wejściowe i tłumaczenia)
   działających bez instalacji Home Assistanta, w CI razem z walidacją hassfest / HACS.
 - Dwujęzyczne (angielski + polski) README, specyfikacja, przewodnik konfiguracji z
   prawdziwymi zrzutami UI, uwagi o testowaniu oraz generowane diagramy (SVG, z kopiami PNG).

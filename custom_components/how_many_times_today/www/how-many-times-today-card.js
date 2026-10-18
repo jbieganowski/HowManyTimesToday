@@ -65,6 +65,8 @@ const CARD_STRINGS = {
     overdue_prefix: "overdue by",
     entity_not_found: "Entity not found",
     editor_entity_label: "Schedule sensor",
+    editor_hint: "The name, description, times, start and end of a schedule are edited in the settings of the integration, not here.",
+    editor_open_settings: "Open the integration settings",
     inactive_label: "inactive",
     pending_label: "not started yet",
     status_pending: "Not started yet",
@@ -98,6 +100,8 @@ const CARD_STRINGS = {
     overdue_prefix: "spóźnienie o",
     entity_not_found: "Nie znaleziono encji",
     editor_entity_label: "Sensor harmonogramu",
+    editor_hint: "Nazwę, opis, godziny, start i koniec harmonogramu edytujesz w ustawieniach integracji, nie tutaj.",
+    editor_open_settings: "Otwórz ustawienia integracji",
     inactive_label: "nieaktywne",
     pending_label: "jeszcze nie wystartował",
     status_pending: "Jeszcze się nie zaczęło",
@@ -131,6 +135,8 @@ const CARD_STRINGS = {
     overdue_prefix: "überfällig um",
     entity_not_found: "Entität nicht gefunden",
     editor_entity_label: "Zeitplan-Sensor",
+    editor_hint: "Name, Beschreibung, Uhrzeiten, Start und Ende eines Zeitplans bearbeitest du in den Einstellungen der Integration, nicht hier.",
+    editor_open_settings: "Einstellungen der Integration öffnen",
     inactive_label: "inaktiv",
     pending_label: "noch nicht gestartet",
     status_pending: "Noch nicht gestartet",
@@ -164,6 +170,8 @@ const CARD_STRINGS = {
     overdue_prefix: "просрочено на",
     entity_not_found: "Сущность не найдена",
     editor_entity_label: "Сенсор расписания",
+    editor_hint: "Название, описание, время, начало и конец расписания изменяются в настройках интеграции, а не здесь.",
+    editor_open_settings: "Открыть настройки интеграции",
     inactive_label: "неактивно",
     pending_label: "ещё не началось",
     status_pending: "Ещё не началось",
@@ -197,6 +205,8 @@ const CARD_STRINGS = {
     overdue_prefix: "прострочено на",
     entity_not_found: "Сутність не знайдено",
     editor_entity_label: "Сенсор розкладу",
+    editor_hint: "Назву, опис, час, початок і кінець розкладу змінюють у налаштуваннях інтеграції, а не тут.",
+    editor_open_settings: "Відкрити налаштування інтеграції",
     inactive_label: "неактивно",
     pending_label: "ще не почалося",
     status_pending: "Ще не почалося",
@@ -230,6 +240,8 @@ const CARD_STRINGS = {
     overdue_prefix: "已超时",
     entity_not_found: "未找到实体",
     editor_entity_label: "计划传感器",
+    editor_hint: "日程的名称、说明、时间、开始和结束请在集成设置中编辑，而不是在这里。",
+    editor_open_settings: "打开集成设置",
     inactive_label: "未启用",
     pending_label: "尚未开始",
     status_pending: "尚未开始",
@@ -700,6 +712,8 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>
         .wrap { padding: 12px 0; }
+        .hint { margin: 16px 0 8px; color: var(--secondary-text-color); line-height: 1.4; }
+        .hint-link { color: var(--primary-color); font-weight: 500; }
       </style>
       <div class="wrap"></div>
     `;
@@ -722,7 +736,22 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
     });
 
     this._picker = picker;
-    this.shadowRoot.querySelector(".wrap").appendChild(picker);
+    const wrap = this.shadowRoot.querySelector(".wrap");
+    wrap.appendChild(picker);
+
+    // The card only chooses WHICH schedule to show; the schedule itself (name, times,
+    // start/end) lives in the integration's options, so say so and link to it
+    const hint = document.createElement("p");
+    hint.className = "hint";
+    hint.textContent = translate(this._hass.language, "editor_hint");
+    const link = document.createElement("a");
+    link.className = "hint-link";
+    link.href = "/config/integrations/integration/how_many_times_today";
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.textContent = translate(this._hass.language, "editor_open_settings");
+    wrap.appendChild(hint);
+    wrap.appendChild(link);
   }
 }
 

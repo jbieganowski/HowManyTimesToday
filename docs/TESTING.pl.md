@@ -4,7 +4,7 @@
 
 ## Testy jednostkowe (pytest)
 
-115 testów, bez instalacji Home Assistanta:
+118 testów, bez instalacji Home Assistanta:
 
 ```sh
 pip install -r requirements-test.txt
@@ -31,6 +31,10 @@ python -m pytest tests/ -v
   te same klucze w `strings.json` i każdym `translations/*.json`, wszystkie sześć języków
   obecnych i faktycznie przetłumaczonych, każdy stan, błąd, usługa i krok formularza
   używany w kodzie ma tekst.
+- `tests/test_card.py` (3): statyczne sprawdzenia JavaScriptu karty — parsuje się (`node
+  --check`, pomijane, gdy nie ma Node.js), każdy blok językowy jej napisów ma te same klucze,
+  a karta i jej edytor znoszą sytuację, gdy Home Assistant przekazuje `hass` przed
+  konfiguracją.
 - `tests/conftest.py` umożliwia to bez Home Assistanta: wczytuje moduły integracji
   bezpośrednio (omijając `__init__.py`, który importuje `homeassistant`) i instaluje
   minimalne atrapy modułów `homeassistant.*` — `Store` w pamięci (na poziomie klasy, więc

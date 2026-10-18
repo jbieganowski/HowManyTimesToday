@@ -4,7 +4,7 @@
 
 ## Unit tests (pytest)
 
-115 tests, no Home Assistant installation needed:
+118 tests, no Home Assistant installation needed:
 
 ```sh
 pip install -r requirements-test.txt
@@ -30,6 +30,9 @@ python -m pytest tests/ -v
   task/slot data (`legacy.py`), and translation completeness — the same keys in
   `strings.json` and every `translations/*.json`, all six languages present and actually
   translated, every state, error, service and form step the code uses has a text.
+- `tests/test_card.py` (3): static checks of the card's JavaScript — it parses (`node --check`,
+  skipped when Node.js is missing), every language block of its strings has the same keys,
+  and the card and its editor tolerate Home Assistant handing over `hass` before the config.
 - `tests/conftest.py` makes this possible without Home Assistant: it loads the
   integration's modules directly (bypassing `__init__.py`, which imports
   `homeassistant`) and installs minimal fake `homeassistant.*` modules — an in-memory

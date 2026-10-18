@@ -224,13 +224,16 @@ przypadł podczas przestoju, po restarcie nadal jest otwarty.
 ## 8. Harmonogram na dashboardzie
 
 Dodaj jedną kartę na harmonogram. Przez UI użyj **Dodaj kartę → How Many Times Today** —
-edytor wizualny oferuje selektor encji ograniczony do sensorów tej integracji. Albo w
-YAML:
+edytor wizualny oferuje selektor encji ograniczony do sensorów tej integracji. Edytor karty tylko wybiera, **który harmonogram karta pokazuje**; zawiera też link do
+ustawień integracji, gdzie zmienia się nazwę, opis, godziny, start i koniec harmonogramu
+(sekcja 5). Albo w YAML:
 
 ```yaml
 type: custom:how-many-times-today-card
 entity: sensor.lek_na_serce
 ```
+
+![Edytor karty: wybiera harmonogram i linkuje do ustawień integracji](images/screenshot-card-editor.jpg)
 
 ![Karty harmonogramów na dashboardzie: czerwona, wyłączona i komunikaty w aplikacji](images/screenshot-card-dashboard.jpg)
 

@@ -13,7 +13,7 @@
   <text x="465.0" y="231" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">walidacja hassfest + HACS</text>
   <rect x="720" y="130" width="240" height="90" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
   <text x="840.0" y="154" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">✔  zielone</text>
-  <text x="840.0" y="171" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">115 testów, manifest, brand</text>
+  <text x="840.0" y="171" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">118 testów, manifest, brand</text>
   <line x1="210" y1="160" x2="300" y2="142" stroke="#6b6859" stroke-width="2" marker-end="url(#m6b6859)"/>
   <line x1="210" y1="192" x2="300" y2="222" stroke="#6b6859" stroke-width="2" marker-end="url(#m6b6859)"/>
   <line x1="630" y1="142" x2="720" y2="165" stroke="#2e7d32" stroke-width="2" marker-end="url(#m2e7d32)"/>

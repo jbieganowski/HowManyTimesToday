@@ -45,7 +45,7 @@
 
 ### Quality and documentation
 
-- 115 unit tests (engine, coordinator and stores, input and translations) running without a
+- 118 unit tests (engine, coordinator and stores, input and translations) running without a
   Home Assistant installation, in CI together with hassfest / HACS validation.
 - Bilingual (English + Polish) README, specification, configuration guide with real
   screenshots of the UI, testing notes, and generated diagrams (SVG, with PNG copies).

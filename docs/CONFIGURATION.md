@@ -225,12 +225,16 @@ that came due while Home Assistant was down is still open afterwards.
 ## 8. A schedule on a dashboard
 
 Add one card per schedule. In the UI use **Add card → How Many Times Today** — a visual
-editor offers an entity picker limited to this integration's sensors. Or in YAML:
+editor offers an entity picker limited to this integration's sensors. The card's editor only chooses **which schedule the card shows**; it also links to the
+integration settings, where a schedule's name, description, times, start and end are
+changed (section 5). Or in YAML:
 
 ```yaml
 type: custom:how-many-times-today-card
 entity: sensor.heart_medication
 ```
+
+![The card editor: it chooses the schedule and links to the integration settings](images/screenshot-card-editor.jpg)
 
 ![Schedule cards on a dashboard: a red one, a switched-off one, and the in-app messages](images/screenshot-card-dashboard.jpg)
 
