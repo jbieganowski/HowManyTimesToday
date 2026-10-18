@@ -233,5 +233,5 @@ Konfiguruj i usługą encji `reset_schedule`.
 
 ## Testy
 
-146 testów jednostkowych działa bez instalacji Home Assistanta; zobacz
+149 testów jednostkowych działa bez instalacji Home Assistanta; zobacz
 [TESTING.pl.md](TESTING.pl.md).

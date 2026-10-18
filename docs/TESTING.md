@@ -4,7 +4,7 @@
 
 ## Unit tests (pytest)
 
-146 tests, no Home Assistant installation needed:
+149 tests, no Home Assistant installation needed:
 
 ```sh
 pip install -r requirements-test.txt
@@ -25,7 +25,7 @@ python -m pytest tests/ -v
   the due event payload and its single delivery, the optional push (and a failing
   notifier), the exact-moment timer and its cancellation, and schedules added, edited and
   removed through the options, changing a schedule through the service, and the reset (history of today replaced, pointless presses undone, earlier days kept, inactive schedules skipped).
-- `tests/test_validation.py` (40): input helpers of the config flow (`normalize_hhmm`,
+- `tests/test_validation.py` (43): input helpers of the config flow (`normalize_hhmm`,
   `normalize_local_datetime`, `default_times`), the one-off conversion from the previous
   task/slot data (`legacy.py`), and translation completeness — the same keys in
   `strings.json` and every `translations/*.json`, all six languages present and actually

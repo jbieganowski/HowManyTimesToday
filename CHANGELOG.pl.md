@@ -2,7 +2,7 @@
 
 ([English version](CHANGELOG.md))
 
-## [Unreleased]
+## [1.0.0] - 2026-10-18
 
 ### Integracja
 
@@ -27,6 +27,7 @@
 - **Usługi encji** `press_schedule`, `clear_history`, `set_schedule_active`, `reset_schedule` i `update_schedule` (zmienia nazwę, opis, godziny lub interwał, start, koniec i okno tolerancji harmonogramu; postęp zostaje); naciśnięcie,
   które wymaga odpowiedzi, kończy się błędem walidacji z kluczem tłumaczenia
   `answer_required`.
+- **Wersja i autor** (SemVer, widoczne na stronie urządzenia, w oknie dodawania i na górze menu Konfiguruj).
 - **Reset do „wszystko na czas”** w oknie Konfiguruj (i usługa `reset_schedule`): wybrane harmonogramy dostają dzisiejszy licznik i historię tak, jakby każdy już przypadły termin zrobiono na czas.
 - **Edycja harmonogramu w edytorze karty:** nazwa, opis, godziny lub interwał, start, koniec i okno tolerancji.
 - **Stan przeżywa restarty**; dzisiejszy licznik wynika z historii i zeruje się o północy.

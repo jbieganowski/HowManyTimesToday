@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "How Many Times Today",
-        "description": "Set up the integration. Schedules (medication, feeding, water, ...) are added afterwards with the Configure button."
+        "description": "Set up the integration. Schedules (medication, feeding, water, ...) are added afterwards with the Configure button.\n\nVersion {version} · Author: {author}"
       }
     },
     "abort": {
@@ -13,12 +13,13 @@
   "options": {
     "step": {
       "init": {
+        "description": "Version {version} · Author: {author}",
         "menu_options": {
           "add_schedule": "Add a new schedule",
           "manage_schedules": "Edit, switch on/off or remove a schedule",
           "global_settings": "Global settings (sound, push notification)",
           "legend": "How to read the card?",
-          "reset_schedules": "The name cannot be empty."
+          "reset_schedules": "Reset to \"all on time\""
         }
       },
       "schedule_basics": {
@@ -94,10 +95,10 @@
         "description": "Every schedule has one button. The **colour and the sentence under the name** tell you what to do:\n\n- **Green** — “Done — all good”. The last term was confirmed.\n- **Fading to red** — “Getting close”. The next term is approaching.\n- **Red** — “NOW — time to do it”. A term is due: press the button (inside the tolerance window it counts as on time).\n- **Blinking brown** — “WARNING — overdue!”. A term was not confirmed in time: press the button and answer the question — A: it was done but not recorded, B: it was not done and you are doing it now, C: it was done and this is an additional one.\n- **Red with a black number** — “Done too many times”. More executions today than planned.\n- **Grey** — “Switched off” or “Not started yet”. The schedule takes no presses. A switched-off schedule (or one past its end) is hidden on the dashboard and shows grey only while you edit it; switch it back on in the card editor.\n\nThe **big number** is how many times it was done today. If it **blinks** (“Blinking number: last time was recorded outside the schedule”), the last press was outside the schedule."
       },
       "reset_schedules": {
-        "title": "Not a valid time. Use 24-hour HH:MM.",
-        "description": "Give at least one time.",
+        "title": "Reset to \"all on time\"",
+        "description": "Sets the chosen schedules to the state where everything due so far today was done on time. Say it is 2 pm and the cat should have been fed at 7: the counter becomes 1, the button lights up as it should, and today's history gets a normal entry at 7:00. Today's earlier entries of these schedules are replaced; earlier days stay as they are. Schedules that are switched off or have not started are skipped.",
         "data": {
-          "schedule_ids": "A schedule can have at most 24 times a day."
+          "schedule_ids": "Schedules to reset"
         }
       },
       "global_settings": {
@@ -162,34 +163,34 @@
       "message": "This schedule is not active (before its start, after its end, or switched off)."
     },
     "invalid_name": {
-      "message": "The end must be later than the start."
+      "message": "The name cannot be empty."
     },
     "invalid_time": {
-      "message": "The tolerance window must be between 1 and 240 minutes."
+      "message": "Not a valid time. Use 24-hour HH:MM."
     },
     "no_times": {
-      "message": "That field does not apply to this schedule's mode (times are for fixed-times schedules, the interval for every-X-hours schedules)."
+      "message": "Give at least one time."
     },
     "too_many_times": {
-      "message": "Give at least one field to change."
+      "message": "A schedule can have at most 24 times a day."
     },
     "invalid_interval": {
-      "message": "Change a schedule"
+      "message": "The interval must be between 0.5 and 48 hours."
     },
     "invalid_datetime": {
-      "message": "Change a schedule's name, description, times, interval, start, end or tolerance window. Switching its mode is done in the integration settings."
+      "message": "That date and time cannot be read."
     },
     "end_before_start": {
-      "message": "Name"
+      "message": "The end must be later than the start."
     },
     "invalid_window": {
-      "message": "Description"
+      "message": "The tolerance window must be between 1 and 240 minutes."
     },
     "wrong_mode": {
-      "message": "Times"
+      "message": "That field does not apply to this schedule's mode (times are for fixed-times schedules, the interval for every-X-hours schedules)."
     },
     "nothing_to_update": {
-      "message": "Fixed-times schedules only: the times of the day as HH:MM (1-24 of them)."
+      "message": "Give at least one field to change."
     }
   },
   "services": {
@@ -214,38 +215,38 @@
       }
     },
     "update_schedule": {
-      "name": "Interval (hours)",
-      "description": "Every-X-hours schedules only (0.5 - 48).",
+      "name": "Change a schedule",
+      "description": "Change a schedule's name, description, times, interval, start, end or tolerance window. Switching its mode is done in the integration settings.",
       "fields": {
         "name": {
-          "name": "Start"
+          "name": "Name"
         },
         "description": {
-          "name": "End"
+          "name": "Description"
         },
         "fixed_times": {
-          "name": "Leave empty to remove the end.",
-          "description": "Tolerance window (minutes)"
+          "name": "Times",
+          "description": "Fixed-times schedules only: the times of the day as HH:MM (1-24 of them)."
         },
         "interval_hours": {
-          "name": "Reset to \"all on time\"",
-          "description": "Reset to \"all on time\""
+          "name": "Interval (hours)",
+          "description": "Every-X-hours schedules only (0.5 - 48)."
         },
         "start_at": {
-          "name": "Sets the chosen schedules to the state where everything due so far today was done on time. Say it is 2 pm and the cat should have been fed at 7: the counter becomes 1, the button lights up as it should, and today's history gets a normal entry at 7:00. Today's earlier entries of these schedules are replaced; earlier days stay as they are. Schedules that are switched off or have not started are skipped."
+          "name": "Start"
         },
         "end_at": {
-          "name": "Schedules to reset",
-          "description": "Reset to \"all on time\""
+          "name": "End",
+          "description": "Leave empty to remove the end."
         },
         "window_minutes": {
-          "name": "Sets a schedule to the state where everything due so far today was done on time: the counter matches the terms that have come due and today's history gets a normal entry for each of them (earlier days stay as they are)."
+          "name": "Tolerance window (minutes)"
         }
       }
     },
     "reset_schedule": {
-      "name": "The interval must be between 0.5 and 48 hours.",
-      "description": "That date and time cannot be read."
+      "name": "Reset to \"all on time\"",
+      "description": "Sets a schedule to the state where everything due so far today was done on time: the counter matches the terms that have come due and today's history gets a normal entry for each of them (earlier days stay as they are)."
     },
     "set_schedule_active": {
       "name": "Switch schedule on or off",

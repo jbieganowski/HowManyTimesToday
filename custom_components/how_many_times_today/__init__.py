@@ -11,6 +11,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.storage import Store
+from homeassistant.loader import async_get_integration
 from homeassistant.util import dt as dt_util
 
 from . import legacy
@@ -74,7 +75,8 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    coordinator =HowManyTimesTodayCoordinator(hass, entry)
+    coordinator = HowManyTimesTodayCoordinator(hass, entry)
+    coordinator.version = str((await async_get_integration(hass, DOMAIN)).version)
     await coordinator.async_setup()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator

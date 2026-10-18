@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "How Many Times Today",
-        "description": "Konfiguracja integracji. Harmonogramy (leki, karmienie, woda itp.) dodajesz później przyciskiem Konfiguruj."
+        "description": "Konfiguracja integracji. Harmonogramy (leki, karmienie, woda itp.) dodajesz później przyciskiem Konfiguruj.\n\nWersja {version} · Autor: {author}"
       }
     },
     "abort": {
@@ -13,12 +13,13 @@
   "options": {
     "step": {
       "init": {
+        "description": "Wersja {version} · Autor: {author}",
         "menu_options": {
           "add_schedule": "Dodaj nowy harmonogram",
           "manage_schedules": "Edytuj, włącz/wyłącz lub usuń harmonogram",
           "global_settings": "Ustawienia globalne (dźwięk, powiadomienie push)",
           "legend": "Jak czytać kartę?",
-          "reset_schedules": "Nazwa nie może być pusta."
+          "reset_schedules": "Reset do „wszystko na czas”"
         }
       },
       "schedule_basics": {
@@ -94,10 +95,10 @@
         "description": "Każdy harmonogram ma jeden klawisz. **Kolor i zdanie pod nazwą** mówią, co robić:\n\n- **Zielony** — „Zrobione – wszystko w porządku”. Ostatni termin został potwierdzony.\n- **Przechodzący w czerwony** — „Zbliża się pora”. Zbliża się następny termin.\n- **Czerwony** — „TERAZ – czas to zrobić”. Termin przypadł: naciśnij klawisz (w oknie tolerancji liczy się jako na czas).\n- **Migający brąz** — „UWAGA – spóźnione!”. Termin nie został potwierdzony na czas: naciśnij klawisz i odpowiedz na pytanie — A: było zrobione, tylko nie zapisane, B: nie zrobiono i robisz to teraz, C: zrobiono i to jest dodatkowe wykonanie.\n- **Czerwony z czarną liczbą** — „Zrobione za dużo razy”. Dziś więcej wykonań niż zaplanowano.\n- **Szary** — „Wyłączone” lub „Jeszcze się nie zaczęło”. Harmonogram nie przyjmuje naciśnięć. Harmonogram wyłączony (lub po terminie końca) jest ukryty na pulpicie i szary jest tylko podczas edycji pulpitu; włączysz go ponownie w edytorze karty.\n\n**Duża liczba** to ile razy zrobiono to dzisiaj. Jeśli **miga** („Migająca liczba: ostatnie wykonanie zapisano poza planem”), ostatnie naciśnięcie było poza harmonogramem."
       },
       "reset_schedules": {
-        "title": "To nie jest poprawna godzina. Użyj formatu 24-godzinnego GG:MM.",
-        "description": "Podaj co najmniej jedną godzinę.",
+        "title": "Reset do „wszystko na czas”",
+        "description": "Ustawia wybrane harmonogramy w stan, w którym wszystko, co do tej pory dziś przypadało, zostało zrobione na czas. Przykład: jest 14:00, a kota należało nakarmić o 7:00 — licznik wskaże 1, klawisz będzie świecił jak należy, a w dzisiejszej historii pojawi się zwykły wpis z godziny 7:00. Dzisiejsze wcześniejsze wpisy tych harmonogramów są zastępowane; wcześniejsze dni zostają bez zmian. Harmonogramy wyłączone lub jeszcze niezaczęte są pomijane.",
         "data": {
-          "schedule_ids": "Harmonogram może mieć najwyżej 24 godziny na dobę."
+          "schedule_ids": "Harmonogramy do zresetowania"
         }
       },
       "global_settings": {
@@ -162,34 +163,34 @@
       "message": "Ten harmonogram nie jest aktywny (przed startem, po końcu lub wyłączony ręcznie)."
     },
     "invalid_name": {
-      "message": "Koniec musi być późniejszy niż start."
+      "message": "Nazwa nie może być pusta."
     },
     "invalid_time": {
-      "message": "Okno tolerancji musi mieścić się między 1 a 240 minut."
+      "message": "To nie jest poprawna godzina. Użyj formatu 24-godzinnego GG:MM."
     },
     "no_times": {
-      "message": "To pole nie dotyczy trybu tego harmonogramu (godziny są dla harmonogramów ze stałymi godzinami, interwał dla harmonogramów co X godzin)."
+      "message": "Podaj co najmniej jedną godzinę."
     },
     "too_many_times": {
-      "message": "Podaj co najmniej jedno pole do zmiany."
+      "message": "Harmonogram może mieć najwyżej 24 godziny na dobę."
     },
     "invalid_interval": {
-      "message": "Zmień harmonogram"
+      "message": "Interwał musi mieścić się między 0,5 a 48 godzin."
     },
     "invalid_datetime": {
-      "message": "Zmienia nazwę, opis, godziny, interwał, start, koniec lub okno tolerancji harmonogramu. Zmiana trybu odbywa się w ustawieniach integracji."
+      "message": "Nie można odczytać tej daty i godziny."
     },
     "end_before_start": {
-      "message": "Nazwa"
+      "message": "Koniec musi być późniejszy niż start."
     },
     "invalid_window": {
-      "message": "Opis"
+      "message": "Okno tolerancji musi mieścić się między 1 a 240 minut."
     },
     "wrong_mode": {
-      "message": "Godziny"
+      "message": "To pole nie dotyczy trybu tego harmonogramu (godziny są dla harmonogramów ze stałymi godzinami, interwał dla harmonogramów co X godzin)."
     },
     "nothing_to_update": {
-      "message": "Tylko harmonogramy ze stałymi godzinami: godziny w ciągu dnia jako GG:MM (od 1 do 24)."
+      "message": "Podaj co najmniej jedno pole do zmiany."
     }
   },
   "services": {
@@ -214,38 +215,38 @@
       }
     },
     "update_schedule": {
-      "name": "Interwał (godziny)",
-      "description": "Tylko harmonogramy co X godzin (0,5 – 48).",
+      "name": "Zmień harmonogram",
+      "description": "Zmienia nazwę, opis, godziny, interwał, start, koniec lub okno tolerancji harmonogramu. Zmiana trybu odbywa się w ustawieniach integracji.",
       "fields": {
         "name": {
-          "name": "Start"
+          "name": "Nazwa"
         },
         "description": {
-          "name": "Koniec"
+          "name": "Opis"
         },
         "fixed_times": {
-          "name": "Zostaw puste, aby usunąć koniec.",
-          "description": "Okno tolerancji (minuty)"
+          "name": "Godziny",
+          "description": "Tylko harmonogramy ze stałymi godzinami: godziny w ciągu dnia jako GG:MM (od 1 do 24)."
         },
         "interval_hours": {
-          "name": "Reset do „wszystko na czas”",
-          "description": "Reset do „wszystko na czas”"
+          "name": "Interwał (godziny)",
+          "description": "Tylko harmonogramy co X godzin (0,5 – 48)."
         },
         "start_at": {
-          "name": "Ustawia wybrane harmonogramy w stan, w którym wszystko, co do tej pory dziś przypadało, zostało zrobione na czas. Przykład: jest 14:00, a kota należało nakarmić o 7:00 — licznik wskaże 1, klawisz będzie świecił jak należy, a w dzisiejszej historii pojawi się zwykły wpis z godziny 7:00. Dzisiejsze wcześniejsze wpisy tych harmonogramów są zastępowane; wcześniejsze dni zostają bez zmian. Harmonogramy wyłączone lub jeszcze niezaczęte są pomijane."
+          "name": "Start"
         },
         "end_at": {
-          "name": "Harmonogramy do zresetowania",
-          "description": "Reset do „wszystko na czas”"
+          "name": "Koniec",
+          "description": "Zostaw puste, aby usunąć koniec."
         },
         "window_minutes": {
-          "name": "Ustawia harmonogram w stan, w którym wszystko, co do tej pory dziś przypadało, zostało zrobione na czas: licznik odpowiada terminom, które już przypadły, a dzisiejsza historia dostaje zwykły wpis dla każdego z nich (wcześniejsze dni zostają bez zmian)."
+          "name": "Okno tolerancji (minuty)"
         }
       }
     },
     "reset_schedule": {
-      "name": "Interwał musi mieścić się między 0,5 a 48 godzin.",
-      "description": "Nie można odczytać tej daty i godziny."
+      "name": "Reset do „wszystko na czas”",
+      "description": "Ustawia harmonogram w stan, w którym wszystko, co do tej pory dziś przypadało, zostało zrobione na czas: licznik odpowiada terminom, które już przypadły, a dzisiejsza historia dostaje zwykły wpis dla każdego z nich (wcześniejsze dni zostają bez zmian)."
     },
     "set_schedule_active": {
       "name": "Włącz lub wyłącz harmonogram",

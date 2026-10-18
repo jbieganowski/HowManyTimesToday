@@ -2,7 +2,7 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
-## [Unreleased]
+## [1.0.0] - 2026-10-18
 
 ### Integration
 
@@ -24,6 +24,7 @@
   an in-app message, and an optional push goes through the mobile app.
 - **Entity services** `press_schedule`, `clear_history`, `set_schedule_active`, `reset_schedule` and `update_schedule` (changes a schedule's name, description, times or interval, start, end and tolerance window; the progress is kept); a press that
   needs an answer fails with a validation error whose translation key is `answer_required`.
+- **Version and author** (SemVer, shown on the device page, in the add dialog and at the top of the Configure menu).
 - **Reset to "all on time"** in the Configure dialog (and the `reset_schedule` service): the chosen schedules get today's counter and history as if every term already due had been done on time.
 - **Edit a schedule in the card editor:** name, description, times or interval, start, end and tolerance window.
 - **State survives restarts**; today's counter is derived from the history and resets at

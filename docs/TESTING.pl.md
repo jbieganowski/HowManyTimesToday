@@ -4,7 +4,7 @@
 
 ## Testy jednostkowe (pytest)
 
-146 testów, bez instalacji Home Assistanta:
+149 testów, bez instalacji Home Assistanta:
 
 ```sh
 pip install -r requirements-test.txt
@@ -25,7 +25,7 @@ python -m pytest tests/ -v
   harmonogram, wszystkie, po tygodniach), payload zdarzenia terminu i jego jednokrotne
   dostarczenie, opcjonalny push (i zepsuty powiadamiacz), timer na dokładną chwilę wraz z
   anulowaniem oraz harmonogramy dodawane, edytowane i usuwane przez opcje zmiana harmonogramu przez usługę oraz reset (dzisiejsza historia zastępowana, niepotrzebne naciśnięcia cofane, wcześniejsze dni zostają, wyłączone pomijane).
-- `tests/test_validation.py` (40): pomocnicze funkcje wejścia formularza
+- `tests/test_validation.py` (43): pomocnicze funkcje wejścia formularza
   (`normalize_hhmm`, `normalize_local_datetime`, `default_times`), jednorazowa konwersja
   danych z poprzedniego modelu zadań i slotów (`legacy.py`) oraz kompletność tłumaczeń —
   te same klucze w `strings.json` i każdym `translations/*.json`, wszystkie sześć języków

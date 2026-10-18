@@ -190,6 +190,8 @@ language of the logged-in user. Confirming it returns to the menu; nothing is ch
 
 ## 7. What the integration creates
 
+One **device**, "How Many Times Today", groups all the sensors. Its page (Settings → Devices & services → Devices) shows the **manufacturer** (the author, Jacek Bieganowski) and the **firmware** (the integration's version). The same version and author appear at the top of the Configure menu.
+
 One **sensor per schedule**, named after the schedule (for example
 `sensor.heart_medication`). Its state is the look of the button:
 

@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "How Many Times Today",
-        "description": "Richte die Integration ein. Zeitpläne (Medikamente, Fütterung, Wasser, ...) werden anschließend über die Schaltfläche „Konfigurieren“ hinzugefügt."
+        "description": "Richte die Integration ein. Zeitpläne (Medikamente, Fütterung, Wasser, ...) werden anschließend über die Schaltfläche „Konfigurieren“ hinzugefügt.\n\nVersion {version} · Autor: {author}"
       }
     },
     "abort": {
@@ -13,12 +13,13 @@
   "options": {
     "step": {
       "init": {
+        "description": "Version {version} · Autor: {author}",
         "menu_options": {
           "add_schedule": "Neuen Zeitplan hinzufügen",
           "manage_schedules": "Zeitplan bearbeiten, ein-/ausschalten oder entfernen",
           "global_settings": "Globale Einstellungen (Ton, Push-Benachrichtigung)",
           "legend": "Wie liest man die Karte?",
-          "reset_schedules": "Der Name darf nicht leer sein."
+          "reset_schedules": "Zurücksetzen auf „alles pünktlich“"
         }
       },
       "schedule_basics": {
@@ -94,10 +95,10 @@
         "description": "Jeder Zeitplan hat eine Taste. **Farbe und der Satz unter dem Namen** sagen, was zu tun ist:\n\n- **Grün** — „Erledigt – alles in Ordnung“. Der letzte Termin wurde bestätigt.\n- **Übergang zu Rot** — „Es wird bald Zeit“. Der nächste Termin rückt näher.\n- **Rot** — „JETZT – Zeit, es zu tun“. Ein Termin ist fällig: Drücke die Taste (im Toleranzfenster gilt es als pünktlich).\n- **Blinkendes Braun** — „ACHTUNG – überfällig!“. Ein Termin wurde nicht rechtzeitig bestätigt: Drücke die Taste und beantworte die Frage — A: es war erledigt, nur nicht erfasst, B: es war nicht erledigt und du tust es jetzt, C: es war erledigt und dies ist eine zusätzliche Ausführung.\n- **Rot mit schwarzer Zahl** — „Zu oft erledigt“. Heute mehr Ausführungen als geplant.\n- **Grau** — „Ausgeschaltet“ oder „Noch nicht gestartet“. Der Zeitplan nimmt keine Eingaben an. Ein ausgeschalteter Zeitplan (oder einer nach seinem Ende) ist im Dashboard ausgeblendet und nur beim Bearbeiten grau; im Karten-Editor schaltest du ihn wieder ein.\n\nDie **große Zahl** zeigt, wie oft es heute erledigt wurde. **Blinkt** sie („Blinkende Zahl: letztes Mal außerhalb des Zeitplans erfasst“), war der letzte Druck außerhalb des Zeitplans."
       },
       "reset_schedules": {
-        "title": "Keine gültige Uhrzeit. Verwende das 24-Stunden-Format HH:MM.",
-        "description": "Gib mindestens eine Uhrzeit an.",
+        "title": "Zurücksetzen auf „alles pünktlich“",
+        "description": "Setzt die gewählten Zeitpläne in den Zustand, in dem alles, was heute bisher fällig war, pünktlich erledigt wurde. Beispiel: Es ist 14 Uhr, die Katze sollte um 7 Uhr gefüttert werden – der Zähler zeigt 1, die Taste leuchtet wie vorgesehen, und der heutige Verlauf erhält einen normalen Eintrag um 7:00. Frühere Einträge dieser Zeitpläne von heute werden ersetzt; frühere Tage bleiben unverändert. Ausgeschaltete oder noch nicht gestartete Zeitpläne werden übersprungen.",
         "data": {
-          "schedule_ids": "Ein Zeitplan kann höchstens 24 Uhrzeiten pro Tag haben."
+          "schedule_ids": "Zurückzusetzende Zeitpläne"
         }
       },
       "global_settings": {
@@ -162,34 +163,34 @@
       "message": "Dieser Zeitplan ist nicht aktiv (vor dem Start, nach dem Ende oder von Hand ausgeschaltet)."
     },
     "invalid_name": {
-      "message": "Das Ende muss nach dem Start liegen."
+      "message": "Der Name darf nicht leer sein."
     },
     "invalid_time": {
-      "message": "Das Toleranzfenster muss zwischen 1 und 240 Minuten liegen."
+      "message": "Keine gültige Uhrzeit. Verwende das 24-Stunden-Format HH:MM."
     },
     "no_times": {
-      "message": "Dieses Feld gilt nicht für den Modus dieses Zeitplans (Uhrzeiten gelten für Zeitpläne mit festen Uhrzeiten, das Intervall für Zeitpläne „Alle X Stunden“)."
+      "message": "Gib mindestens eine Uhrzeit an."
     },
     "too_many_times": {
-      "message": "Gib mindestens ein Feld zum Ändern an."
+      "message": "Ein Zeitplan kann höchstens 24 Uhrzeiten pro Tag haben."
     },
     "invalid_interval": {
-      "message": "Zeitplan ändern"
+      "message": "Das Intervall muss zwischen 0,5 und 48 Stunden liegen."
     },
     "invalid_datetime": {
-      "message": "Ändert Name, Beschreibung, Uhrzeiten, Intervall, Start, Ende oder Toleranzfenster eines Zeitplans. Den Modus wechselst du in den Einstellungen der Integration."
+      "message": "Dieses Datum mit Uhrzeit kann nicht gelesen werden."
     },
     "end_before_start": {
-      "message": "Name"
+      "message": "Das Ende muss nach dem Start liegen."
     },
     "invalid_window": {
-      "message": "Beschreibung"
+      "message": "Das Toleranzfenster muss zwischen 1 und 240 Minuten liegen."
     },
     "wrong_mode": {
-      "message": "Uhrzeiten"
+      "message": "Dieses Feld gilt nicht für den Modus dieses Zeitplans (Uhrzeiten gelten für Zeitpläne mit festen Uhrzeiten, das Intervall für Zeitpläne „Alle X Stunden“)."
     },
     "nothing_to_update": {
-      "message": "Nur Zeitpläne mit festen Uhrzeiten: die Tageszeiten als HH:MM (1 bis 24)."
+      "message": "Gib mindestens ein Feld zum Ändern an."
     }
   },
   "services": {
@@ -214,38 +215,38 @@
       }
     },
     "update_schedule": {
-      "name": "Intervall (Stunden)",
-      "description": "Nur Zeitpläne „Alle X Stunden“ (0,5 – 48).",
+      "name": "Zeitplan ändern",
+      "description": "Ändert Name, Beschreibung, Uhrzeiten, Intervall, Start, Ende oder Toleranzfenster eines Zeitplans. Den Modus wechselst du in den Einstellungen der Integration.",
       "fields": {
         "name": {
-          "name": "Start"
+          "name": "Name"
         },
         "description": {
-          "name": "Ende"
+          "name": "Beschreibung"
         },
         "fixed_times": {
-          "name": "Leer lassen, um das Ende zu entfernen.",
-          "description": "Toleranzfenster (Minuten)"
+          "name": "Uhrzeiten",
+          "description": "Nur Zeitpläne mit festen Uhrzeiten: die Tageszeiten als HH:MM (1 bis 24)."
         },
         "interval_hours": {
-          "name": "Zurücksetzen auf „alles pünktlich“",
-          "description": "Zurücksetzen auf „alles pünktlich“"
+          "name": "Intervall (Stunden)",
+          "description": "Nur Zeitpläne „Alle X Stunden“ (0,5 – 48)."
         },
         "start_at": {
-          "name": "Setzt die gewählten Zeitpläne in den Zustand, in dem alles, was heute bisher fällig war, pünktlich erledigt wurde. Beispiel: Es ist 14 Uhr, die Katze sollte um 7 Uhr gefüttert werden – der Zähler zeigt 1, die Taste leuchtet wie vorgesehen, und der heutige Verlauf erhält einen normalen Eintrag um 7:00. Frühere Einträge dieser Zeitpläne von heute werden ersetzt; frühere Tage bleiben unverändert. Ausgeschaltete oder noch nicht gestartete Zeitpläne werden übersprungen."
+          "name": "Start"
         },
         "end_at": {
-          "name": "Zurückzusetzende Zeitpläne",
-          "description": "Zurücksetzen auf „alles pünktlich“"
+          "name": "Ende",
+          "description": "Leer lassen, um das Ende zu entfernen."
         },
         "window_minutes": {
-          "name": "Setzt einen Zeitplan in den Zustand, in dem alles, was heute bisher fällig war, pünktlich erledigt wurde: Der Zähler entspricht den bereits fälligen Terminen, und der heutige Verlauf erhält für jeden einen normalen Eintrag (frühere Tage bleiben unverändert)."
+          "name": "Toleranzfenster (Minuten)"
         }
       }
     },
     "reset_schedule": {
-      "name": "Das Intervall muss zwischen 0,5 und 48 Stunden liegen.",
-      "description": "Dieses Datum mit Uhrzeit kann nicht gelesen werden."
+      "name": "Zurücksetzen auf „alles pünktlich“",
+      "description": "Setzt einen Zeitplan in den Zustand, in dem alles, was heute bisher fällig war, pünktlich erledigt wurde: Der Zähler entspricht den bereits fälligen Terminen, und der heutige Verlauf erhält für jeden einen normalen Eintrag (frühere Tage bleiben unverändert)."
     },
     "set_schedule_active": {
       "name": "Zeitplan ein- oder ausschalten",

@@ -12,12 +12,14 @@ from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers import entity_platform
 from homeassistant.helpers import entity_registry as er
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import (
     ANSWERS,
+    AUTHOR,
     ATTR_ACTIVE,
     ATTR_ANSWER,
     ATTR_WEEKS,
@@ -106,6 +108,15 @@ class ScheduleSensor(CoordinatorEntity[HowManyTimesTodayCoordinator], SensorEnti
         super().__init__(coordinator)
         self._schedule_id = schedule_id
         self._attr_unique_id = _unique_id(schedule_id)
+        # one device for the whole integration: its page shows the author and the version
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, coordinator.entry.entry_id)},
+            name="How Many Times Today",
+            manufacturer=AUTHOR,
+            model="Schedules",
+            sw_version=coordinator.version,
+            entry_type=DeviceEntryType.SERVICE,
+        )
 
     @property
     def name(self) -> str:

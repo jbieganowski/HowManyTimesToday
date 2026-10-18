@@ -65,6 +65,7 @@ class HowManyTimesTodayCoordinator(DataUpdateCoordinator[None]):
             update_interval=timedelta(seconds=UPDATE_INTERVAL_SECONDS),
         )
         self.entry = entry
+        self.version = ""  # from manifest.json, set by async_setup_entry
         self.state_store = ScheduleStateStore(hass, entry.entry_id)
         self.history = HistoryStore(hass, entry.entry_id)
         self.schedules: dict[str, Schedule] = {}

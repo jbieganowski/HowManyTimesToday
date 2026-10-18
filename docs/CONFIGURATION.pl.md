@@ -189,6 +189,8 @@ użytkownika. Zatwierdzenie wraca do menu; nic się nie zmienia.
 
 ## 7. Co tworzy integracja
 
+Jedno **urządzenie** „How Many Times Today” grupuje wszystkie sensory. Jego strona (Ustawienia → Urządzenia i usługi → Urządzenia) pokazuje **producenta** (autora, Jacek Bieganowski) i **oprogramowanie** (wersję integracji). Ta sama wersja i autor widnieją na górze menu Konfiguruj.
+
 Jeden **sensor na harmonogram**, nazwany od harmonogramu (np. `sensor.lek_na_serce`).
 Jego stan to wygląd klawisza:
 

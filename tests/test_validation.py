@@ -216,3 +216,50 @@ def test_every_form_field_and_step_the_flow_uses_has_a_label():
     assert steps - {"user"} <= set(strings), f"steps without strings: {steps - set(strings)}"
     menu = set(re.findall(r'menu_options=\[([^\]]+)\]', source)[0].replace('"', "").replace(" ", "").split(","))
     assert menu == set(strings["init"]["menu_options"])
+
+
+# --- version and author ---------------------------------------------------------------------
+
+
+def test_the_version_is_semver_and_matches_both_changelogs():
+    manifest = _load(INTEGRATION / "manifest.json")
+    version = manifest["version"]
+    assert re.fullmatch(r"\d+\.\d+\.\d+", version), version
+    for name in ("CHANGELOG.md", "CHANGELOG.pl.md"):
+        text = (INTEGRATION.parent.parent / name).read_text(encoding="utf-8")
+        assert f"## [{version}]" in text, f"{name} has no section for {version}"
+
+
+def test_every_language_shows_the_version_and_the_author_in_the_dialogs():
+    for lang in ("en", "pl", "de", "ru", "uk", "zh-Hans"):
+        data = _load(INTEGRATION / "translations" / f"{lang}.json")
+        for text in (data["options"]["step"]["init"]["description"], data["config"]["step"]["user"]["description"]):
+            assert "{version}" in text and "{author}" in text, f"{lang}: {text!r}"
+    assert const.AUTHOR == "Jacek Bieganowski"
+
+
+def test_english_texts_say_what_their_keys_promise():
+    """The generated translation tables are positional; a shifted entry would give a key
+    somebody else's text while every language still has the same keys."""
+    en = _load(INTEGRATION / "translations" / "en.json")
+    expectations = {
+        ("exceptions", "invalid_name", "message"): "name",
+        ("exceptions", "invalid_time", "message"): "time",
+        ("exceptions", "no_times", "message"): "time",
+        ("exceptions", "invalid_interval", "message"): "interval",
+        ("exceptions", "invalid_window", "message"): "window",
+        ("exceptions", "end_before_start", "message"): "end",
+        ("exceptions", "wrong_mode", "message"): "mode",
+        ("options", "step", "reset_schedules", "title"): "reset",
+        ("options", "step", "reset_schedules", "data", "schedule_ids"): "schedules",
+        ("services", "reset_schedule", "name"): "reset",
+        ("services", "update_schedule", "name"): "change",
+        ("services", "update_schedule", "fields", "interval_hours", "name"): "interval",
+        ("services", "update_schedule", "fields", "window_minutes", "name"): "tolerance",
+        ("services", "update_schedule", "fields", "end_at", "name"): "end",
+    }
+    for path, word in expectations.items():
+        node = en
+        for part in path:
+            node = node[part]
+        assert word in node.lower(), f"{'.'.join(path)} = {node!r} does not mention {word!r}"

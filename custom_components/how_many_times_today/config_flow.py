@@ -8,9 +8,11 @@ import voluptuous as vol
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, OptionsFlow
 from homeassistant.core import callback
 from homeassistant.helpers import selector
+from homeassistant.loader import async_get_integration
 from homeassistant.util import dt as dt_util
 
 from .const import (
+    AUTHOR,
     AVAILABLE_SOUNDS,
     CONF_GLOBAL_SOUND,
     CONF_NOTIFY_SERVICE,
@@ -36,6 +38,11 @@ from .models import default_times, normalize_hhmm, normalize_local_datetime, par
 STEP_ACTIONS = ["edit", "switch_active", "remove"]
 
 
+async def _about_placeholders(hass) -> dict[str, str]:
+    """Version (from manifest.json) and author, shown in the dialogs' descriptions."""
+    return {"version": str((await async_get_integration(hass, DOMAIN)).version), "author": AUTHOR}
+
+
 class HowManyTimesTodayConfigFlow(ConfigFlow, domain=DOMAIN):
     """The integration itself is a singleton; schedules are managed entirely via Options."""
 
@@ -46,7 +53,9 @@ class HowManyTimesTodayConfigFlow(ConfigFlow, domain=DOMAIN):
         self._abort_if_unique_id_configured()
         if user_input is not None:
             return self.async_create_entry(title="How Many Times Today", data={})
-        return self.async_show_form(step_id="user")
+        return self.async_show_form(
+            step_id="user", description_placeholders=await _about_placeholders(self.hass)
+        )
 
     @staticmethod
     @callback
@@ -75,6 +84,7 @@ class HowManyTimesTodayOptionsFlow(OptionsFlow):
         return self.async_show_menu(
             step_id="init",
             menu_options=["add_schedule", "manage_schedules", "reset_schedules", "global_settings", "legend"],
+            description_placeholders=await _about_placeholders(self.hass),
         )
 
     # --- "How to read the card?": the colours and sentences explained -------------

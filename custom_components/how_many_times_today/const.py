@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 DOMAIN = "how_many_times_today"
+AUTHOR = "Jacek Bieganowski"
 
 # --- schedule modes ---
 MODE_FIXED_TIMES = "fixed_times"  # N times a day, each at a chosen HH:MM

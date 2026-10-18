@@ -86,7 +86,7 @@ event `how_many_times_today_due` is fired, and an optional push goes to the mobi
 
 ## Development
 
-146 unit tests cover the scheduling engine, the stores and the coordinator without needing
+149 unit tests cover the scheduling engine, the stores and the coordinator without needing
 a real Home Assistant install (details in [docs/TESTING.md](docs/TESTING.md)):
 
 ```sh
@@ -100,6 +100,16 @@ validation.
 <p align="center">
   <img src="docs/images/diagram-test-architecture.svg" alt="How the unit tests run without Home Assistant" width="100%">
 </p>
+
+## Version and author
+
+Versions follow semantic versioning, `MAJOR.MINOR.PATCH` (the number lives in
+`custom_components/how_many_times_today/manifest.json`; every release is a commit
+"Release X.Y.Z: ..." with the git tag `vX.Y.Z` and a section in the changelog). A
+feature raises the minor number, a fix the patch number. The version and the author,
+Jacek Bieganowski, are shown on the integration's device page (manufacturer and
+firmware), in the dialog that adds the integration and at the top of the **Configure**
+menu.
 
 ## Regenerating the diagrams
 

@@ -85,7 +85,7 @@ zdarzenie `how_many_times_today_due`, a opcjonalny push idzie do aplikacji mobil
 
 ## Rozwój
 
-146 testów jednostkowych pokrywa silnik harmonogramów, magazyny i koordynator bez potrzeby
+149 testów jednostkowych pokrywa silnik harmonogramów, magazyny i koordynator bez potrzeby
 realnej instalacji Home Assistant (szczegóły w [docs/TESTING.pl.md](docs/TESTING.pl.md)):
 
 ```sh
@@ -99,6 +99,15 @@ hassfest i HACS.
 <p align="center">
   <img src="docs/images/diagram-test-architecture.pl.svg" alt="Jak testy jednostkowe działają bez Home Assistanta" width="100%">
 </p>
+
+## Wersja i autor
+
+Wersje podlegają wersjonowaniu semantycznemu, `MAJOR.MINOR.PATCH` (numer jest w
+`custom_components/how_many_times_today/manifest.json`; każde wydanie to commit
+„Release X.Y.Z: …” z tagiem git `vX.Y.Z` i sekcją w changelogu). Nowa funkcja podnosi
+numer środkowy, poprawka ostatni. Wersja i autor, Jacek Bieganowski, są widoczne na
+stronie urządzenia integracji (producent i oprogramowanie), w oknie dodawania integracji
+oraz na górze menu **Konfiguruj**.
 
 ## Regenerowanie diagramów
 
