@@ -4,27 +4,27 @@
 
 ## Unit tests (pytest)
 
-139 tests, no Home Assistant installation needed:
+145 tests, no Home Assistant installation needed:
 
 ```sh
 pip install -r requirements-test.txt
 python -m pytest tests/ -v
 ```
 
-- `tests/test_models.py` (72): the pure scheduling engine (`models.py`) — terms for
+- `tests/test_models.py` (76): the pure scheduling engine (`models.py`) — terms for
   fixed-times and every-X-hours schedules (start, end, midnight, fractional hours,
   absolute durations across a daylight-saving change), the planned count, the gap and the
   ¾ "missed" moment, and the whole press logic: inside and before the window, the A/B/C
   answers, oldest open term first, extra executions, the blinking number, the exceeded
   state, state priority, colour progress, pending / inactive / switched off, the due event
-  freshness, long downtimes, the runtime round-trip, and validating a change to a stored schedule (`update_schedule`).
-- `tests/test_coordinator.py` (24): the coordinator and the stores against fake Home
+  freshness, long downtimes, the runtime round-trip, and validating a change to a stored schedule (`update_schedule`) and the reset to "all on time".
+- `tests/test_coordinator.py` (26): the coordinator and the stores against fake Home
   Assistant pieces — state and history surviving a simulated restart (an open term stays
   open), a corrupt saved entry being skipped, presses (an answer needed, catching up
   terms that came due), switching on/off, clearing history (one schedule, all, by week),
   the due event payload and its single delivery, the optional push (and a failing
   notifier), the exact-moment timer and its cancellation, and schedules added, edited and
-  removed through the options, and changing a schedule through the service.
+  removed through the options, changing a schedule through the service, and the reset (history of today replaced, earlier days kept, inactive schedules skipped).
 - `tests/test_validation.py` (40): input helpers of the config flow (`normalize_hhmm`,
   `normalize_local_datetime`, `default_times`), the one-off conversion from the previous
   task/slot data (`legacy.py`), and translation completeness — the same keys in

@@ -27,7 +27,7 @@ def diagrams(lang: str):
         return s
 
     # ------------------------------------------------------------ options flow map
-    s = new("options-flow", 1000, 660, L("The Configure dialog", "Okno Konfiguruj"),
+    s = new("options-flow", 1000, 745, L("The Configure dialog", "Okno Konfiguruj"),
             L("Settings → Devices & services → How Many Times Today → the gear icon",
               "Ustawienia → Urządzenia i usługi → How Many Times Today → ikona koła zębatego"))
     s.box(40, 290, 140, 70, L("Configure", "Konfiguruj"), [L("gear icon", "ikona koła")], PURPLE)
@@ -58,14 +58,21 @@ def diagrams(lang: str):
     s.box(480, 480, 190, 60, L("Sound + push service", "Dźwięk + usługa push"), [], AMBER, 12)
     s.arrow(670, 510, 700, 510, MUTED)
     s.box(700, 485, 260, 50, L("Saved: applies to every schedule", "Zapisane: dotyczy wszystkich"), [], SAGE, 11)
-    # the help page
+    # reset to "all on time"
     s.arrow(180, 325, 220, 590, MUTED)
-    s.box(220, 560, 230, 60, L("How to read the card?", "Jak czytać kartę?"), [], PURPLE, 12)
+    s.box(220, 560, 230, 60, L('Reset to "all on time"', 'Reset do "wszystko na czas"'), [], AMBER, 12)
     s.arrow(450, 590, 480, 590, MUTED)
-    s.box(480, 560, 190, 60, L("Help page", "Strona pomocy"), [], PURPLE, 12)
+    s.box(480, 560, 190, 60, L("Pick the schedules", "Wybierz harmonogramy"), [], AMBER, 12)
     s.arrow(670, 590, 700, 590, MUTED)
-    s.box(700, 565, 260, 50, L("Nothing changes; back to the menu", "Nic się nie zmienia; wraca do menu"), [], SAGE, 11)
-    s.text(40, 650, L("Every step saves immediately and takes effect without restarting Home Assistant.",
+    s.box(700, 560, 260, 60, L("Counter and history match the due terms", "Licznik i historia zgodne z terminami"), [], SAGE, 11)
+    # the help page
+    s.arrow(180, 325, 220, 670, MUTED)
+    s.box(220, 640, 230, 60, L("How to read the card?", "Jak czytać kartę?"), [], PURPLE, 12)
+    s.arrow(450, 670, 480, 670, MUTED)
+    s.box(480, 640, 190, 60, L("Help page", "Strona pomocy"), [], PURPLE, 12)
+    s.arrow(670, 670, 700, 670, MUTED)
+    s.box(700, 645, 260, 50, L("Nothing changes; back to the menu", "Nic się nie zmienia; wraca do menu"), [], SAGE, 11)
+    s.text(40, 730, L("Every step saves immediately and takes effect without restarting Home Assistant.",
                       "Każdy krok zapisuje się od razu i działa bez restartu Home Assistanta."), 13, 600, INK, check_w=920)
 
     # ------------------------------------------------------------ schedule -> terms

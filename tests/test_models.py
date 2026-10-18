@@ -583,3 +583,46 @@ def test_update_of_an_interval_schedule_rejects_times_and_a_bad_interval():
     assert update_error(stored_interval(), {"interval_hours": 0.2}) == "invalid_interval"
     assert update_error(stored_interval(), {"interval_hours": 49}) == "invalid_interval"
     assert update_error(stored_interval(), {"interval_hours": "x"}) == "invalid_interval"
+
+
+# --- reset to "everything on time" --------------------------------------------------------
+
+
+def test_reset_closes_every_term_due_today_and_writes_a_normal_entry_for_each():
+    sim = Sim(fixed(("07:00", "13:00", "20:00")), created=at(6))
+    sim.tick(at(14))  # 07:00 missed, 13:00 open, 20:00 still to come
+    assert models.compute_status(sim.s, sim.rt, [], at(14)).state == const.STATE_BLINKING_BROWN
+    entries = models.reset_to_on_schedule(sim.s, sim.rt, at(14))
+    assert [(e["timestamp"], e["kind"], e["count_delta"], e["outside_schedule"]) for e in entries] == [
+        (at(7).isoformat(), const.KIND_ON_SCHEDULE, 1, False),
+        (at(13).isoformat(), const.KIND_ON_SCHEDULE, 1, False),
+    ]
+    status = models.compute_status(sim.s, sim.rt, entries, at(14))
+    assert status.count_today == 2 and status.planned_count == 3 and status.open_slots == []
+    assert status.state in (const.STATE_GREEN, const.STATE_TRANSITION) and not status.number_blinking
+    assert sim.rt.last_press_at == at(13)
+
+
+def test_reset_forgets_terms_resolved_in_advance_and_stops_the_blinking_number():
+    sim = Sim(fixed(("07:00", "13:00")), created=at(6))
+    sim.tick(at(6, 45))
+    sim.press(at(6, 45))  # 07:00 closed in advance
+    sim.tick(at(10))
+    sim.rt.number_blinking = True
+    models.reset_to_on_schedule(sim.s, sim.rt, at(10))
+    assert not sim.rt.number_blinking
+    assert at(13).isoformat() not in sim.rt.occurrences
+
+
+def test_reset_with_no_term_due_yet_gives_an_empty_day_and_refuses_an_inactive_schedule():
+    sim = Sim(fixed(("16:00",)), created=at(6))
+    assert models.reset_to_on_schedule(sim.s, sim.rt, at(8)) == []
+    sim.rt.manually_inactive = True
+    with pytest.raises(models.ScheduleNotActive):
+        models.reset_to_on_schedule(sim.s, sim.rt, at(8))
+
+
+def test_reset_of_an_interval_schedule_counts_the_terms_of_today_only():
+    sim = Sim(interval(8, start="2026-10-18T22:00:00"), created=at(0))  # 22:00, 06:00, 14:00, 22:00 ...
+    entries = models.reset_to_on_schedule(sim.s, sim.rt, at(15))
+    assert [e["timestamp"] for e in entries] == [at(6).isoformat(), at(14).isoformat()]

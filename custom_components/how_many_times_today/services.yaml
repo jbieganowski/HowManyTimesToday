@@ -50,6 +50,17 @@ set_schedule_active:
       selector:
         boolean:
 
+reset_schedule:
+  name: Reset to "all on time"
+  description: >-
+    Set a schedule to the state where everything due so far today was done on time: the
+    counter matches the terms that have come due and today's history gets a normal entry
+    for each of them (earlier days stay as they are).
+  target:
+    entity:
+      integration: how_many_times_today
+      domain: sensor
+
 update_schedule:
   name: Change a schedule
   description: >-

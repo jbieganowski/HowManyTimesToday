@@ -419,3 +419,41 @@ def test_update_schedule_rejects_a_bad_change_and_stores_nothing():
             await coord.async_update_schedule("unknown", {"name": "x"})
 
     run(go())
+
+
+# --- reset to "everything on time" ------------------------------------------------------------
+
+
+def test_reset_replaces_todays_history_keeps_earlier_days_and_lights_the_button_up():
+    async def go():
+        entry = make_entry([cfg_fixed("a", times=("07:00", "13:00", "20:00")), cfg_fixed("off")])
+        CLOCK["now"] = at(6)
+        coord = await start(entry)
+        await coord.async_set_active("off", False)
+        CLOCK["now"] = at(14)
+        await coord.async_refresh()
+        await coord.history.async_append("a", [models.make_entry(at(9, d=18), const.KIND_ON_SCHEDULE, at(9, d=18), False, 1)])
+        assert coord.status("a").state == const.STATE_BLINKING_BROWN
+        assert await coord.async_reset_to_on_schedule(None) == ["a"]  # the one switched off is skipped
+        status = coord.status("a")
+        assert status.count_today == 2 and status.open_slots == [] and status.state != const.STATE_BLINKING_BROWN
+        stamps = [e["timestamp"] for e in coord.history.get("a")]
+        assert stamps == [at(9, d=18).isoformat(), at(7).isoformat(), at(13).isoformat()]
+        assert coord.history.get("off") == []
+        # the reset sticks: nothing reopens at the next refresh
+        await coord.async_refresh()
+        assert coord.status("a").open_slots == [] and coord.status("a").count_today == 2
+
+    run(go())
+
+
+def test_reset_of_a_named_inactive_schedule_raises_unless_skipped():
+    async def go():
+        entry = make_entry([cfg_fixed("a")])
+        coord = await start(entry)
+        await coord.async_set_active("a", False)
+        with pytest.raises(models.ScheduleNotActive):
+            await coord.async_reset_to_on_schedule(["a"])
+        assert await coord.async_reset_to_on_schedule(["a"], skip_inactive=True) == []
+
+    run(go())

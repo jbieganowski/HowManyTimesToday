@@ -31,6 +31,7 @@ from .const import (
 from .models import (
     OPEN,
     DueEvent,
+    ScheduleNotActive,
     Schedule,
     ScheduleRuntime,
     Status,
@@ -41,6 +42,7 @@ from .models import (
     new_runtime,
     next_boundary,
     press,
+    reset_to_on_schedule,
 )
 from .store import HistoryStore, ScheduleStateStore
 
@@ -275,6 +277,29 @@ class HowManyTimesTodayCoordinator(DataUpdateCoordinator[None]):
         options = dict(self.entry.options)
         options[CONF_SCHEDULES] = configs
         self.hass.config_entries.async_update_entry(self.entry, options=options)
+
+    async def async_reset_to_on_schedule(
+        self, schedule_ids: list[str] | None = None, skip_inactive: bool = False
+    ) -> list[str]:
+        """Set schedules to "everything was done on time" (see models.reset_to_on_schedule):
+        today's counter and history match the terms that have come due. `schedule_ids`
+        None means every schedule. A schedule that is off or has not started raises
+        ScheduleNotActive, or is skipped with `skip_inactive`. Returns the ids reset."""
+        now = dt_now()
+        done = []
+        for sid in (list(self.schedules) if schedule_ids is None else schedule_ids):
+            schedule, rt = self._require(sid)
+            try:
+                entries = reset_to_on_schedule(schedule, rt, now)
+            except ScheduleNotActive:
+                if skip_inactive or schedule_ids is None:
+                    continue
+                raise
+            await self.history.async_replace_day(sid, now.date(), entries, now.tzinfo)
+            done.append(sid)
+        await self.state_store.async_save(self.runtime)
+        await self.async_refresh()
+        return done
 
     async def async_set_active(self, schedule_id: str, active: bool) -> None:
         _, rt = self._require(schedule_id)

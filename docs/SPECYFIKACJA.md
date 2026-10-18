@@ -214,12 +214,23 @@ skonfigurowaną w Home Assistant, a nie przeglądarki czy serwera.
 
 ## Usługi i atrybuty
 
-Cztery usługi encji (`press_schedule`, `clear_history`, `set_schedule_active`, `update_schedule`), atrybuty
+Pięć usług encji (`press_schedule`, `clear_history`, `set_schedule_active`, `reset_schedule`, `update_schedule`), atrybuty
 sensora i zdarzenie terminu opisuje [przewodnik konfiguracji](CONFIGURATION.pl.md).
 Naciśnięcie, które wymaga odpowiedzi, a jej nie ma, kończy się błędem walidacji z kluczem
 tłumaczenia `answer_required`.
 
+## Reset do „wszystko na czas”
+
+`models.reset_to_on_schedule` ustawia włączony harmonogram w stan, w którym wszystko, co
+do tej pory dziś przypadało, zrobiono na czas: każdy dzisiejszy termin do teraz i każdy
+wciąż otwarty termin z wcześniejszych dni zostaje zamknięty; terminy rozstrzygnięte z
+wyprzedzeniem na później dziś są zapominane; migająca liczba przestaje migać; dzisiejsza
+historia jest zastępowana jednym wpisem `on_schedule` na każdy dzisiejszy termin, z
+godziną samego terminu (`count_delta` 1), a wcześniejsze dni zostają. Harmonogram
+wyłączony lub jeszcze niezaczęty zgłasza `ScheduleNotActive`. Reset jest krokiem okna
+Konfiguruj i usługą encji `reset_schedule`.
+
 ## Testy
 
-139 testów jednostkowych działa bez instalacji Home Assistanta; zobacz
+145 testów jednostkowych działa bez instalacji Home Assistanta; zobacz
 [TESTING.pl.md](TESTING.pl.md).

@@ -212,12 +212,22 @@ Home Assistant, not the browser's or the server's.
 
 ## Services and attributes
 
-Four entity services (`press_schedule`, `clear_history`, `set_schedule_active`, `update_schedule`), the
+Five entity services (`press_schedule`, `clear_history`, `set_schedule_active`, `reset_schedule`, `update_schedule`), the
 sensor attributes and the due event are described in the
 [configuration guide](CONFIGURATION.md). A press that needs an answer and has none fails
 with a validation error whose translation key is `answer_required`.
 
+## Reset to "all on time"
+
+`models.reset_to_on_schedule` puts a switched-on schedule in the state where everything
+due so far today was done on time: every term of today up to now, and every term still
+open from earlier, is closed; terms resolved in advance for later today are forgotten;
+the blinking number stops; today's history is replaced by one `on_schedule` entry per
+term due today, stamped with the term's own time (`count_delta` 1), while earlier days
+are kept. A switched-off or not yet started schedule raises `ScheduleNotActive`. It is
+offered as a step of the Configure dialog and as the `reset_schedule` entity service.
+
 ## Testing
 
-139 unit tests run without a Home Assistant installation; see
+145 unit tests run without a Home Assistant installation; see
 [TESTING.md](TESTING.md).

@@ -188,6 +188,7 @@ def test_every_state_error_and_service_the_code_raises_or_exposes_is_translated(
         const.SERVICE_CLEAR_HISTORY,
         const.SERVICE_SET_SCHEDULE_ACTIVE,
         const.SERVICE_UPDATE_SCHEDULE,
+        const.SERVICE_RESET_SCHEDULE,
     } == set(strings["services"])
     assert set(strings["selector"]["answer"]["options"]) == set(const.ANSWERS)
     assert {"name_required", "invalid_datetime", "end_before_start"} <= set(strings["options"]["error"])

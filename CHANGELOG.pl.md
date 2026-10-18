@@ -24,9 +24,11 @@
 - **Powiadomienia:** co do sekundy w chwili, gdy termin przypada, odpalane jest zdarzenie
   `how_many_times_today_due` (po tym, jak encja przyjęła nowy stan), karta pokazuje
   komunikat w aplikacji, a opcjonalny push idzie przez aplikację mobilną.
-- **Usługi encji** `press_schedule`, `clear_history`, `set_schedule_active` i `update_schedule` (zmienia nazwę, opis, godziny lub interwał, start, koniec i okno tolerancji harmonogramu; postęp zostaje); naciśnięcie,
+- **Usługi encji** `press_schedule`, `clear_history`, `set_schedule_active`, `reset_schedule` i `update_schedule` (zmienia nazwę, opis, godziny lub interwał, start, koniec i okno tolerancji harmonogramu; postęp zostaje); naciśnięcie,
   które wymaga odpowiedzi, kończy się błędem walidacji z kluczem tłumaczenia
   `answer_required`.
+- **Reset do „wszystko na czas”** w oknie Konfiguruj (i usługa `reset_schedule`): wybrane harmonogramy dostają dzisiejszy licznik i historię tak, jakby każdy już przypadły termin zrobiono na czas.
+- **Edycja harmonogramu w edytorze karty:** nazwa, opis, godziny lub interwał, start, koniec i okno tolerancji.
 - **Stan przeżywa restarty**; dzisiejszy licznik wynika z historii i zeruje się o północy.
   Terminy i daty podążają za strefą czasową Home Assistanta.
 - **Migracja** z poprzedniego modelu zadań i slotów (wersja wpisu 1 → 2): zadania stają się

@@ -96,6 +96,7 @@ LEGACY_STORAGE_STATE_PREFIX = f"{DOMAIN}_slot_state"
 # --- services ---
 SERVICE_PRESS_SCHEDULE = "press_schedule"
 SERVICE_CLEAR_HISTORY = "clear_history"
+SERVICE_RESET_SCHEDULE = "reset_schedule"
 SERVICE_SET_SCHEDULE_ACTIVE = "set_schedule_active"
 SERVICE_UPDATE_SCHEDULE = "update_schedule"
 

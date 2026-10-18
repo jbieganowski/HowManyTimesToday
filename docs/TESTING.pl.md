@@ -4,27 +4,27 @@
 
 ## Testy jednostkowe (pytest)
 
-139 testów, bez instalacji Home Assistanta:
+145 testów, bez instalacji Home Assistanta:
 
 ```sh
 pip install -r requirements-test.txt
 python -m pytest tests/ -v
 ```
 
-- `tests/test_models.py` (72): czysty silnik harmonogramów (`models.py`) — terminy dla
+- `tests/test_models.py` (76): czysty silnik harmonogramów (`models.py`) — terminy dla
   harmonogramów ze stałymi godzinami i co X godzin (start, koniec, północ, ułamkowe
   godziny, bezwzględne czasy trwania przez zmianę czasu), planowana liczba, odstęp i
   moment „pominięcia” po ¾ oraz cała logika naciśnięć: w oknie i przed nim, odpowiedzi
   A/B/C, najstarszy otwarty termin najpierw, wykonania dodatkowe, migająca liczba, stan
   przekroczenia, priorytet stanów, postęp koloru, pending / inactive / wyłączony, świeżość
-  zdarzenia terminu, długie przestoje, serializacja stanu oraz walidacja zmiany zapisanego harmonogramu (`update_schedule`).
-- `tests/test_coordinator.py` (24): koordynator i magazyny na atrapach elementów Home
+  zdarzenia terminu, długie przestoje, serializacja stanu oraz walidacja zmiany zapisanego harmonogramu (`update_schedule`) i reset do „wszystko na czas”.
+- `tests/test_coordinator.py` (26): koordynator i magazyny na atrapach elementów Home
   Assistanta — stan i historia przeżywające symulowany restart (otwarty termin pozostaje
   otwarty), pominięcie uszkodzonego zapisu, naciśnięcia (potrzebna odpowiedź, nadrabianie
   terminów, które przypadły), włączanie/wyłączanie, czyszczenie historii (jeden
   harmonogram, wszystkie, po tygodniach), payload zdarzenia terminu i jego jednokrotne
   dostarczenie, opcjonalny push (i zepsuty powiadamiacz), timer na dokładną chwilę wraz z
-  anulowaniem oraz harmonogramy dodawane, edytowane i usuwane przez opcje oraz zmiana harmonogramu przez usługę.
+  anulowaniem oraz harmonogramy dodawane, edytowane i usuwane przez opcje zmiana harmonogramu przez usługę oraz reset (dzisiejsza historia zastępowana, wcześniejsze dni zostają, wyłączone pomijane).
 - `tests/test_validation.py` (40): pomocnicze funkcje wejścia formularza
   (`normalize_hhmm`, `normalize_local_datetime`, `default_times`), jednorazowa konwersja
   danych z poprzedniego modelu zadań i slotów (`legacy.py`) oraz kompletność tłumaczeń —

@@ -41,6 +41,7 @@ icon** on the integration entry.
 | --- | --- |
 | **Add a new schedule** | Creates a schedule (medication, feeding, water, …) |
 | **Edit, switch on/off or remove a schedule** | Changes a schedule, switches it off or on by hand, or deletes it |
+| **Reset to "all on time"** | Sets chosen schedules to the state where everything due so far today was done on time |
 | **Global settings (sound, push notification)** | Settings shared by all schedules |
 | **How to read the card?** | A help page: what every colour and sentence on the button means |
 
@@ -143,6 +144,23 @@ Choose **Edit, switch on/off or remove a schedule**, pick the schedule and the a
 
 If there is no schedule yet, the menu item shows "No schedules defined yet".
 
+### Reset to "all on time"
+
+Choose **Reset to "all on time"** when the real life and the button have drifted apart —
+for example it is 2 pm, the cat was in fact fed at 7 as scheduled, but nobody pressed the
+button. Tick the schedules (all are ticked by default) and confirm:
+
+- every term of today that has already come due (and any term still open from earlier)
+  is closed as done on time, so the button lights up as it should and nothing is blinking
+  or red;
+- today's counter becomes the number of terms already due (1 of 3 at 2 pm for a cat fed
+  at 7, 13 and 20), and today's history gets one normal entry per such term, stamped with
+  the term's own time (07:00 in the example). Entries made earlier today for these
+  schedules are replaced; earlier days stay as they are;
+- schedules that are switched off or have not started yet are skipped.
+
+The same is available as the `reset_schedule` service (section 9).
+
 ## 6. Global settings
 
 Choose **Global settings (sound, push notification)**.
@@ -225,9 +243,14 @@ that came due while Home Assistant was down is still open afterwards.
 ## 8. A schedule on a dashboard
 
 Add one card per schedule. In the UI use **Add card → How Many Times Today** — a visual
-editor offers an entity picker limited to this integration's sensors. The card's editor only chooses **which schedule the card shows**; it also links to the
-integration settings, where a schedule's name, description, times, start and end are
-changed (section 5). Or in YAML:
+editor offers an entity picker limited to this integration's sensors. The card's editor chooses **which schedule the card shows** and lets you change that
+schedule right there: its name and description, the times (how many a day and each
+time) or the interval, and — under **Advanced** — the start, the end (with a button to
+remove it) and the tolerance window. **Save schedule changes** applies them at once, the
+preview updates, and a message under the button says "Saved" or why the change was
+refused. Progress and history are kept. Only the kind of schedule (fixed times / every
+X hours) is changed in the integration settings (section 5), which the editor links to.
+Or in YAML:
 
 ```yaml
 type: custom:how-many-times-today-card
@@ -245,13 +268,14 @@ and can be cleared entirely or by week:
 
 ## 9. Services
 
-All four are entity services: pick the schedule's sensor as the target.
+All five are entity services: pick the schedule's sensor as the target.
 
 | Service | Fields | Effect |
 | --- | --- | --- |
 | `how_many_times_today.press_schedule` | `answer` (optional) | Confirms the schedule, like pressing its button |
 | `how_many_times_today.clear_history` | `weeks` (optional) | Clears the press history |
 | `how_many_times_today.set_schedule_active` | `active` (required) | Switches the schedule on or off |
+| `how_many_times_today.reset_schedule` | — | Sets the schedule to "everything due so far today was done on time" (counter and today's history; earlier days stay) |
 | `how_many_times_today.update_schedule` | `name`, `description`, `fixed_times`, `interval_hours`, `start_at`, `end_at`, `window_minutes` (all optional, at least one) | Changes the schedule's name, description, times or interval, start, end or tolerance window (the card editor uses it) |
 
 ```yaml

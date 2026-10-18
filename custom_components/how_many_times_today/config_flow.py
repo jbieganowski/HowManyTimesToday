@@ -74,7 +74,7 @@ class HowManyTimesTodayOptionsFlow(OptionsFlow):
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
         return self.async_show_menu(
             step_id="init",
-            menu_options=["add_schedule", "manage_schedules", "global_settings", "legend"],
+            menu_options=["add_schedule", "manage_schedules", "reset_schedules", "global_settings", "legend"],
         )
 
     # --- "How to read the card?": the colours and sentences explained -------------
@@ -85,6 +85,39 @@ class HowManyTimesTodayOptionsFlow(OptionsFlow):
         if user_input is not None:
             return await self.async_step_init()
         return self.async_show_form(step_id="legend", data_schema=vol.Schema({}))
+
+    # --- reset to "everything on time" ----------------------------------------------
+
+    async def async_step_reset_schedules(self, user_input: dict[str, Any] | None = None):
+        """Pick the schedules to set to "everything due so far was done on time"; the
+        form's description explains what that does to the counter and the history."""
+        schedules = self._schedules
+        if not schedules:
+            return self.async_abort(reason="no_schedules")
+        coordinator = self.hass.data.get(DOMAIN, {}).get(self.config_entry.entry_id)
+
+        if user_input is not None:
+            if coordinator is not None and user_input["schedule_ids"]:
+                known = [sid for sid in user_input["schedule_ids"] if sid in coordinator.schedules]
+                await coordinator.async_reset_to_on_schedule(known, skip_inactive=True)
+            return self.async_create_entry(title="", data=dict(self.config_entry.options))
+
+        ids = [s[CONF_SCHEDULE_ID] for s in schedules]
+        schema = vol.Schema(
+            {
+                vol.Required("schedule_ids", default=ids): selector.selector(
+                    {
+                        "select": {
+                            "multiple": True,
+                            "options": [
+                                {"value": s[CONF_SCHEDULE_ID], "label": s[CONF_SCHEDULE_NAME]} for s in schedules
+                            ],
+                        }
+                    }
+                ),
+            }
+        )
+        return self.async_show_form(step_id="reset_schedules", data_schema=schema)
 
     # --- add / edit a schedule (shared steps) ---------------------------------
 

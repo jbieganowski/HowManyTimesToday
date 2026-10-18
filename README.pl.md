@@ -76,7 +76,7 @@ Albo przez „Dodaj kartę" w UI dashboardu — pojawi się selektor encji ogran
 sensorów tej integracji.
 
 Usługi (wszystkie przyjmują sensor harmonogramu jako cel): `press_schedule` (z opcjonalnym
-`answer`), `clear_history`, `set_schedule_active` i `update_schedule` (nazwa, godziny, interwał, start, koniec, okno). Gdy termin przypada, odpalane jest
+`answer`), `clear_history`, `set_schedule_active`, `reset_schedule` i `update_schedule` (nazwa, godziny, interwał, start, koniec, okno). Gdy termin przypada, odpalane jest
 zdarzenie `how_many_times_today_due`, a opcjonalny push idzie do aplikacji mobilnej.
 
 <p align="center">
@@ -85,7 +85,7 @@ zdarzenie `how_many_times_today_due`, a opcjonalny push idzie do aplikacji mobil
 
 ## Rozwój
 
-139 testów jednostkowych pokrywa silnik harmonogramów, magazyny i koordynator bez potrzeby
+145 testów jednostkowych pokrywa silnik harmonogramów, magazyny i koordynator bez potrzeby
 realnej instalacji Home Assistant (szczegóły w [docs/TESTING.pl.md](docs/TESTING.pl.md)):
 
 ```sh

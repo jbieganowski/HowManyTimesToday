@@ -40,6 +40,7 @@ koła zębatego** przy wpisie integracji.
 | --- | --- |
 | **Dodaj nowy harmonogram** | Tworzy harmonogram (lek, karmienie, woda, …) |
 | **Edytuj, włącz/wyłącz lub usuń harmonogram** | Zmienia harmonogram, wyłącza go lub włącza ręcznie albo usuwa |
+| **Reset do „wszystko na czas”** | Ustawia wybrane harmonogramy w stan, w którym wszystko, co do tej pory dziś przypadało, zrobiono na czas |
 | **Ustawienia globalne (dźwięk, powiadomienie push)** | Ustawienia wspólne dla wszystkich harmonogramów |
 | **Jak czytać kartę?** | Strona pomocy: co znaczy każdy kolor i każde zdanie na klawiszu |
 
@@ -143,6 +144,23 @@ Wybierz **Edytuj, włącz/wyłącz lub usuń harmonogram**, wskaż harmonogram i
 Gdy nie ma jeszcze żadnego harmonogramu, pozycja pokazuje „Nie zdefiniowano jeszcze
 żadnych harmonogramów”.
 
+### Reset do „wszystko na czas”
+
+Wybierz **Reset do „wszystko na czas”**, gdy życie i klawisz rozjechały się — na przykład
+jest 14:00, kota faktycznie nakarmiono o 7:00 zgodnie z harmonogramem, ale nikt nie
+nacisnął klawisza. Zaznacz harmonogramy (domyślnie wszystkie) i potwierdź:
+
+- każdy dzisiejszy termin, który już przypadł (oraz każdy wciąż otwarty termin z
+  wcześniejszych dni), zostaje zamknięty jako zrobiony na czas, więc klawisz świeci jak
+  należy i nic nie miga ani nie jest czerwone;
+- dzisiejszy licznik staje się liczbą terminów, które już przypadły (o 14:00 dla kota
+  karmionego o 7, 13 i 20 jest to 1 z 3), a dzisiejsza historia dostaje jeden zwykły wpis
+  na taki termin, z godziną samego terminu (w przykładzie 07:00). Wcześniejsze dzisiejsze
+  wpisy tych harmonogramów są zastępowane; wcześniejsze dni zostają bez zmian;
+- harmonogramy wyłączone lub jeszcze niezaczęte są pomijane.
+
+To samo jest dostępne jako usługa `reset_schedule` (sekcja 9).
+
 ## 6. Ustawienia globalne
 
 Wybierz **Ustawienia globalne (dźwięk, powiadomienie push)**.
@@ -224,9 +242,13 @@ przypadł podczas przestoju, po restarcie nadal jest otwarty.
 ## 8. Harmonogram na dashboardzie
 
 Dodaj jedną kartę na harmonogram. Przez UI użyj **Dodaj kartę → How Many Times Today** —
-edytor wizualny oferuje selektor encji ograniczony do sensorów tej integracji. Edytor karty tylko wybiera, **który harmonogram karta pokazuje**; zawiera też link do
-ustawień integracji, gdzie zmienia się nazwę, opis, godziny, start i koniec harmonogramu
-(sekcja 5). Albo w YAML:
+edytor wizualny oferuje selektor encji ograniczony do sensorów tej integracji. Edytor karty wybiera, **który harmonogram karta pokazuje**, i pozwala od razu go zmienić:
+nazwę i opis, godziny (ile razy dziennie i każdą godzinę) albo interwał, a w sekcji
+**Zaawansowane** — start, koniec (z przyciskiem jego usunięcia) i okno tolerancji.
+**Zapisz zmiany harmonogramu** stosuje je od razu, podgląd się odświeża, a komunikat pod
+przyciskiem mówi „Zapisano” albo dlaczego zmiana została odrzucona. Postęp i historia
+zostają. Tylko rodzaj harmonogramu (stałe godziny / co X godzin) zmienia się w ustawieniach
+integracji (sekcja 5), do których edytor linkuje. Albo w YAML:
 
 ```yaml
 type: custom:how-many-times-today-card
@@ -251,6 +273,7 @@ Wszystkie trzy to usługi encji: jako cel wskaż sensor harmonogramu.
 | `how_many_times_today.press_schedule` | `answer` (opcjonalne) | Potwierdza harmonogram, jak naciśnięcie jego przycisku |
 | `how_many_times_today.clear_history` | `weeks` (opcjonalne) | Czyści historię naciśnięć |
 | `how_many_times_today.set_schedule_active` | `active` (wymagane) | Włącza lub wyłącza harmonogram |
+| `how_many_times_today.reset_schedule` | — | Ustawia harmonogram w stan „wszystko, co dziś przypadało, zrobiono na czas” (licznik i dzisiejsza historia; wcześniejsze dni zostają) |
 | `how_many_times_today.update_schedule` | `name`, `description`, `fixed_times`, `interval_hours`, `start_at`, `end_at`, `window_minutes` (wszystkie opcjonalne, co najmniej jedno) | Zmienia nazwę, opis, godziny lub interwał, start, koniec albo okno tolerancji harmonogramu (używa jej edytor karty) |
 
 ```yaml

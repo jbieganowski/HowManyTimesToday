@@ -57,6 +57,16 @@ class HistoryStore:
         self._data[schedule_id] = list(entries)
         await self._async_save()
 
+    async def async_replace_day(self, schedule_id: str, day, entries: list[dict], tz) -> None:
+        """Replace everything recorded on the local `day` with `entries`, keeping the
+        other days (used by the reset to "everything on time")."""
+        kept = [
+            e for e in self._data.get(schedule_id, [])
+            if datetime.fromisoformat(e["timestamp"]).astimezone(tz).date() != day
+        ]
+        self._data[schedule_id] = sorted(kept + entries, key=lambda e: e["timestamp"])
+        await self._async_save()
+
     async def async_drop(self, schedule_ids) -> None:
         """Forget the history of deleted schedules."""
         removed = [sid for sid in schedule_ids if sid in self._data]

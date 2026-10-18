@@ -603,6 +603,40 @@ def press(
     return entries
 
 
+def reset_to_on_schedule(s: Schedule, rt: ScheduleRuntime, now: datetime) -> list[dict]:
+    """Put the schedule in the state "everything was done on time": every term of today
+    that has already come due (and every term still open from earlier) is closed, and
+    today's history becomes one normal entry per such term, stamped with the term's own
+    time. Terms resolved in advance for later today are forgotten, the blinking number
+    stops. Returns the new entries of today; the caller replaces today's old ones with
+    them. Mutates `rt`. Raises ScheduleNotActive for a pending or switched-off schedule.
+    """
+    state = activity(s, rt, now)
+    if state != "active":
+        raise ScheduleNotActive(state)
+
+    midnight = datetime.combine(now.date(), time(0, 0), tzinfo=now.tzinfo)
+    due_today = []
+    for term in occurrences_after(s, midnight - _EPS):
+        if term > now:
+            break
+        due_today.append(term)
+
+    for key in list(rt.occurrences):
+        term = _term_of(key)
+        if term > now:
+            del rt.occurrences[key]  # resolved in advance: not due yet
+        else:
+            rt.occurrences[key] = {"status": RESOLVED, "missed": False}
+    for term in due_today:
+        rt.occurrences[term.isoformat()] = {"status": RESOLVED, "missed": False}
+
+    rt.processed_until = now
+    rt.number_blinking = False
+    rt.last_press_at = due_today[-1] if due_today else rt.last_press_at
+    return [make_entry(term, KIND_ON_SCHEDULE, term, False, 1) for term in due_today]
+
+
 # --- the status the sensor shows ----------------------------------------------------
 
 

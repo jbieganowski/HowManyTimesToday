@@ -27,6 +27,7 @@ from .const import (
     SCHEDULE_STATES,
     SERVICE_CLEAR_HISTORY,
     SERVICE_PRESS_SCHEDULE,
+    SERVICE_RESET_SCHEDULE,
     SERVICE_SET_SCHEDULE_ACTIVE,
     SERVICE_UPDATE_SCHEDULE,
     SIGNAL_SCHEDULES_UPDATED,
@@ -88,6 +89,7 @@ async def async_setup_entry(
         },
         "async_update_schedule",
     )
+    platform.async_register_entity_service(SERVICE_RESET_SCHEDULE, {}, "async_reset_schedule")
     platform.async_register_entity_service(
         SERVICE_SET_SCHEDULE_ACTIVE,
         {vol.Required(ATTR_ACTIVE): cv.boolean},
@@ -176,6 +178,14 @@ class ScheduleSensor(CoordinatorEntity[HowManyTimesTodayCoordinator], SensorEnti
             await self.coordinator.async_update_schedule(self._schedule_id, changes)
         except ScheduleUpdateError as err:
             raise ServiceValidationError(translation_domain=DOMAIN, translation_key=err.key) from err
+
+    async def async_reset_schedule(self) -> None:
+        try:
+            await self.coordinator.async_reset_to_on_schedule([self._schedule_id])
+        except ScheduleNotActive as err:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN, translation_key="schedule_not_active"
+            ) from err
 
     async def async_set_schedule_active(self, active: bool) -> None:
         await self.coordinator.async_set_active(self._schedule_id, active)

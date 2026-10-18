@@ -22,8 +22,10 @@
 - **Notifications:** at the exact second a term comes due the event
   `how_many_times_today_due` is fired (after the entity took its new state), the card shows
   an in-app message, and an optional push goes through the mobile app.
-- **Entity services** `press_schedule`, `clear_history`, `set_schedule_active` and `update_schedule` (changes a schedule's name, description, times or interval, start, end and tolerance window; the progress is kept); a press that
+- **Entity services** `press_schedule`, `clear_history`, `set_schedule_active`, `reset_schedule` and `update_schedule` (changes a schedule's name, description, times or interval, start, end and tolerance window; the progress is kept); a press that
   needs an answer fails with a validation error whose translation key is `answer_required`.
+- **Reset to "all on time"** in the Configure dialog (and the `reset_schedule` service): the chosen schedules get today's counter and history as if every term already due had been done on time.
+- **Edit a schedule in the card editor:** name, description, times or interval, start, end and tolerance window.
 - **State survives restarts**; today's counter is derived from the history and resets at
   midnight. Terms and dates follow the Home Assistant time zone.
 - **Migration** from the previous task/slot model (config entry version 1 → 2): tasks become
