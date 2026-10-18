@@ -86,7 +86,7 @@ event `how_many_times_today_due` is fired, and an optional push goes to the mobi
 
 ## Development
 
-114 unit tests cover the scheduling engine, the stores and the coordinator without needing
+115 unit tests cover the scheduling engine, the stores and the coordinator without needing
 a real Home Assistant install (details in [docs/TESTING.md](docs/TESTING.md)):
 
 ```sh

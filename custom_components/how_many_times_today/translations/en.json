@@ -16,7 +16,8 @@
         "menu_options": {
           "add_schedule": "Add a new schedule",
           "manage_schedules": "Edit, switch on/off or remove a schedule",
-          "global_settings": "Global settings (sound, push notification)"
+          "global_settings": "Global settings (sound, push notification)",
+          "legend": "How to read the card?"
         }
       },
       "schedule_basics": {
@@ -86,6 +87,10 @@
           "schedule_id": "Schedule",
           "action": "Action"
         }
+      },
+      "legend": {
+        "title": "How to read the card",
+        "description": "Every schedule has one button. The **colour and the sentence under the name** tell you what to do:\n\n- **Green** — “Done — all good”. The last term was confirmed.\n- **Fading to red** — “Getting close”. The next term is approaching.\n- **Red** — “NOW — time to do it”. A term is due: press the button (inside the tolerance window it counts as on time).\n- **Blinking brown** — “WARNING — overdue!”. A term was not confirmed in time: press the button and answer the question — A: it was done but not recorded, B: it was not done and you are doing it now, C: it was done and this is an additional one.\n- **Red with a black number** — “Done too many times”. More executions today than planned.\n- **Grey** — “Switched off” or “Not started yet”. The schedule takes no presses.\n\nThe **big number** is how many times it was done today. If it **blinks** (“Blinking number: last time was recorded outside the schedule”), the last press was outside the schedule."
       },
       "global_settings": {
         "title": "Global settings",

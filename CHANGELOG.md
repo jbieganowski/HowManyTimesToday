@@ -28,12 +28,16 @@
   midnight. Terms and dates follow the Home Assistant time zone.
 - **Migration** from the previous task/slot model (config entry version 1 → 2): tasks become
   schedules with their ids, press history and last presses are kept, old entities removed.
+- A help page in the Configure menu, **How to read the card?**: what every colour and sentence
+  on the button means, in plain words and in the viewer's language (it quotes the card exactly).
 - Config Flow and Options Flow with real UI steps (a counter for the number of times, one
   time field per execution), time inputs validated; seven languages (en, pl, de, ru, uk,
   zh-Hans), shown in the language of the logged-in Home Assistant user.
 
 ### Lovelace card
 
+- A plain sentence for every state under the name (so the card never relies on colour alone),
+  and a note when the number blinks.
 - One button per schedule with a big number, the description under it and the history with
   the bold "OUTSIDE THE SCHEDULE" prefix; the A/B/C question dialog; in-app message and
   sound; a visual editor with an entity picker limited to this integration's sensors.
@@ -41,7 +45,7 @@
 
 ### Quality and documentation
 
-- 114 unit tests (engine, coordinator and stores, input and translations) running without a
+- 115 unit tests (engine, coordinator and stores, input and translations) running without a
   Home Assistant installation, in CI together with hassfest / HACS validation.
 - Bilingual (English + Polish) README, specification, configuration guide with real
   screenshots of the UI, testing notes, and generated diagrams (SVG, with PNG copies).

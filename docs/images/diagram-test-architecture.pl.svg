@@ -2,7 +2,7 @@
   <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient><marker id="m2e7d32" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="m5c3d82" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c3d82"/></marker><marker id="m6b6859" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6859"/></marker></defs>
   <rect x="1" y="1" width="998" height="538" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
   <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">Jak testy jednostkowe działają bez Home Assistanta</text>
-  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">114 testów; testowany kod pozostaje bez zmian</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">115 testów; testowany kod pozostaje bez zmian</text>
   <rect x="40" y="120" width="260" height="70" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
   <text x="170.0" y="144" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_models.py</text>
   <text x="170.0" y="162" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">53 testów: silnik</text>
@@ -11,7 +11,7 @@
   <text x="170.0" y="257" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">22 testów</text>
   <rect x="40" y="310" width="260" height="70" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
   <text x="170.0" y="334" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_validation.py</text>
-  <text x="170.0" y="352" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">39 testów: dane, tłumaczenia</text>
+  <text x="170.0" y="352" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">40 testów: dane, tłumaczenia</text>
   <rect x="40" y="430" width="260" height="70" rx="12" fill="#eee8f5" stroke="#5c3d82" stroke-width="1.8"/>
   <text x="170.0" y="454" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#5c3d82" text-anchor="middle">conftest.py</text>
   <text x="170.0" y="472" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">wczytuje moduły, instaluje atrapy</text>

@@ -221,5 +221,5 @@ tłumaczenia `answer_required`.
 
 ## Testy
 
-114 testów jednostkowych działa bez instalacji Home Assistanta; zobacz
+115 testów jednostkowych działa bez instalacji Home Assistanta; zobacz
 [TESTING.pl.md](TESTING.pl.md).

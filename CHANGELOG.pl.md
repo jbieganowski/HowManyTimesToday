@@ -32,12 +32,16 @@
 - **Migracja** z poprzedniego modelu zadań i slotów (wersja wpisu 1 → 2): zadania stają się
   harmonogramami ze swoimi identyfikatorami, historia naciśnięć i ostatnie naciśnięcia
   zostają, stare encje są usuwane.
+- Strona pomocy w menu Konfiguruj, **Jak czytać kartę?**: co znaczy każdy kolor i zdanie na
+  klawiszu, prostymi słowami i w języku oglądającego (cytuje kartę dokładnie).
 - Config Flow i Options Flow z prawdziwymi krokami w UI (licznik liczby wykonań, osobne pole
   godziny na wykonanie), walidacja godzin; siedem języków (en, pl, de, ru, uk, zh-Hans),
   w języku zalogowanego użytkownika Home Assistanta.
 
 ### Karta Lovelace
 
+- Proste zdanie o każdym stanie pod nazwą (karta nie polega samym kolorem) oraz uwaga, gdy
+  liczba miga.
 - Jeden klawisz na harmonogram z dużą liczbą, opisem pod spodem i historią z pogrubionym
   przedrostkiem „POZA HARMONOGRAMEM”; okno pytania A/B/C; komunikat w aplikacji i dźwięk;
   edytor wizualny z selektorem encji ograniczonym do sensorów tej integracji. Dołączona do
@@ -45,7 +49,7 @@
 
 ### Jakość i dokumentacja
 
-- 114 testów jednostkowych (silnik, koordynator i magazyny, dane wejściowe i tłumaczenia)
+- 115 testów jednostkowych (silnik, koordynator i magazyny, dane wejściowe i tłumaczenia)
   działających bez instalacji Home Assistanta, w CI razem z walidacją hassfest / HACS.
 - Dwujęzyczne (angielski + polski) README, specyfikacja, przewodnik konfiguracji z
   prawdziwymi zrzutami UI, uwagi o testowaniu oraz generowane diagramy (SVG, z kopiami PNG).

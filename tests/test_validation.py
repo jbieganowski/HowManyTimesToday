@@ -189,6 +189,19 @@ def test_every_state_error_and_service_the_code_raises_or_exposes_is_translated(
     assert {f"time_{i}" for i in range(1, 25)} <= set(strings["options"]["step"]["schedule_times"]["data"])
 
 
+def test_the_legend_quotes_the_cards_own_state_sentences_in_every_language():
+    """The 'How to read the card?' step must say exactly what the card says (read from the
+    card's own strings), so the help never drifts from the button."""
+    js = (INTEGRATION / "www" / "how-many-times-today-card.js").read_text(encoding="utf-8")
+    order = ["en", "pl", "de", "ru", "uk", "zh-Hans"]  # the order of the language blocks in the card
+    for key in ("status_green", "status_transition", "status_red", "status_blinking_brown", "status_exceeded", "status_number_blinking"):
+        sentences = re.findall(rf'{key}: "(.*?)"', js)
+        assert len(sentences) == len(order), f"{key}: expected one sentence per language, got {len(sentences)}"
+        for lang, sentence in zip(order, sentences):
+            legend = _load(INTEGRATION / "translations" / f"{lang}.json")["options"]["step"]["legend"]["description"]
+            assert sentence in legend, f"{lang}: the legend does not quote the card's {key!r}: {sentence!r}"
+
+
 def test_every_form_field_and_step_the_flow_uses_has_a_label():
     """Static check on config_flow.py (it cannot be imported without Home Assistant)."""
     source = (INTEGRATION / "config_flow.py").read_text(encoding="utf-8")

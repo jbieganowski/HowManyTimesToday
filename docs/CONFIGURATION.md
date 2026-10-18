@@ -42,6 +42,7 @@ icon** on the integration entry.
 | **Add a new schedule** | Creates a schedule (medication, feeding, water, …) |
 | **Edit, switch on/off or remove a schedule** | Changes a schedule, switches it off or on by hand, or deletes it |
 | **Global settings (sound, push notification)** | Settings shared by all schedules |
+| **How to read the card?** | A help page: what every colour and sentence on the button means |
 
 ![Map of the Configure dialog](images/diagram-options-flow.svg)
 
@@ -152,6 +153,15 @@ Choose **Global settings (sound, push notification)**.
 | --- | --- |
 | **Notification sound** | One sound for the whole plugin: `chime`, `bell`, `alert`, `gentle` or `none` (default `chime`). It plays in the browser showing the card when a schedule turns `red`, and again when it turns `blinking_brown` |
 | **Push notification service** | Optional, e.g. `notify.mobile_app_phone`. The dropdown lists the mobile-app notifiers; any notify service can be typed. Empty means no push |
+
+### How to read the card
+
+The fourth menu item, **How to read the card?**, is a help page. It explains in plain
+words what every colour and every sentence under the name means, what the big number is,
+and what to do when the button blinks. Its wording is exactly what the card shows, in the
+language of the logged-in user. Confirming it returns to the menu; nothing is changed.
+
+![The help page](images/config-legend.jpg)
 
 ## 7. What the integration creates
 

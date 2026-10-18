@@ -16,7 +16,8 @@
         "menu_options": {
           "add_schedule": "Dodaj nowy harmonogram",
           "manage_schedules": "Edytuj, włącz/wyłącz lub usuń harmonogram",
-          "global_settings": "Ustawienia globalne (dźwięk, powiadomienie push)"
+          "global_settings": "Ustawienia globalne (dźwięk, powiadomienie push)",
+          "legend": "Jak czytać kartę?"
         }
       },
       "schedule_basics": {
@@ -86,6 +87,10 @@
           "schedule_id": "Harmonogram",
           "action": "Akcja"
         }
+      },
+      "legend": {
+        "title": "Jak czytać kartę",
+        "description": "Każdy harmonogram ma jeden klawisz. **Kolor i zdanie pod nazwą** mówią, co robić:\n\n- **Zielony** — „Zrobione – wszystko w porządku”. Ostatni termin został potwierdzony.\n- **Przechodzący w czerwony** — „Zbliża się pora”. Zbliża się następny termin.\n- **Czerwony** — „TERAZ – czas to zrobić”. Termin przypadł: naciśnij klawisz (w oknie tolerancji liczy się jako na czas).\n- **Migający brąz** — „UWAGA – spóźnione!”. Termin nie został potwierdzony na czas: naciśnij klawisz i odpowiedz na pytanie — A: było zrobione, tylko nie zapisane, B: nie zrobiono i robisz to teraz, C: zrobiono i to jest dodatkowe wykonanie.\n- **Czerwony z czarną liczbą** — „Zrobione za dużo razy”. Dziś więcej wykonań niż zaplanowano.\n- **Szary** — „Wyłączone” lub „Jeszcze się nie zaczęło”. Harmonogram nie przyjmuje naciśnięć.\n\n**Duża liczba** to ile razy zrobiono to dzisiaj. Jeśli **miga** („Migająca liczba: ostatnie wykonanie zapisano poza planem”), ostatnie naciśnięcie było poza harmonogramem."
       },
       "global_settings": {
         "title": "Ustawienia globalne",

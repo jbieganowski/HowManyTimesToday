@@ -41,6 +41,7 @@ koła zębatego** przy wpisie integracji.
 | **Dodaj nowy harmonogram** | Tworzy harmonogram (lek, karmienie, woda, …) |
 | **Edytuj, włącz/wyłącz lub usuń harmonogram** | Zmienia harmonogram, wyłącza go lub włącza ręcznie albo usuwa |
 | **Ustawienia globalne (dźwięk, powiadomienie push)** | Ustawienia wspólne dla wszystkich harmonogramów |
+| **Jak czytać kartę?** | Strona pomocy: co znaczy każdy kolor i każde zdanie na klawiszu |
 
 ![Mapa okna Konfiguruj](images/diagram-options-flow.pl.svg)
 
@@ -152,6 +153,15 @@ Wybierz **Ustawienia globalne (dźwięk, powiadomienie push)**.
 | --- | --- |
 | **Dźwięk powiadomienia** | Jeden dźwięk dla całej wtyczki: `chime`, `bell`, `alert`, `gentle` lub `none` (domyślnie `chime`). Gra w przeglądarce pokazującej kartę, gdy harmonogram robi się `red`, i ponownie, gdy robi się `blinking_brown` |
 | **Usługa powiadomień push** | Opcjonalna, np. `notify.mobile_app_telefon`. Lista podpowiada powiadamiacze aplikacji mobilnej; można wpisać dowolną usługę notify. Puste oznacza brak pusha |
+
+### Jak czytać kartę
+
+Czwarta pozycja menu, **Jak czytać kartę?**, to strona pomocy. Prostymi słowami wyjaśnia,
+co znaczy każdy kolor i każde zdanie pod nazwą, czym jest duża liczba i co robić, gdy
+klawisz miga. Jej treść to dokładnie to, co pokazuje karta, w języku zalogowanego
+użytkownika. Zatwierdzenie wraca do menu; nic się nie zmienia.
+
+![Strona pomocy](images/config-legend.jpg)
 
 ## 7. Co tworzy integracja
 

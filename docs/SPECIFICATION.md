@@ -219,5 +219,5 @@ with a validation error whose translation key is `answer_required`.
 
 ## Testing
 
-114 unit tests run without a Home Assistant installation; see
+115 unit tests run without a Home Assistant installation; see
 [TESTING.md](TESTING.md).

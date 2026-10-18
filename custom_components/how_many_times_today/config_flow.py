@@ -74,8 +74,17 @@ class HowManyTimesTodayOptionsFlow(OptionsFlow):
     async def async_step_init(self, user_input: dict[str, Any] | None = None):
         return self.async_show_menu(
             step_id="init",
-            menu_options=["add_schedule", "manage_schedules", "global_settings"],
+            menu_options=["add_schedule", "manage_schedules", "global_settings", "legend"],
         )
+
+    # --- "How to read the card?": the colours and sentences explained -------------
+
+    async def async_step_legend(self, user_input: dict[str, Any] | None = None):
+        """A read-only help page (its text is the step's description); confirming it
+        just goes back to the menu."""
+        if user_input is not None:
+            return await self.async_step_init()
+        return self.async_show_form(step_id="legend", data_schema=vol.Schema({}))
 
     # --- add / edit a schedule (shared steps) ---------------------------------
 

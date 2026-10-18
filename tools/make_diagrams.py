@@ -18,7 +18,7 @@ from svglib import (  # noqa: E402
 )
 
 OUT = Path(__file__).resolve().parents[1] / "docs" / "images"
-TESTS = {"models": 53, "coordinator": 22, "validation": 39}
+TESTS = {"models": 53, "coordinator": 22, "validation": 40}
 TESTS_TOTAL = sum(TESTS.values())
 
 

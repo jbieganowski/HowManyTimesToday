@@ -49,10 +49,9 @@ function isoWeekOf(date) {
   return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, "0")}`;
 }
 
-// --- UI strings, supported language set (see docs/SPECIFICATION.md);
-// unsupported languages fall back to English. The schedule strings (answer_*, kind_*,
-// inactive_label, pending_label) are translated for en/pl; de/ru/uk/zh-hans show the
-// English text for those specific keys. ---
+// --- UI strings, supported language set matches Buy The Way (see
+// docs/SPECIFICATION.md): pl, en, de, ru, uk, zh-hans; unsupported languages fall
+// back to English. ---
 const CARD_STRINGS = {
   en: {
     show_history: "▶ show history",
@@ -133,6 +132,25 @@ const CARD_STRINGS = {
     overdue_prefix: "überfällig um",
     entity_not_found: "Entität nicht gefunden",
     editor_entity_label: "Zeitplan-Sensor",
+    inactive_label: "inaktiv",
+    pending_label: "noch nicht gestartet",
+    status_pending: "Noch nicht gestartet",
+    status_green: "Erledigt – alles in Ordnung",
+    status_transition: "Es wird bald Zeit",
+    status_red: "JETZT – Zeit, es zu tun",
+    status_blinking_brown: "ACHTUNG – überfällig!",
+    status_exceeded: "Zu oft erledigt",
+    status_inactive: "Ausgeschaltet",
+    status_number_blinking: "Blinkende Zahl: letztes Mal außerhalb des Zeitplans erfasst",
+    answer_dialog_title: "Was ist um {time} passiert?",
+    answer_already_done: "A. Es wurde erledigt, nur nicht erfasst",
+    answer_do_now: "B. Wurde nicht um {time} erledigt, ich mache es jetzt",
+    answer_extra: "C. Wurde um {time} erledigt, das hier ist eine zusätzliche Ausführung",
+    answer_cancel: "Abbrechen",
+    kind_registered_late: "mit Verspätung erfasst",
+    kind_outside: "AUSSERHALB DES ZEITPLANS",
+    kind_extra: "AUSSERHALB DES ZEITPLANS",
+    kind_missed: "VERPASST",
   },
   ru: {
     show_history: "▶ показать историю",
@@ -147,6 +165,25 @@ const CARD_STRINGS = {
     overdue_prefix: "просрочено на",
     entity_not_found: "Сущность не найдена",
     editor_entity_label: "Сенсор расписания",
+    inactive_label: "неактивно",
+    pending_label: "ещё не началось",
+    status_pending: "Ещё не началось",
+    status_green: "Сделано — всё в порядке",
+    status_transition: "Скоро пора",
+    status_red: "СЕЙЧАС — пора сделать",
+    status_blinking_brown: "ВНИМАНИЕ — просрочено!",
+    status_exceeded: "Сделано слишком много раз",
+    status_inactive: "Выключено",
+    status_number_blinking: "Мигающее число: последнее выполнение записано вне расписания",
+    answer_dialog_title: "Что произошло в {time}?",
+    answer_already_done: "A. Было сделано, просто не записано",
+    answer_do_now: "B. Не было сделано в {time}, делаю сейчас",
+    answer_extra: "C. Сделано в {time}, а это дополнительное выполнение",
+    answer_cancel: "Отмена",
+    kind_registered_late: "записано с задержкой",
+    kind_outside: "ВНЕ РАСПИСАНИЯ",
+    kind_extra: "ВНЕ РАСПИСАНИЯ",
+    kind_missed: "ПРОПУЩЕНО",
   },
   uk: {
     show_history: "▶ показати історію",
@@ -161,6 +198,25 @@ const CARD_STRINGS = {
     overdue_prefix: "прострочено на",
     entity_not_found: "Сутність не знайдено",
     editor_entity_label: "Сенсор розкладу",
+    inactive_label: "неактивно",
+    pending_label: "ще не почалося",
+    status_pending: "Ще не почалося",
+    status_green: "Зроблено — усе гаразд",
+    status_transition: "Наближається час",
+    status_red: "ЗАРАЗ — час зробити",
+    status_blinking_brown: "УВАГА — прострочено!",
+    status_exceeded: "Зроблено забагато разів",
+    status_inactive: "Вимкнено",
+    status_number_blinking: "Миготливе число: останнє виконання записано поза розкладом",
+    answer_dialog_title: "Що сталося о {time}?",
+    answer_already_done: "A. Було зроблено, просто не записано",
+    answer_do_now: "B. Не зроблено о {time}, роблю зараз",
+    answer_extra: "C. Зроблено о {time}, а це додаткове виконання",
+    answer_cancel: "Скасувати",
+    kind_registered_late: "записано із затримкою",
+    kind_outside: "ПОЗА РОЗКЛАДОМ",
+    kind_extra: "ПОЗА РОЗКЛАДОМ",
+    kind_missed: "ПРОПУЩЕНО",
   },
   "zh-hans": {
     show_history: "▶ 显示历史",
@@ -175,6 +231,25 @@ const CARD_STRINGS = {
     overdue_prefix: "已超时",
     entity_not_found: "未找到实体",
     editor_entity_label: "计划传感器",
+    inactive_label: "未启用",
+    pending_label: "尚未开始",
+    status_pending: "尚未开始",
+    status_green: "已完成——一切正常",
+    status_transition: "即将到时间",
+    status_red: "现在——该做了",
+    status_blinking_brown: "警告——已逾期！",
+    status_exceeded: "完成次数过多",
+    status_inactive: "已关闭",
+    status_number_blinking: "数字闪烁：上次执行记录在计划之外",
+    answer_dialog_title: "{time} 发生了什么？",
+    answer_already_done: "A. 已完成，只是没有记录",
+    answer_do_now: "B. {time} 时没有完成，现在补做",
+    answer_extra: "C. {time} 时已完成，这是额外的一次执行",
+    answer_cancel: "取消",
+    kind_registered_late: "延迟记录",
+    kind_outside: "计划外",
+    kind_extra: "计划外",
+    kind_missed: "已错过",
   },
 };
 
@@ -596,7 +671,7 @@ class HowManyTimesTodayCard extends HTMLElement {
 customElements.define("how-many-times-today-card", HowManyTimesTodayCard);
 
 // --- visual card editor: entity picker restricted to this integration's own
-// schedule sensors (identified by the count_today attribute), filled with the
+// schedule sensors (identified by the schedule_id attribute), filled with the
 // Lovelace UI editor instead of hand-written YAML ---
 class HowManyTimesTodayCardEditor extends HTMLElement {
   setConfig(config) {
