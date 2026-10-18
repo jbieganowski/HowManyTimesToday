@@ -127,8 +127,9 @@ although the counter reset at midnight.
 
 A schedule runs between its start and end. Before the start it is `pending`, after the
 end `inactive` (for example an antibiotic for two weeks). It can also be switched off by
-hand. An inactive or pending schedule shows a grey button labelled "inactive" (in the
-viewer's language), sends no alerts, writes no MISSED entries and refuses presses; its
+hand. A pending schedule shows a grey button saying it has not started; an inactive one has its
+card hidden on the dashboard (grey only while the dashboard is being edited, so it can be
+selected and switched back on). Neither sends alerts, writes no MISSED entries and refuses presses; its
 history stays available and it can be removed. Switching back on does not backfill the
 time spent off. A schedule created a few minutes after its start still shows its first
 term as due, but terms older than the tolerance window are not backfilled.

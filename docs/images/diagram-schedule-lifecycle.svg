@@ -17,6 +17,6 @@
   <text x="500" y="276" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#8a8777" text-anchor="middle">inactive</text>
   <line x1="500" y1="232" x2="500" y2="250" stroke="#6b6859" stroke-width="2" marker-end="url(#m6b6859)"/>
   <text x="510" y="242" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">switched off by hand</text>
-  <text x="40" y="330" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#2b2b28" text-anchor="start">pending / inactive: a grey button, no alerts, no MISSED entries, presses are refused (schedule_not_active).</text>
+  <text x="40" y="330" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#2b2b28" text-anchor="start">pending: a grey button; inactive: the card is hidden (grey while editing). No alerts, no MISSED entries, presses refused.</text>
   <text x="40" y="354" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="start">Switching back on does not backfill the time spent off. The history stays available.</text>
 </svg>

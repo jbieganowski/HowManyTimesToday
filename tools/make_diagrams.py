@@ -139,7 +139,7 @@ def diagrams(lang: str):
     s = new("stage-states", 1000, 520, L("Which state wins", "Który stan wygrywa"),
             L("the first matching row, from the top", "pierwszy pasujący wiersz od góry"))
     ladder = [
-        ("inactive", "grey", MUTED, L("switched off by hand, or past the end", "wyłączony ręcznie lub po końcu")),
+        ("inactive", "grey", MUTED, L("switched off by hand, or past the end (card hidden)", "wyłączony ręcznie lub po końcu (karta ukryta)")),
         ("pending", "grey", BLUE, L("before the start date and time", "przed datą i godziną startu")),
         ("blinking_brown", "brown", BROWN, L("a term outlived its window and is still open", "termin przekroczył okno i wciąż jest otwarty")),
         ("exceeded", "exceeded", RED, L("more executions today than planned (red, black number)", "więcej wykonań dziś niż zaplanowano (czerwony, czarna liczba)")),
@@ -250,8 +250,8 @@ def diagrams(lang: str):
     s.text(500, 276, "inactive", 14, 700, FAINT, "middle")
     s.arrow(500, 232, 500, 250, MUTED)
     s.text(510, 242, L("switched off by hand", "wyłączony ręcznie"), 12, 400, MUTED)
-    s.text(40, 330, L("pending / inactive: a grey button, no alerts, no MISSED entries, presses are refused (schedule_not_active).",
-                      "pending / inactive: szary klawisz, bez alertów, bez wpisów POMINIĘTE, naciśnięcia odrzucane (schedule_not_active)."), 13, 400, INK, check_w=920)
+    s.text(40, 330, L("pending: a grey button; inactive: the card is hidden (grey while editing). No alerts, no MISSED entries, presses refused.",
+                      "pending: szary klawisz; inactive: karta ukryta (szara podczas edycji). Bez alertów, bez wpisów POMINIĘTE, naciśnięcia odrzucane."), 13, 400, INK, check_w=920)
     s.text(40, 354, L("Switching back on does not backfill the time spent off. The history stays available.",
                       "Ponowne włączenie nie nadrabia czasu wyłączenia. Historia pozostaje dostępna."), 13, 400, MUTED, check_w=920)
 

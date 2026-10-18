@@ -136,9 +136,11 @@ Wybierz **Edytuj, włącz/wyłącz lub usuń harmonogram**, wskaż harmonogram i
 
 - **Edytuj ten harmonogram** otwiera te same kroki co przy dodawaniu. Postęp i historia
   zostają; zmiana trybu jest dozwolona.
-- **Włącz / wyłącz** przełącza harmonogram ręcznie. Wyłączony harmonogram pokazuje szary
-  klawisz `inactive`, nie wysyła alertów i nie zapisuje pominięć; czas spędzony w
-  wyłączeniu nie jest nadrabiany po ponownym włączeniu. Historia pozostaje dostępna.
+- **Włącz / wyłącz** przełącza harmonogram ręcznie (edytor karty ma to samo pole
+  **Harmonogram aktywny**). Wyłączony harmonogram ma stan `inactive`, nie wysyła alertów i
+  nie zapisuje pominięć; czas spędzony w wyłączeniu nie jest nadrabiany po ponownym
+  włączeniu. Jego karta jest ukryta na pulpicie i szara tylko podczas edycji pulpitu, więc
+  można ją nadal zaznaczyć i włączyć z powrotem. Historia pozostaje dostępna.
 - **Usuń ten harmonogram i jego encję** usuwa go razem z historią.
 
 Gdy nie ma jeszcze żadnego harmonogramu, pozycja pokazuje „Nie zdefiniowano jeszcze
@@ -255,7 +257,7 @@ type: custom:how-many-times-today-card
 entity: sensor.lek_na_serce
 ```
 
-![Edytor karty: wybiera harmonogram i linkuje do ustawień integracji](images/screenshot-card-editor.jpg)
+![Edytor karty: wybór harmonogramu, zmiana nazwy, opisu i godzin, włączanie i wyłączanie, zapis](images/screenshot-card-editor.jpg)
 
 ![Karty harmonogramów na dashboardzie: czerwona, wyłączona i komunikaty w aplikacji](images/screenshot-card-dashboard.jpg)
 
@@ -368,7 +370,8 @@ actions:
 | „Już skonfigurowano” przy dodawaniu integracji | Integracja jest pojedyncza — użyj ikony koła zębatego przy istniejącym wpisie |
 | „Nie zdefiniowano jeszcze żadnych harmonogramów” w menu edycji | Najpierw dodaj harmonogram |
 | Harmonogram jest `blinking_brown` zaraz po restarcie | Zamierzone: zapisany stan jest odtwarzany, więc termin pominięty w czasie przestoju pozostaje widoczny |
-| Klawisz jest szary i pokazuje `pending` / `inactive` | Przed startem, po końcu lub wyłączony ręcznie; naciśnięcia są odrzucane |
+| Klawisz jest szary i mówi, że jeszcze się nie zaczęło | Przed startem; do tego czasu naciśnięcia są odrzucane |
+| Karta harmonogramu zniknęła z pulpitu | Jest wyłączony lub po końcu (`inactive`); wejdź w edycję pulpitu, by zobaczyć ją na szaro, i zaznacz **Harmonogram aktywny** w jej edytorze albo włącz go w oknie Konfiguruj |
 | Godziny wydają się przesunięte o dwie godziny | Harmonogramy używają strefy czasowej skonfigurowanej w Home Assistant, nie przeglądarki |
 
 Jak elementy ze sobą współpracują: [SPECYFIKACJA.md](SPECYFIKACJA.md).

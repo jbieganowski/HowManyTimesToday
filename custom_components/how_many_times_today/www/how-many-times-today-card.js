@@ -65,8 +65,34 @@ const CARD_STRINGS = {
     overdue_prefix: "overdue by",
     entity_not_found: "Entity not found",
     editor_entity_label: "Schedule sensor",
-    editor_hint: "The name, description, times, start and end of a schedule are edited in the settings of the integration, not here.",
+    editor_hint: "The schedule's type (fixed times / interval) is changed in the integration's settings, not here.",
+    editor_live_notice: "The fields below are NOT part of the card's configuration (they won't appear in \"Show code editor\") — they save immediately to the schedule itself.",
     editor_open_settings: "Open the integration settings",
+    editor_section_schedule: "Schedule details",
+    editor_active_label: "Schedule active",
+    editor_name_label: "Name",
+    editor_description_label: "Description",
+    editor_count_label: "How many times a day",
+    editor_time_label: "Time {n}",
+    editor_interval_label: "Every how many hours",
+    editor_advanced_label: "Advanced",
+    editor_start_label: "Start",
+    editor_end_label: "End (optional)",
+    editor_clear_end: "Remove end date",
+    editor_window_label: "Tolerance window (minutes)",
+    editor_save_button: "Save schedule changes",
+    editor_saved_message: "Saved",
+    editor_generic_error: "Could not save the changes",
+    error_nothing_to_update: "Nothing to save — change something first",
+    error_invalid_name: "Please enter a name",
+    error_invalid_time: "One of the times isn't valid (use HH:MM)",
+    error_no_times: "Give at least one time",
+    error_too_many_times: "Too many times (maximum 24 a day)",
+    error_invalid_interval: "The interval must be between 0.5 and 48 hours",
+    error_invalid_datetime: "That date/time isn't valid",
+    error_end_before_start: "The end date must be after the start date",
+    error_invalid_window: "The tolerance window must be between 1 and 240 minutes",
+    error_wrong_mode: "This field doesn't apply to this schedule's mode",
     inactive_label: "inactive",
     pending_label: "not started yet",
     status_pending: "Not started yet",
@@ -100,8 +126,34 @@ const CARD_STRINGS = {
     overdue_prefix: "spóźnienie o",
     entity_not_found: "Nie znaleziono encji",
     editor_entity_label: "Sensor harmonogramu",
-    editor_hint: "Nazwę, opis, godziny, start i koniec harmonogramu edytujesz w ustawieniach integracji, nie tutaj.",
+    editor_hint: "Rodzaj harmonogramu (stałe godziny / interwał) zmienisz w ustawieniach integracji, nie tutaj.",
+    editor_live_notice: "Poniższe pola NIE są częścią konfiguracji karty (nie pojawią się w „Pokaż edytor kodu”) — zapisują się od razu w samym harmonogramie.",
     editor_open_settings: "Otwórz ustawienia integracji",
+    editor_section_schedule: "Szczegóły harmonogramu",
+    editor_active_label: "Harmonogram aktywny",
+    editor_name_label: "Nazwa",
+    editor_description_label: "Opis",
+    editor_count_label: "Ile razy dziennie",
+    editor_time_label: "Godzina {n}",
+    editor_interval_label: "Co ile godzin",
+    editor_advanced_label: "Zaawansowane",
+    editor_start_label: "Start",
+    editor_end_label: "Koniec (opcjonalnie)",
+    editor_clear_end: "Usuń datę końca",
+    editor_window_label: "Okno tolerancji (minuty)",
+    editor_save_button: "Zapisz zmiany harmonogramu",
+    editor_saved_message: "Zapisano",
+    editor_generic_error: "Nie udało się zapisać zmian",
+    error_nothing_to_update: "Nie ma czego zapisać – najpierw coś zmień",
+    error_invalid_name: "Wpisz nazwę",
+    error_invalid_time: "Jedna z godzin jest nieprawidłowa (format GG:MM)",
+    error_no_times: "Podaj przynajmniej jedną godzinę",
+    error_too_many_times: "Za dużo godzin (maksymalnie 24 dziennie)",
+    error_invalid_interval: "Interwał musi być od 0,5 do 48 godzin",
+    error_invalid_datetime: "Ta data/godzina jest nieprawidłowa",
+    error_end_before_start: "Data końca musi być po dacie startu",
+    error_invalid_window: "Okno tolerancji musi być od 1 do 240 minut",
+    error_wrong_mode: "To pole nie pasuje do trybu tego harmonogramu",
     inactive_label: "nieaktywne",
     pending_label: "jeszcze nie wystartował",
     status_pending: "Jeszcze się nie zaczęło",
@@ -135,8 +187,34 @@ const CARD_STRINGS = {
     overdue_prefix: "überfällig um",
     entity_not_found: "Entität nicht gefunden",
     editor_entity_label: "Zeitplan-Sensor",
-    editor_hint: "Name, Beschreibung, Uhrzeiten, Start und Ende eines Zeitplans bearbeitest du in den Einstellungen der Integration, nicht hier.",
+    editor_hint: "Die Art des Zeitplans (feste Uhrzeiten / Intervall) änderst du in den Einstellungen der Integration, nicht hier.",
+    editor_live_notice: "Die folgenden Felder sind NICHT Teil der Kartenkonfiguration (sie erscheinen nicht im „Code-Editor anzeigen”) – sie werden sofort im Zeitplan selbst gespeichert.",
     editor_open_settings: "Einstellungen der Integration öffnen",
+    editor_section_schedule: "Details zum Zeitplan",
+    editor_active_label: "Zeitplan aktiv",
+    editor_name_label: "Name",
+    editor_description_label: "Beschreibung",
+    editor_count_label: "Wie oft am Tag",
+    editor_time_label: "Uhrzeit {n}",
+    editor_interval_label: "Alle wie viele Stunden",
+    editor_advanced_label: "Erweitert",
+    editor_start_label: "Start",
+    editor_end_label: "Ende (optional)",
+    editor_clear_end: "Enddatum entfernen",
+    editor_window_label: "Toleranzfenster (Minuten)",
+    editor_save_button: "Änderungen am Zeitplan speichern",
+    editor_saved_message: "Gespeichert",
+    editor_generic_error: "Änderungen konnten nicht gespeichert werden",
+    error_nothing_to_update: "Nichts zu speichern – ändere zuerst etwas",
+    error_invalid_name: "Bitte gib einen Namen ein",
+    error_invalid_time: "Eine der Uhrzeiten ist ungültig (Format HH:MM)",
+    error_no_times: "Gib mindestens eine Uhrzeit an",
+    error_too_many_times: "Zu viele Uhrzeiten (maximal 24 pro Tag)",
+    error_invalid_interval: "Das Intervall muss zwischen 0,5 und 48 Stunden liegen",
+    error_invalid_datetime: "Dieses Datum/diese Uhrzeit ist ungültig",
+    error_end_before_start: "Das Enddatum muss nach dem Startdatum liegen",
+    error_invalid_window: "Das Toleranzfenster muss zwischen 1 und 240 Minuten liegen",
+    error_wrong_mode: "Dieses Feld passt nicht zum Modus dieses Zeitplans",
     inactive_label: "inaktiv",
     pending_label: "noch nicht gestartet",
     status_pending: "Noch nicht gestartet",
@@ -170,8 +248,34 @@ const CARD_STRINGS = {
     overdue_prefix: "просрочено на",
     entity_not_found: "Сущность не найдена",
     editor_entity_label: "Сенсор расписания",
-    editor_hint: "Название, описание, время, начало и конец расписания изменяются в настройках интеграции, а не здесь.",
+    editor_hint: "Тип расписания (фиксированное время / интервал) изменяется в настройках интеграции, а не здесь.",
+    editor_live_notice: "Поля ниже НЕ являются частью конфигурации карточки (они не появятся в «Показать редактор кода») — они сохраняются сразу в самом расписании.",
     editor_open_settings: "Открыть настройки интеграции",
+    editor_section_schedule: "Детали расписания",
+    editor_active_label: "Расписание активно",
+    editor_name_label: "Название",
+    editor_description_label: "Описание",
+    editor_count_label: "Сколько раз в день",
+    editor_time_label: "Время {n}",
+    editor_interval_label: "Через сколько часов",
+    editor_advanced_label: "Дополнительно",
+    editor_start_label: "Начало",
+    editor_end_label: "Конец (необязательно)",
+    editor_clear_end: "Убрать дату окончания",
+    editor_window_label: "Окно допуска (минуты)",
+    editor_save_button: "Сохранить изменения расписания",
+    editor_saved_message: "Сохранено",
+    editor_generic_error: "Не удалось сохранить изменения",
+    error_nothing_to_update: "Нечего сохранять – сначала что-нибудь измените",
+    error_invalid_name: "Введите название",
+    error_invalid_time: "Одно из указанных времён неверно (формат ЧЧ:ММ)",
+    error_no_times: "Укажите хотя бы одно время",
+    error_too_many_times: "Слишком много времён (максимум 24 в день)",
+    error_invalid_interval: "Интервал должен быть от 0,5 до 48 часов",
+    error_invalid_datetime: "Эта дата/время указаны неверно",
+    error_end_before_start: "Дата окончания должна быть позже даты начала",
+    error_invalid_window: "Окно допуска должно быть от 1 до 240 минут",
+    error_wrong_mode: "Это поле не подходит для режима этого расписания",
     inactive_label: "неактивно",
     pending_label: "ещё не началось",
     status_pending: "Ещё не началось",
@@ -205,8 +309,34 @@ const CARD_STRINGS = {
     overdue_prefix: "прострочено на",
     entity_not_found: "Сутність не знайдено",
     editor_entity_label: "Сенсор розкладу",
-    editor_hint: "Назву, опис, час, початок і кінець розкладу змінюють у налаштуваннях інтеграції, а не тут.",
+    editor_hint: "Тип розкладу (фіксований час / інтервал) змінюється в налаштуваннях інтеграції, а не тут.",
+    editor_live_notice: "Поля нижче НЕ є частиною конфігурації картки (вони не з'являться в «Показати редактор коду») — вони зберігаються одразу в самому розкладі.",
     editor_open_settings: "Відкрити налаштування інтеграції",
+    editor_section_schedule: "Деталі розкладу",
+    editor_active_label: "Розклад активний",
+    editor_name_label: "Назва",
+    editor_description_label: "Опис",
+    editor_count_label: "Скільки разів на день",
+    editor_time_label: "Час {n}",
+    editor_interval_label: "Через скільки годин",
+    editor_advanced_label: "Додатково",
+    editor_start_label: "Початок",
+    editor_end_label: "Кінець (необов'язково)",
+    editor_clear_end: "Прибрати дату закінчення",
+    editor_window_label: "Вікно допуску (хвилини)",
+    editor_save_button: "Зберегти зміни розкладу",
+    editor_saved_message: "Збережено",
+    editor_generic_error: "Не вдалося зберегти зміни",
+    error_nothing_to_update: "Нічого зберігати – спочатку щось змініть",
+    error_invalid_name: "Введіть назву",
+    error_invalid_time: "Один із часів є неправильним (формат ГГ:ХХ)",
+    error_no_times: "Вкажіть принаймні один час",
+    error_too_many_times: "Забагато часів (максимум 24 на день)",
+    error_invalid_interval: "Інтервал має бути від 0,5 до 48 годин",
+    error_invalid_datetime: "Ця дата/час є неправильними",
+    error_end_before_start: "Дата закінчення має бути пізніше за дату початку",
+    error_invalid_window: "Вікно допуску має бути від 1 до 240 хвилин",
+    error_wrong_mode: "Це поле не підходить для режиму цього розкладу",
     inactive_label: "неактивно",
     pending_label: "ще не почалося",
     status_pending: "Ще не почалося",
@@ -240,8 +370,34 @@ const CARD_STRINGS = {
     overdue_prefix: "已超时",
     entity_not_found: "未找到实体",
     editor_entity_label: "计划传感器",
-    editor_hint: "日程的名称、说明、时间、开始和结束请在集成设置中编辑，而不是在这里。",
+    editor_hint: "日程的类型（固定时间/间隔）请在集成设置中更改，而不是在这里。",
+    editor_live_notice: "下面的字段不属于卡片配置的一部分（不会出现在\"显示代码编辑器\"中）——它们会立即保存到日程本身。",
     editor_open_settings: "打开集成设置",
+    editor_section_schedule: "日程详情",
+    editor_active_label: "日程已启用",
+    editor_name_label: "名称",
+    editor_description_label: "说明",
+    editor_count_label: "每天几次",
+    editor_time_label: "时间 {n}",
+    editor_interval_label: "每隔多少小时",
+    editor_advanced_label: "高级",
+    editor_start_label: "开始",
+    editor_end_label: "结束（可选）",
+    editor_clear_end: "清除结束日期",
+    editor_window_label: "容差窗口（分钟）",
+    editor_save_button: "保存日程更改",
+    editor_saved_message: "已保存",
+    editor_generic_error: "无法保存更改",
+    error_nothing_to_update: "没有可保存的内容——请先做出修改",
+    error_invalid_name: "请输入名称",
+    error_invalid_time: "其中一个时间无效（格式 HH:MM）",
+    error_no_times: "请至少提供一个时间",
+    error_too_many_times: "时间太多（每天最多24个）",
+    error_invalid_interval: "间隔必须在0.5到48小时之间",
+    error_invalid_datetime: "该日期/时间无效",
+    error_end_before_start: "结束日期必须晚于开始日期",
+    error_invalid_window: "容差窗口必须在1到240分钟之间",
+    error_wrong_mode: "此字段不适用于该日程的模式",
     inactive_label: "未启用",
     pending_label: "尚未开始",
     status_pending: "尚未开始",
@@ -359,6 +515,15 @@ class HowManyTimesTodayCard extends HTMLElement {
 
   _t(key, placeholders) {
     return translate(this._hass?.language, key, placeholders);
+  }
+
+  // Home Assistant's dashboard-edit mode sets this on cards that define the setter
+  // (a documented Lovelace convention). An inactive schedule hides itself on the
+  // normal dashboard, but while the user is rearranging cards it must still render
+  // (greyed out) so it can be selected/moved/removed like any other card.
+  set editMode(editMode) {
+    this._editMode = editMode;
+    this._tick();
   }
 
   connectedCallback() {
@@ -489,13 +654,20 @@ class HowManyTimesTodayCard extends HTMLElement {
   _render() {
     const root = this.shadowRoot;
     if (!this._stateObj) {
+      this.hidden = false;
       root.innerHTML = `<ha-card><div class="placeholder">${this._t("entity_not_found")}: ${this._config.entity}</div></ha-card>`;
       return;
     }
 
+    const state = this._stateObj.state;
+    // An inactive schedule shouldn't clutter the normal dashboard - it's only
+    // managed from the integration's own options (Settings), not from here.
+    // While the dashboard itself is being edited (cards moved/resized), the card
+    // must stay visible as a grey placeholder so it remains selectable.
+    this.hidden = state === "inactive" && !this._editMode;
+
     const locale = this._hass?.language;
     const attrs = this._stateObj.attributes;
-    const state = this._stateObj.state;
     const name = attrs.name || attrs.friendly_name || this._config.entity;
     const color = this._colorFor(state, attrs);
     const seconds = attrs.seconds_to_next_expected;
@@ -691,9 +863,14 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
   }
 
   set hass(hass) {
+    const firstTime = !this._hass;
     this._hass = hass;
     if (this._picker) {
       this._picker.hass = hass;
+      // Only build the schedule-edit form once per entity selection, not on every
+      // hass update - otherwise unrelated state changes elsewhere in HA would wipe
+      // out whatever the user is in the middle of typing.
+      if (firstTime) this._renderScheduleForm();
     } else {
       this._render();
     }
@@ -701,6 +878,10 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
 
   _entityFilter(stateObj) {
     return !!(stateObj.attributes && stateObj.attributes.schedule_id !== undefined);
+  }
+
+  _t(key, placeholders) {
+    return translate(this._hass?.language, key, placeholders);
   }
 
   _render() {
@@ -714,9 +895,49 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
         .wrap { padding: 12px 0; }
         .hint { margin: 16px 0 8px; color: var(--secondary-text-color); line-height: 1.4; }
         .hint-link { color: var(--primary-color); font-weight: 500; }
+        .field { margin: 12px 0; }
+        .field label { display: block; font-size: 0.9em; margin-bottom: 4px; color: var(--secondary-text-color); }
+        .field input {
+          width: 100%; box-sizing: border-box; padding: 8px; font-size: 1em;
+          border: 1px solid var(--divider-color, #ccc); border-radius: 4px;
+          background: var(--card-background-color, white); color: var(--primary-text-color, black);
+        }
+        .toggle-row { display: flex; align-items: center; gap: 8px; }
+        .toggle-row input[type=checkbox] { width: 20px; height: 20px; }
+        .toggle-row label { margin: 0; font-size: 1em; color: var(--primary-text-color, black); }
+        .count-row { display: flex; align-items: center; gap: 8px; }
+        .count-row label { margin: 0; }
+        .count-row input[type=number] { width: 80px; }
+        .times-list { margin-top: 8px; }
+        .time-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .time-row label { margin: 0; min-width: 90px; font-size: 0.9em; color: var(--secondary-text-color); }
+        details.advanced { margin-top: 16px; border-top: 1px solid var(--divider-color, #ccc); padding-top: 8px; }
+        details.advanced summary { cursor: pointer; font-weight: 600; }
+        details.advanced button {
+          margin-top: 4px; padding: 6px 10px; cursor: pointer;
+          border: 1px solid var(--divider-color, #ccc); border-radius: 4px; background: none;
+          color: var(--primary-text-color, black);
+        }
+        .save-row { margin-top: 20px; }
+        .save-button {
+          width: 100%; padding: 14px; font-size: 1.05em; font-weight: 700;
+          background: var(--primary-color); color: var(--text-primary-color, white);
+          border: none; border-radius: 6px; cursor: pointer;
+        }
+        .save-button:disabled { opacity: 0.6; cursor: default; }
+        .save-status { margin-top: 10px; font-weight: 600; }
+        .save-status.ok { color: #2e7d32; }
+        .save-status.err { color: #c62828; }
+        h3.section { font-size: 1em; margin: 20px 0 4px; }
+        .live-notice {
+          margin: 16px 0; padding: 10px 12px; border-radius: 6px; font-size: 0.85em; line-height: 1.4;
+          background: var(--warning-color, #fff3cd); color: #7a5b00; border: 1px solid #e0c36a;
+        }
       </style>
       <div class="wrap"></div>
     `;
+
+    const wrap = this.shadowRoot.querySelector(".wrap");
 
     const picker = document.createElement("ha-entity-picker");
     picker.hass = this._hass;
@@ -733,14 +954,14 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
           composed: true,
         })
       );
+      this._renderScheduleForm();
     });
 
     this._picker = picker;
-    const wrap = this.shadowRoot.querySelector(".wrap");
     wrap.appendChild(picker);
 
-    // The card only chooses WHICH schedule to show; the schedule itself (name, times,
-    // start/end) lives in the integration's options, so say so and link to it
+    // Only the schedule's TYPE (fixed times vs interval) still requires the
+    // integration's own settings - everything else is editable right here below
     const hint = document.createElement("p");
     hint.className = "hint";
     hint.textContent = translate(this._hass.language, "editor_hint");
@@ -752,6 +973,212 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
     link.textContent = translate(this._hass.language, "editor_open_settings");
     wrap.appendChild(hint);
     wrap.appendChild(link);
+
+    const formContainer = document.createElement("div");
+    this._formContainer = formContainer;
+    wrap.appendChild(formContainer);
+
+    this._renderScheduleForm();
+  }
+
+  _renderScheduleForm() {
+    const container = this._formContainer;
+    if (!container) return;
+    const entityId = this._config.entity;
+    const stateObj = entityId && this._hass ? this._hass.states[entityId] : null;
+    if (!stateObj) {
+      container.innerHTML = "";
+      return;
+    }
+    const attrs = stateObj.attributes;
+    const mode = attrs.mode;
+
+    // start_at/end_at are ISO strings already in HA's own timezone (not the
+    // browser's) - slicing the digits directly gives HA's wall-clock time with no
+    // conversion, so it's correct regardless of what timezone the browser is in.
+    // (A `new Date(iso).getHours()` round-trip would silently shift the time by
+    // the browser/HA offset - caught live when they differed by 2 hours.)
+    const toLocalInputValue = (iso) => (iso ? String(iso).slice(0, 16) : "");
+
+    const times = attrs.times || [];
+    const initialCount = mode === "fixed_times" ? Math.max(1, times.length) : 1;
+
+    const startInitial = toLocalInputValue(attrs.start_at);
+    const endInitial = toLocalInputValue(attrs.end_at);
+
+    container.innerHTML = `
+      <div class="live-notice">${this._t("editor_live_notice")}</div>
+      <h3 class="section">${this._t("editor_section_schedule")}</h3>
+      <div class="field">
+        <label>${this._t("editor_name_label")}</label>
+        <input type="text" id="f-name" value="${(attrs.name || "").replace(/"/g, "&quot;")}">
+      </div>
+      <div class="field">
+        <label>${this._t("editor_description_label")}</label>
+        <input type="text" id="f-description" value="${(attrs.description || "").replace(/"/g, "&quot;")}">
+      </div>
+      <div class="field toggle-row">
+        <input type="checkbox" id="f-active" ${attrs.active ? "checked" : ""}>
+        <label for="f-active">${this._t("editor_active_label")}</label>
+      </div>
+      ${
+        mode === "fixed_times"
+          ? `
+            <div class="field count-row">
+              <label>${this._t("editor_count_label")}</label>
+              <input type="number" id="f-count" min="1" max="24" step="1" value="${initialCount}">
+            </div>
+            <div class="times-list" id="f-times-list"></div>
+          `
+          : `
+            <div class="field">
+              <label>${this._t("editor_interval_label")}</label>
+              <input type="number" id="f-interval" min="0.5" max="48" step="0.5" value="${attrs.interval_hours ?? 12}">
+            </div>
+          `
+      }
+      <details class="advanced">
+        <summary>${this._t("editor_advanced_label")}</summary>
+        <div class="field">
+          <label>${this._t("editor_start_label")}</label>
+          <input type="datetime-local" id="f-start" value="${startInitial}" data-initial="${startInitial}">
+        </div>
+        <div class="field">
+          <label>${this._t("editor_end_label")}</label>
+          <input type="datetime-local" id="f-end" value="${endInitial}" data-initial="${endInitial}">
+          <button type="button" id="f-clear-end">${this._t("editor_clear_end")}</button>
+        </div>
+        <div class="field">
+          <label>${this._t("editor_window_label")}</label>
+          <input type="number" id="f-window" min="1" max="240" step="1" value="${attrs.window_minutes ?? 30}">
+        </div>
+      </details>
+      <div class="save-row">
+        <button type="button" class="save-button" id="f-save">${this._t("editor_save_button")}</button>
+        <div class="save-status" id="f-status"></div>
+      </div>
+    `;
+
+    if (mode === "fixed_times") {
+      this._renderTimesList(times.length ? times : ["09:00"]);
+      container.querySelector("#f-count").addEventListener("input", (ev) => {
+        const n = Math.max(1, Math.min(24, parseInt(ev.target.value, 10) || 1));
+        const current = this._currentTimesValues();
+        while (current.length < n) current.push("09:00");
+        current.length = n;
+        this._renderTimesList(current);
+      });
+    }
+
+    container.querySelector("#f-clear-end").addEventListener("click", () => {
+      container.querySelector("#f-end").value = "";
+    });
+
+    container.querySelector("#f-save").addEventListener("click", () => this._onSave(mode));
+
+    // Active/inactive takes effect immediately (it's a different backend service
+    // than the rest of the form, not something that waits for "Save")
+    const activeToggle = container.querySelector("#f-active");
+    activeToggle.addEventListener("change", async (ev) => {
+      const checkbox = ev.target;
+      const newValue = checkbox.checked;
+      checkbox.disabled = true;
+      try {
+        await this._hass.callService(
+          DOMAIN,
+          "set_schedule_active",
+          { active: newValue },
+          { entity_id: this._config.entity }
+        );
+      } catch (err) {
+        checkbox.checked = !newValue; // revert the visible toggle on failure
+      } finally {
+        checkbox.disabled = false;
+      }
+    });
+  }
+
+  _renderTimesList(times) {
+    const list = this._formContainer.querySelector("#f-times-list");
+    if (!list) return;
+    list.innerHTML = times
+      .map(
+        (t, i) => `
+        <div class="time-row">
+          <label>${this._t("editor_time_label", { n: i + 1 })}</label>
+          <input type="time" class="f-time" value="${t}">
+        </div>
+      `
+      )
+      .join("");
+  }
+
+  _currentTimesValues() {
+    return [...this._formContainer.querySelectorAll(".f-time")].map((el) => el.value || "09:00");
+  }
+
+  async _onSave(mode) {
+    const container = this._formContainer;
+    // Two identical save buttons (top, right after name/description so it's visible
+    // without scrolling past the times list; bottom, after the advanced section) -
+    // both trigger the exact same save, reading every field regardless of which one
+    // was clicked, and both show the result so the user sees it either way.
+    const statuses = [...container.querySelectorAll(".save-status")];
+    const saveBtns = [...container.querySelectorAll(".save-button")];
+    const setStatus = (text, cls) => {
+      for (const s of statuses) {
+        s.textContent = text;
+        s.className = `save-status ${cls || ""}`.trim();
+      }
+    };
+    setStatus("", "");
+    for (const b of saveBtns) b.disabled = true;
+
+    const data = {
+      name: container.querySelector("#f-name").value.trim(),
+      description: container.querySelector("#f-description").value,
+    };
+    if (mode === "fixed_times") {
+      data.fixed_times = this._currentTimesValues();
+    } else {
+      data.interval_hours = parseFloat(container.querySelector("#f-interval").value);
+    }
+    // datetime-local gives "YYYY-MM-DDTHH:MM" in whatever timezone the browser is
+    // in; backend wants "YYYY-MM-DD HH:MM:SS" local HA time. Assumes the browser
+    // and the HA instance are in the same timezone (true for the typical
+    // single-user self-hosted setup this plugin targets).
+    // Only sent when actually changed from the value shown when the form opened,
+    // so saving an unrelated field (e.g. the name) never nudges start/end by the
+    // seconds truncation of a round-trip through the datetime-local input.
+    const startEl = container.querySelector("#f-start");
+    const endEl = container.querySelector("#f-end");
+    const startVal = startEl.value;
+    const endVal = endEl.value;
+    if (startVal !== startEl.dataset.initial) {
+      data.start_at = startVal ? startVal.replace("T", " ") + ":00" : "";
+    }
+    if (endVal !== endEl.dataset.initial) {
+      data.end_at = endVal ? endVal.replace("T", " ") + ":00" : "";
+    }
+    data.window_minutes = parseInt(container.querySelector("#f-window").value, 10);
+
+    try {
+      await this._hass.callService(DOMAIN, "update_schedule", data, { entity_id: this._config.entity });
+      setStatus(this._t("editor_saved_message"), "ok");
+    } catch (err) {
+      // err.message turned out NOT to be localized in practice (HA returned English
+      // even for a Polish-language account) - map the translation_key ourselves
+      // instead, using the same CARD_STRINGS mechanism as everything else here.
+      const key = err?.translation_key || err?.error?.translation_key;
+      const errorKey = key ? `error_${key}` : null;
+      const hasTranslation = errorKey && CARD_STRINGS.en[errorKey];
+      const message = hasTranslation
+        ? this._t(errorKey)
+        : err?.message || err?.error?.message || this._t("editor_generic_error");
+      setStatus(message, "err");
+    } finally {
+      for (const b of saveBtns) b.disabled = false;
+    }
   }
 }
 

@@ -137,9 +137,12 @@ Choose **Edit, switch on/off or remove a schedule**, pick the schedule and the a
 
 - **Edit this schedule** opens the same steps as when adding. Progress and history are
   kept; a mode change is allowed.
-- **Switch on / off** toggles the schedule by hand. A switched-off schedule shows a grey
-  `inactive` button, sends no alerts and logs no missed terms; the time spent off is not
-  backfilled when it is switched on again. The history stays available.
+- **Switch on / off** toggles the schedule by hand (the card editor has the same
+  **Schedule active** checkbox). A switched-off schedule has the state `inactive`, sends no
+  alerts and logs no missed terms; the time spent off is not backfilled when it is
+  switched on again. Its card is hidden on the dashboard and shows grey only while the
+  dashboard is being edited, so it can still be selected and switched back on. The history
+  stays available.
 - **Remove this schedule and its entity** deletes it with its history.
 
 If there is no schedule yet, the menu item shows "No schedules defined yet".
@@ -257,7 +260,7 @@ type: custom:how-many-times-today-card
 entity: sensor.heart_medication
 ```
 
-![The card editor: it chooses the schedule and links to the integration settings](images/screenshot-card-editor.jpg)
+![The card editor: choose the schedule, change its name, description, times, switch it on or off, and save](images/screenshot-card-editor.jpg)
 
 ![Schedule cards on a dashboard: a red one, a switched-off one, and the in-app messages](images/screenshot-card-dashboard.jpg)
 
@@ -370,7 +373,8 @@ actions:
 | "Already configured" when adding the integration | It is a singleton — use the gear icon on the existing entry |
 | "No schedules defined yet" in the edit menu | Add a schedule first |
 | A schedule is `blinking_brown` right after a restart | Intended: the stored state is restored, so a term missed during the downtime stays visible |
-| The button is grey and says `pending` / `inactive` | Before the start, past the end, or switched off by hand; presses are refused |
+| The button is grey and says it has not started | Before the start; presses are refused until then |
+| A schedule's card has disappeared from the dashboard | It is switched off or past its end (`inactive`); edit the dashboard to see it grey, then tick **Schedule active** in its editor or switch it on in the Configure dialog |
 | Times look two hours off | Schedules use the time zone configured in Home Assistant, not the browser's |
 
 How the pieces fit together: [SPECIFICATION.md](SPECIFICATION.md).

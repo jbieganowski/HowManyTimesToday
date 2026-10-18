@@ -129,8 +129,9 @@ pozostaje otwarty (i zapisze POMINIĘTE) mimo zerowania licznika o północy.
 
 Harmonogram działa między startem a końcem. Przed startem jest `pending`, po końcu
 `inactive` (np. antybiotyk przez dwa tygodnie). Można go też wyłączyć ręcznie.
-Nieaktywny lub oczekujący harmonogram pokazuje szary klawisz z napisem „nieaktywne” (w
-języku oglądającego), nie wysyła alertów, nie zapisuje wpisów POMINIĘTE i odrzuca
+Oczekujący harmonogram pokazuje szary klawisz z informacją, że jeszcze się nie zaczął;
+nieaktywny ma kartę ukrytą na pulpicie (szarą tylko podczas edycji pulpitu, więc można ją
+zaznaczyć i włączyć z powrotem). Żaden nie wysyła alertów, nie zapisuje wpisów POMINIĘTE i odrzuca
 naciśnięcia; historia pozostaje dostępna i można go usunąć. Ponowne włączenie nie nadrabia
 czasu wyłączenia. Harmonogram utworzony kilka minut po starcie nadal pokazuje pierwszy
 termin jako należny, ale terminy starsze niż okno tolerancji nie są nadrabiane.

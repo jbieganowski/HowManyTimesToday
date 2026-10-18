@@ -9,7 +9,7 @@
   <text x="120" y="142.46" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">–</text>
   <rect x="185.0" y="123" width="150" height="26" rx="13" fill="#f5f3ee" stroke="#6b6859" stroke-width="1.5"/>
   <text x="260" y="140.9" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="700" fill="#6b6859" text-anchor="middle">inactive</text>
-  <text x="360" y="141" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#2b2b28" text-anchor="start">wyłączony ręcznie lub po końcu</text>
+  <text x="360" y="141" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" fill="#2b2b28" text-anchor="start">wyłączony ręcznie lub po końcu (karta ukryta)</text>
   <rect x="40" y="168" width="920" height="48" rx="12" fill="#e6f0f8" stroke="#4a90c4" stroke-width="1.5"/>
   <text x="62" y="198" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#6b6859" text-anchor="start">2</text>
   <circle cx="120" cy="192" r="17" fill="#9a978c"/>
