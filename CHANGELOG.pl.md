@@ -2,6 +2,16 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.1.1] - 2026-10-18
+
+### Integracja
+
+- **Poprawka:** na mocno obciążonym pulpicie karty czasem pokazywały „Custom element doesn't
+  exist” aż do następnego odświeżenia. Karta jest teraz rejestrowana także jako zasób
+  pulpitu (Ustawienia → Pulpity → Zasoby, dodawany przy starcie, usuwany razem z
+  integracją), tak jak ładują się inne karty niestandardowe; droga przez dodatkowy moduł
+  zostaje.
+
 ## [1.1.0] - 2026-10-18
 
 ### Integracja

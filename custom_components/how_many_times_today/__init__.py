@@ -92,8 +92,10 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
 
 
 async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """The integration was deleted: remove its stored state and history with it."""
+    """The integration was deleted: remove its stored state and history with it, and the
+    dashboard resource it added."""
     await async_remove_all(hass, entry.entry_id)
+    await _async_remove_dashboard_resource(hass)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -107,6 +109,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     entry.async_on_unload(entry.add_update_listener(_async_options_updated))
 
     await _async_register_frontend_card(hass)
+    await _async_ensure_dashboard_resource(hass)  # every setup: it is removed with the entry
     return True
 
 
@@ -166,6 +169,52 @@ async def _async_register_frontend_card(hass: HomeAssistant) -> None:
     from homeassistant.components.frontend import add_extra_js_url
 
     add_extra_js_url(hass, CARD_URL_PATH)
+
+
+def _storage_resources(hass: HomeAssistant):
+    """The dashboard resource collection when dashboards run in storage mode (the usual
+    case), else None (YAML mode: the resources are the user's own file)."""
+    lovelace = hass.data.get("lovelace")
+    resources = getattr(lovelace, "resources", None)
+    if resources is None or not hasattr(resources, "async_create_item"):
+        return None
+    return resources
+
+
+async def _async_ensure_dashboard_resource(hass: HomeAssistant) -> None:
+    """Also register the card as a dashboard resource. The dashboard loads its resources
+    itself, the way every other custom card is loaded, so the card is defined whatever
+    happens to the extra module above (on a busy page that one sometimes never ran and the
+    cards showed "Custom element doesn't exist" until the next reload). Both routes load
+    the same URL and the card defines its elements only once."""
+    try:
+        resources = _storage_resources(hass)
+        if resources is None:
+            return
+        await resources.async_get_info()  # makes sure the stored list is loaded
+        if any(_is_card_resource(item) for item in resources.async_items()):
+            return
+        await resources.async_create_item({"res_type": "module", "url": CARD_URL_PATH})
+    except Exception:  # noqa: BLE001 - the extra module still loads the card
+        _LOGGER.debug("Could not register the card as a dashboard resource", exc_info=True)
+
+
+def _is_card_resource(item: dict) -> bool:
+    return str(item.get("url", "")).split("?", 1)[0] == CARD_URL_PATH
+
+
+async def _async_remove_dashboard_resource(hass: HomeAssistant) -> None:
+    """Take the resource added by `_async_ensure_dashboard_resource` away again."""
+    try:
+        resources = _storage_resources(hass)
+        if resources is None:
+            return
+        await resources.async_get_info()
+        for item in list(resources.async_items()):
+            if _is_card_resource(item):
+                await resources.async_delete_item(item["id"])
+    except Exception:  # noqa: BLE001
+        _LOGGER.debug("Could not remove the card's dashboard resource", exc_info=True)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

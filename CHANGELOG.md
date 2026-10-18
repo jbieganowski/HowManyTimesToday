@@ -2,6 +2,15 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.1.1] - 2026-10-18
+
+### Integration
+
+- **Fixed:** on a busy dashboard the cards sometimes showed "Custom element doesn't exist"
+  until the next reload. The card is now also registered as a dashboard resource (Settings →
+  Dashboards → Resources, added on start, removed with the integration), the way other
+  custom cards are loaded; the extra module route stays as well.
+
 ## [1.1.0] - 2026-10-18
 
 ### Integration

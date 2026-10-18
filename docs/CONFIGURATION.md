@@ -25,7 +25,9 @@ The integration is a **singleton**: there is exactly one entry and all schedules
 inside it. Adding it a second time shows "Already configured".
 
 The card (`custom:how-many-times-today-card`) ships inside the integration and
-registers itself, so no dashboard resource has to be added by hand.
+registers itself, so no dashboard resource has to be added by hand: on start the integration
+adds it to **Settings → Dashboards → Resources** (and removes it again when the integration
+is deleted) and also loads it as an extra module, so it is available on every dashboard.
 
 > **Time zone.** Schedules follow the time zone configured in Home Assistant
 > (**Settings → System → General**). "09:00" means 09:00 in that zone, and start/end

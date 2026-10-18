@@ -24,7 +24,9 @@ Integracja jest **pojedyncza**: istnieje dokładnie jeden wpis, a wszystkie harm
 są w jego wnętrzu. Dodanie jej drugi raz pokazuje „Już skonfigurowano”.
 
 Karta (`custom:how-many-times-today-card`) jest dołączona do integracji i rejestruje się
-sama, więc nie trzeba ręcznie dodawać zasobu do dashboardu.
+sama, więc nie trzeba ręcznie dodawać zasobu do dashboardu: przy starcie integracja dodaje
+ją do **Ustawienia → Pulpity → Zasoby** (i usuwa, gdy integrację skasujesz) oraz ładuje jako
+dodatkowy moduł, więc jest dostępna na każdym pulpicie.
 
 > **Strefa czasowa.** Harmonogramy podążają za strefą czasową skonfigurowaną w Home
 > Assistant (**Ustawienia → System → Ogólne**). „09:00” oznacza 09:00 w tej strefie, a
