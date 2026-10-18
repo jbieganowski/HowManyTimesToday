@@ -97,6 +97,7 @@ LEGACY_STORAGE_STATE_PREFIX = f"{DOMAIN}_slot_state"
 SERVICE_PRESS_SCHEDULE = "press_schedule"
 SERVICE_CLEAR_HISTORY = "clear_history"
 SERVICE_SET_SCHEDULE_ACTIVE = "set_schedule_active"
+SERVICE_UPDATE_SCHEDULE = "update_schedule"
 
 ATTR_ANSWER = "answer"
 ATTR_WEEKS = "weeks"  # optional list of ISO week strings "YYYY-Www"

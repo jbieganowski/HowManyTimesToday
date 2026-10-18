@@ -214,12 +214,12 @@ skonfigurowaną w Home Assistant, a nie przeglądarki czy serwera.
 
 ## Usługi i atrybuty
 
-Trzy usługi encji (`press_schedule`, `clear_history`, `set_schedule_active`), atrybuty
+Cztery usługi encji (`press_schedule`, `clear_history`, `set_schedule_active`, `update_schedule`), atrybuty
 sensora i zdarzenie terminu opisuje [przewodnik konfiguracji](CONFIGURATION.pl.md).
 Naciśnięcie, które wymaga odpowiedzi, a jej nie ma, kończy się błędem walidacji z kluczem
 tłumaczenia `answer_required`.
 
 ## Testy
 
-118 testów jednostkowych działa bez instalacji Home Assistanta; zobacz
+139 testów jednostkowych działa bez instalacji Home Assistanta; zobacz
 [TESTING.pl.md](TESTING.pl.md).

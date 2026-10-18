@@ -35,6 +35,7 @@ from .models import (
     ScheduleRuntime,
     Status,
     advance,
+    apply_schedule_update,
     build_schedule,
     compute_status,
     new_runtime,
@@ -261,6 +262,19 @@ class HowManyTimesTodayCoordinator(DataUpdateCoordinator[None]):
         await self.history.async_append(schedule_id, entries)
         await self.state_store.async_save(self.runtime)
         await self.async_refresh()
+
+    async def async_update_schedule(self, schedule_id: str, changes: dict) -> None:
+        """Change a schedule's name, description, times/interval, start, end or tolerance
+        window. The change is validated, written to the config entry's options (so it is
+        stored like any other edit) and the update listener rebuilds the schedules.
+        Raises models.ScheduleUpdateError for an unacceptable change."""
+        self._require(schedule_id)
+        configs = [dict(cfg) for cfg in self.schedule_configs]
+        index = next(i for i, cfg in enumerate(configs) if cfg[CONF_SCHEDULE_ID] == schedule_id)
+        configs[index] = apply_schedule_update(configs[index], changes, dt_now().tzinfo)
+        options = dict(self.entry.options)
+        options[CONF_SCHEDULES] = configs
+        self.hass.config_entries.async_update_entry(self.entry, options=options)
 
     async def async_set_active(self, schedule_id: str, active: bool) -> None:
         _, rt = self._require(schedule_id)

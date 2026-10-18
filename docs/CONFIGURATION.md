@@ -245,13 +245,14 @@ and can be cleared entirely or by week:
 
 ## 9. Services
 
-All three are entity services: pick the schedule's sensor as the target.
+All four are entity services: pick the schedule's sensor as the target.
 
 | Service | Fields | Effect |
 | --- | --- | --- |
 | `how_many_times_today.press_schedule` | `answer` (optional) | Confirms the schedule, like pressing its button |
 | `how_many_times_today.clear_history` | `weeks` (optional) | Clears the press history |
 | `how_many_times_today.set_schedule_active` | `active` (required) | Switches the schedule on or off |
+| `how_many_times_today.update_schedule` | `name`, `description`, `fixed_times`, `interval_hours`, `start_at`, `end_at`, `window_minutes` (all optional, at least one) | Changes the schedule's name, description, times or interval, start, end or tolerance window (the card editor uses it) |
 
 ```yaml
 action: how_many_times_today.press_schedule
@@ -259,6 +260,17 @@ target:
   entity_id: sensor.heart_medication
 data:
   answer: do_now
+```
+
+`update_schedule` changes only the fields you give; the mode (fixed times / every X hours) stays as it is, so `fixed_times` fits only a fixed-times schedule and `interval_hours` only an every-X-hours one. An empty `end_at` removes the end. A change that cannot work (a malformed time, more than 24 times, an interval outside 0.5–48 hours, a window outside 1–240 minutes, an end before the start, nothing to change) fails with a validation error carrying a translated message; the schedule's progress and history are kept:
+
+```yaml
+action: how_many_times_today.update_schedule
+target:
+  entity_id: sensor.heart_medication
+data:
+  name: Heart medication
+  fixed_times: ["07:30", "19:30"]
 ```
 
 `press_schedule` without an `answer` when one is needed fails with a validation error

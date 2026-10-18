@@ -376,3 +376,46 @@ def test_the_global_sound_and_notify_service_come_from_the_options():
         assert default.sound == "chime" and default.notify_service is None
 
     run(go())
+
+
+# --- changing a schedule from the card ---------------------------------------------------------
+
+
+def test_update_schedule_stores_the_change_and_keeps_the_progress():
+    async def go():
+        entry = make_entry([cfg_fixed("a"), cfg_fixed("b", name="Karma")])
+        CLOCK["now"] = at(12)
+        hass = FakeHass()
+        coord = await start(entry, hass)
+        await coord.async_press("a")
+        await coord.async_update_schedule("a", {"name": "  Lek rano ", "fixed_times": ["8:00", "20:00", "13:00"]})
+        stored = entry.options[const.CONF_SCHEDULES]
+        assert stored[0]["name"] == "Lek rano" and stored[0]["fixed_times"] == ["08:00", "13:00", "20:00"]
+        assert stored[1]["name"] == "Karma"  # the other schedule is untouched
+        assert hass.config_entries.updates == 1
+        await coord.async_options_updated()  # what the update listener does
+        assert coord.schedules["a"].name == "Lek rano" and coord.status("a").planned_count == 3
+        assert coord.runtime["a"].last_press_at == at(12)
+
+    run(go())
+
+
+def test_update_schedule_rejects_a_bad_change_and_stores_nothing():
+    async def go():
+        entry = make_entry([cfg_interval("i1")])
+        hass = FakeHass()
+        coord = await start(entry, hass)
+        before = [dict(c) for c in entry.options[const.CONF_SCHEDULES]]
+        for changes, key in (
+            ({"fixed_times": ["08:00"]}, "wrong_mode"),
+            ({"interval_hours": 100}, "invalid_interval"),
+            ({}, "nothing_to_update"),
+        ):
+            with pytest.raises(models.ScheduleUpdateError) as err:
+                await coord.async_update_schedule("i1", changes)
+            assert err.value.key == key
+        assert entry.options[const.CONF_SCHEDULES] == before and hass.config_entries.updates == 0
+        with pytest.raises(ValueError):
+            await coord.async_update_schedule("unknown", {"name": "x"})
+
+    run(go())

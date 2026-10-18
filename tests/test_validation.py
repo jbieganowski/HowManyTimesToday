@@ -182,8 +182,13 @@ def _walk(node, dotted):
 def test_every_state_error_and_service_the_code_raises_or_exposes_is_translated():
     strings = _load(INTEGRATION / "strings.json")
     assert set(strings["entity"]["sensor"]["schedule"]["state"]) == set(const.SCHEDULE_STATES)
-    assert {"answer_required", "schedule_not_active"} == set(strings["exceptions"])
-    assert {const.SERVICE_PRESS_SCHEDULE, const.SERVICE_CLEAR_HISTORY, const.SERVICE_SET_SCHEDULE_ACTIVE} == set(strings["services"])
+    assert {"answer_required", "schedule_not_active", *models.UPDATE_ERROR_KEYS} == set(strings["exceptions"])
+    assert {
+        const.SERVICE_PRESS_SCHEDULE,
+        const.SERVICE_CLEAR_HISTORY,
+        const.SERVICE_SET_SCHEDULE_ACTIVE,
+        const.SERVICE_UPDATE_SCHEDULE,
+    } == set(strings["services"])
     assert set(strings["selector"]["answer"]["options"]) == set(const.ANSWERS)
     assert {"name_required", "invalid_datetime", "end_before_start"} <= set(strings["options"]["error"])
     assert {f"time_{i}" for i in range(1, 25)} <= set(strings["options"]["step"]["schedule_times"]["data"])

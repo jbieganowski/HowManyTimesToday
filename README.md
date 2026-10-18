@@ -77,7 +77,7 @@ Or add it through the dashboard UI's "Add card" picker — it offers an entity p
 limited to this integration's own sensors.
 
 Services (all take the schedule's sensor as the target): `press_schedule` (with an
-optional `answer`), `clear_history` and `set_schedule_active`. When a term comes due the
+optional `answer`), `clear_history`, `set_schedule_active` and `update_schedule` (name, times, interval, start, end, window). When a term comes due the
 event `how_many_times_today_due` is fired, and an optional push goes to the mobile app.
 
 <p align="center">
@@ -86,7 +86,7 @@ event `how_many_times_today_due` is fired, and an optional push goes to the mobi
 
 ## Development
 
-118 unit tests cover the scheduling engine, the stores and the coordinator without needing
+139 unit tests cover the scheduling engine, the stores and the coordinator without needing
 a real Home Assistant install (details in [docs/TESTING.md](docs/TESTING.md)):
 
 ```sh

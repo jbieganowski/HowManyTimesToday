@@ -152,6 +152,36 @@
     },
     "schedule_not_active": {
       "message": "Ten harmonogram nie jest aktywny (przed startem, po końcu lub wyłączony ręcznie)."
+    },
+    "invalid_name": {
+      "message": "Nazwa nie może być pusta."
+    },
+    "invalid_time": {
+      "message": "To nie jest poprawna godzina. Użyj formatu 24-godzinnego GG:MM."
+    },
+    "no_times": {
+      "message": "Podaj co najmniej jedną godzinę."
+    },
+    "too_many_times": {
+      "message": "Harmonogram może mieć najwyżej 24 godziny na dobę."
+    },
+    "invalid_interval": {
+      "message": "Interwał musi mieścić się między 0,5 a 48 godzin."
+    },
+    "invalid_datetime": {
+      "message": "Nie można odczytać tej daty i godziny."
+    },
+    "end_before_start": {
+      "message": "Koniec musi być późniejszy niż start."
+    },
+    "invalid_window": {
+      "message": "Okno tolerancji musi mieścić się między 1 a 240 minut."
+    },
+    "wrong_mode": {
+      "message": "To pole nie dotyczy trybu tego harmonogramu (godziny są dla harmonogramów ze stałymi godzinami, interwał dla harmonogramów co X godzin)."
+    },
+    "nothing_to_update": {
+      "message": "Podaj co najmniej jedno pole do zmiany."
     }
   },
   "services": {
@@ -172,6 +202,36 @@
         "weeks": {
           "name": "Tygodnie",
           "description": "Tygodnie ISO (np. 2026-W41). Pomiń, aby wyczyścić całą historię."
+        }
+      }
+    },
+    "update_schedule": {
+      "name": "Zmień harmonogram",
+      "description": "Zmienia nazwę, opis, godziny, interwał, start, koniec lub okno tolerancji harmonogramu. Zmiana trybu odbywa się w ustawieniach integracji.",
+      "fields": {
+        "name": {
+          "name": "Nazwa"
+        },
+        "description": {
+          "name": "Opis"
+        },
+        "fixed_times": {
+          "name": "Godziny",
+          "description": "Tylko harmonogramy ze stałymi godzinami: godziny w ciągu dnia jako GG:MM (od 1 do 24)."
+        },
+        "interval_hours": {
+          "name": "Interwał (godziny)",
+          "description": "Tylko harmonogramy co X godzin (0,5 – 48)."
+        },
+        "start_at": {
+          "name": "Start"
+        },
+        "end_at": {
+          "name": "Koniec",
+          "description": "Zostaw puste, aby usunąć koniec."
+        },
+        "window_minutes": {
+          "name": "Okno tolerancji (minuty)"
         }
       }
     },

@@ -174,6 +174,129 @@ def build_schedule(cfg: dict, tz: tzinfo) -> Schedule:
     )
 
 
+# --- changing a schedule ------------------------------------------------------------
+
+UPDATABLE_FIELDS = (
+    CONF_SCHEDULE_NAME,
+    CONF_SCHEDULE_DESCRIPTION,
+    CONF_SCHEDULE_FIXED_TIMES,
+    CONF_SCHEDULE_INTERVAL_HOURS,
+    CONF_SCHEDULE_START_AT,
+    CONF_SCHEDULE_END_AT,
+    CONF_SCHEDULE_WINDOW_MINUTES,
+)
+# the translation keys a rejected change can carry (each has an `exceptions` text)
+UPDATE_ERROR_KEYS = (
+    "nothing_to_update",
+    "invalid_name",
+    "invalid_time",
+    "no_times",
+    "too_many_times",
+    "invalid_interval",
+    "invalid_datetime",
+    "end_before_start",
+    "invalid_window",
+    "wrong_mode",
+)
+MIN_INTERVAL_HOURS = 0.5
+MAX_INTERVAL_HOURS = 48.0
+MIN_WINDOW_MINUTES = 1
+MAX_WINDOW_MINUTES = 240
+MAX_TIMES_PER_DAY = 24
+
+
+class ScheduleUpdateError(ValueError):
+    """A requested change is not acceptable; `key` is its translation key."""
+
+    def __init__(self, key: str) -> None:
+        super().__init__(key)
+        self.key = key
+
+
+def apply_schedule_update(cfg: dict, changes: dict, tz: tzinfo) -> dict:
+    """The stored dict of a schedule with `changes` applied, fully validated.
+
+    Only the fields in UPDATABLE_FIELDS count; a field given as None is "not given",
+    except end_at where None or "" removes the end. The mode never changes here. `cfg`
+    itself is left untouched. Raises ScheduleUpdateError.
+    """
+    given = {
+        key: value
+        for key, value in changes.items()
+        if key in UPDATABLE_FIELDS and (value is not None or key == CONF_SCHEDULE_END_AT)
+    }
+    if not given:
+        raise ScheduleUpdateError("nothing_to_update")
+
+    new = dict(cfg)
+    mode = cfg[CONF_SCHEDULE_MODE]
+
+    if CONF_SCHEDULE_NAME in given:
+        name = str(given[CONF_SCHEDULE_NAME]).strip()
+        if not name:
+            raise ScheduleUpdateError("invalid_name")
+        new[CONF_SCHEDULE_NAME] = name
+
+    if CONF_SCHEDULE_DESCRIPTION in given:
+        new[CONF_SCHEDULE_DESCRIPTION] = str(given[CONF_SCHEDULE_DESCRIPTION]).strip()
+
+    if CONF_SCHEDULE_FIXED_TIMES in given:
+        if mode != MODE_FIXED_TIMES:
+            raise ScheduleUpdateError("wrong_mode")
+        raw = given[CONF_SCHEDULE_FIXED_TIMES]
+        if isinstance(raw, str) or not isinstance(raw, (list, tuple)):
+            raise ScheduleUpdateError("invalid_time")
+        if not raw:
+            raise ScheduleUpdateError("no_times")
+        if len(raw) > MAX_TIMES_PER_DAY:
+            raise ScheduleUpdateError("too_many_times")
+        try:
+            new[CONF_SCHEDULE_FIXED_TIMES] = sorted({normalize_hhmm(str(t)) for t in raw})
+        except ValueError as err:
+            raise ScheduleUpdateError("invalid_time") from err
+
+    if CONF_SCHEDULE_INTERVAL_HOURS in given:
+        if mode != MODE_INTERVAL:
+            raise ScheduleUpdateError("wrong_mode")
+        try:
+            hours = float(given[CONF_SCHEDULE_INTERVAL_HOURS])
+        except (TypeError, ValueError) as err:
+            raise ScheduleUpdateError("invalid_interval") from err
+        if not (MIN_INTERVAL_HOURS <= hours <= MAX_INTERVAL_HOURS):
+            raise ScheduleUpdateError("invalid_interval")
+        new[CONF_SCHEDULE_INTERVAL_HOURS] = hours
+
+    if CONF_SCHEDULE_START_AT in given:
+        try:
+            new[CONF_SCHEDULE_START_AT] = normalize_local_datetime(str(given[CONF_SCHEDULE_START_AT]))
+        except ValueError as err:
+            raise ScheduleUpdateError("invalid_datetime") from err
+
+    if CONF_SCHEDULE_END_AT in given:
+        raw_end = given[CONF_SCHEDULE_END_AT]
+        if raw_end is None or str(raw_end).strip() == "":
+            new[CONF_SCHEDULE_END_AT] = None
+        else:
+            try:
+                new[CONF_SCHEDULE_END_AT] = normalize_local_datetime(str(raw_end))
+            except ValueError as err:
+                raise ScheduleUpdateError("invalid_datetime") from err
+
+    if CONF_SCHEDULE_WINDOW_MINUTES in given:
+        try:
+            window = int(float(given[CONF_SCHEDULE_WINDOW_MINUTES]))
+        except (TypeError, ValueError) as err:
+            raise ScheduleUpdateError("invalid_window") from err
+        if not (MIN_WINDOW_MINUTES <= window <= MAX_WINDOW_MINUTES):
+            raise ScheduleUpdateError("invalid_window")
+        new[CONF_SCHEDULE_WINDOW_MINUTES] = window
+
+    end = new.get(CONF_SCHEDULE_END_AT)
+    if end and parse_local_datetime(end, tz) <= parse_local_datetime(new[CONF_SCHEDULE_START_AT], tz):
+        raise ScheduleUpdateError("end_before_start")
+    return new
+
+
 # --- terms --------------------------------------------------------------------------
 
 

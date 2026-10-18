@@ -152,6 +152,36 @@
     },
     "schedule_not_active": {
       "message": "Dieser Zeitplan ist nicht aktiv (vor dem Start, nach dem Ende oder von Hand ausgeschaltet)."
+    },
+    "invalid_name": {
+      "message": "Der Name darf nicht leer sein."
+    },
+    "invalid_time": {
+      "message": "Keine gültige Uhrzeit. Verwende das 24-Stunden-Format HH:MM."
+    },
+    "no_times": {
+      "message": "Gib mindestens eine Uhrzeit an."
+    },
+    "too_many_times": {
+      "message": "Ein Zeitplan kann höchstens 24 Uhrzeiten pro Tag haben."
+    },
+    "invalid_interval": {
+      "message": "Das Intervall muss zwischen 0,5 und 48 Stunden liegen."
+    },
+    "invalid_datetime": {
+      "message": "Dieses Datum mit Uhrzeit kann nicht gelesen werden."
+    },
+    "end_before_start": {
+      "message": "Das Ende muss nach dem Start liegen."
+    },
+    "invalid_window": {
+      "message": "Das Toleranzfenster muss zwischen 1 und 240 Minuten liegen."
+    },
+    "wrong_mode": {
+      "message": "Dieses Feld gilt nicht für den Modus dieses Zeitplans (Uhrzeiten gelten für Zeitpläne mit festen Uhrzeiten, das Intervall für Zeitpläne „Alle X Stunden“)."
+    },
+    "nothing_to_update": {
+      "message": "Gib mindestens ein Feld zum Ändern an."
     }
   },
   "services": {
@@ -172,6 +202,36 @@
         "weeks": {
           "name": "Wochen",
           "description": "ISO-Wochen (z. B. 2026-W41). Weglassen, um den ganzen Verlauf zu löschen."
+        }
+      }
+    },
+    "update_schedule": {
+      "name": "Zeitplan ändern",
+      "description": "Ändert Name, Beschreibung, Uhrzeiten, Intervall, Start, Ende oder Toleranzfenster eines Zeitplans. Den Modus wechselst du in den Einstellungen der Integration.",
+      "fields": {
+        "name": {
+          "name": "Name"
+        },
+        "description": {
+          "name": "Beschreibung"
+        },
+        "fixed_times": {
+          "name": "Uhrzeiten",
+          "description": "Nur Zeitpläne mit festen Uhrzeiten: die Tageszeiten als HH:MM (1 bis 24)."
+        },
+        "interval_hours": {
+          "name": "Intervall (Stunden)",
+          "description": "Nur Zeitpläne „Alle X Stunden“ (0,5 – 48)."
+        },
+        "start_at": {
+          "name": "Start"
+        },
+        "end_at": {
+          "name": "Ende",
+          "description": "Leer lassen, um das Ende zu entfernen."
+        },
+        "window_minutes": {
+          "name": "Toleranzfenster (Minuten)"
         }
       }
     },

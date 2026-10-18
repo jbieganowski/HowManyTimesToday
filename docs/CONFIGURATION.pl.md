@@ -251,6 +251,7 @@ Wszystkie trzy to usługi encji: jako cel wskaż sensor harmonogramu.
 | `how_many_times_today.press_schedule` | `answer` (opcjonalne) | Potwierdza harmonogram, jak naciśnięcie jego przycisku |
 | `how_many_times_today.clear_history` | `weeks` (opcjonalne) | Czyści historię naciśnięć |
 | `how_many_times_today.set_schedule_active` | `active` (wymagane) | Włącza lub wyłącza harmonogram |
+| `how_many_times_today.update_schedule` | `name`, `description`, `fixed_times`, `interval_hours`, `start_at`, `end_at`, `window_minutes` (wszystkie opcjonalne, co najmniej jedno) | Zmienia nazwę, opis, godziny lub interwał, start, koniec albo okno tolerancji harmonogramu (używa jej edytor karty) |
 
 ```yaml
 action: how_many_times_today.press_schedule
@@ -258,6 +259,17 @@ target:
   entity_id: sensor.lek_na_serce
 data:
   answer: do_now
+```
+
+`update_schedule` zmienia tylko podane pola; tryb (stałe godziny / co X godzin) pozostaje, więc `fixed_times` pasuje tylko do harmonogramu ze stałymi godzinami, a `interval_hours` tylko do harmonogramu co X godzin. Puste `end_at` usuwa koniec. Zmiana, która nie może zadziałać (błędna godzina, więcej niż 24 godziny, interwał poza 0,5–48 godz., okno poza 1–240 min, koniec przed startem, brak czego zmienić), kończy się błędem walidacji z przetłumaczonym komunikatem; postęp i historia harmonogramu zostają:
+
+```yaml
+action: how_many_times_today.update_schedule
+target:
+  entity_id: sensor.lek_na_serce
+data:
+  name: Lek na serce
+  fixed_times: ["07:30", "19:30"]
 ```
 
 `press_schedule` bez `answer`, gdy jest potrzebna, kończy się błędem walidacji z kluczem

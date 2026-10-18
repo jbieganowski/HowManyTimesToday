@@ -212,12 +212,12 @@ Home Assistant, not the browser's or the server's.
 
 ## Services and attributes
 
-Three entity services (`press_schedule`, `clear_history`, `set_schedule_active`), the
+Four entity services (`press_schedule`, `clear_history`, `set_schedule_active`, `update_schedule`), the
 sensor attributes and the due event are described in the
 [configuration guide](CONFIGURATION.md). A press that needs an answer and has none fails
 with a validation error whose translation key is `answer_required`.
 
 ## Testing
 
-118 unit tests run without a Home Assistant installation; see
+139 unit tests run without a Home Assistant installation; see
 [TESTING.md](TESTING.md).

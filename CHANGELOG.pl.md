@@ -24,7 +24,7 @@
 - **Powiadomienia:** co do sekundy w chwili, gdy termin przypada, odpalane jest zdarzenie
   `how_many_times_today_due` (po tym, jak encja przyjęła nowy stan), karta pokazuje
   komunikat w aplikacji, a opcjonalny push idzie przez aplikację mobilną.
-- **Usługi encji** `press_schedule`, `clear_history`, `set_schedule_active`; naciśnięcie,
+- **Usługi encji** `press_schedule`, `clear_history`, `set_schedule_active` i `update_schedule` (zmienia nazwę, opis, godziny lub interwał, start, koniec i okno tolerancji harmonogramu; postęp zostaje); naciśnięcie,
   które wymaga odpowiedzi, kończy się błędem walidacji z kluczem tłumaczenia
   `answer_required`.
 - **Stan przeżywa restarty**; dzisiejszy licznik wynika z historii i zeruje się o północy.

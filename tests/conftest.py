@@ -87,10 +87,23 @@ class FakeServices:
         self.calls.append((domain, service, data, blocking))
 
 
+class FakeConfigEntries:
+    def __init__(self):
+        self.updates = 0
+
+    def async_update_entry(self, entry, options=None, **_):
+        # like Home Assistant: the entry's options are replaced at once (its update listener,
+        # which the tests call by hand, follows afterwards)
+        self.updates += 1
+        if options is not None:
+            entry.options = options
+
+
 class FakeHass:
     def __init__(self):
         self.bus = FakeBus()
         self.services = FakeServices()
+        self.config_entries = FakeConfigEntries()
         self.tasks: list = []
 
     def async_create_task(self, coro):

@@ -152,6 +152,36 @@
     },
     "schedule_not_active": {
       "message": "This schedule is not active (before its start, after its end, or switched off)."
+    },
+    "invalid_name": {
+      "message": "The name cannot be empty."
+    },
+    "invalid_time": {
+      "message": "Not a valid time. Use 24-hour HH:MM."
+    },
+    "no_times": {
+      "message": "Give at least one time."
+    },
+    "too_many_times": {
+      "message": "A schedule can have at most 24 times a day."
+    },
+    "invalid_interval": {
+      "message": "The interval must be between 0.5 and 48 hours."
+    },
+    "invalid_datetime": {
+      "message": "That date and time cannot be read."
+    },
+    "end_before_start": {
+      "message": "The end must be later than the start."
+    },
+    "invalid_window": {
+      "message": "The tolerance window must be between 1 and 240 minutes."
+    },
+    "wrong_mode": {
+      "message": "That field does not apply to this schedule's mode (times are for fixed-times schedules, the interval for every-X-hours schedules)."
+    },
+    "nothing_to_update": {
+      "message": "Give at least one field to change."
     }
   },
   "services": {
@@ -172,6 +202,36 @@
         "weeks": {
           "name": "Weeks",
           "description": "ISO week strings (e.g. 2026-W41). Omit to clear the whole history."
+        }
+      }
+    },
+    "update_schedule": {
+      "name": "Change a schedule",
+      "description": "Change a schedule's name, description, times, interval, start, end or tolerance window. Switching its mode is done in the integration settings.",
+      "fields": {
+        "name": {
+          "name": "Name"
+        },
+        "description": {
+          "name": "Description"
+        },
+        "fixed_times": {
+          "name": "Times",
+          "description": "Fixed-times schedules only: the times of the day as HH:MM (1-24 of them)."
+        },
+        "interval_hours": {
+          "name": "Interval (hours)",
+          "description": "Every-X-hours schedules only (0.5 - 48)."
+        },
+        "start_at": {
+          "name": "Start"
+        },
+        "end_at": {
+          "name": "End",
+          "description": "Leave empty to remove the end."
+        },
+        "window_minutes": {
+          "name": "Tolerance window (minutes)"
         }
       }
     },

@@ -152,6 +152,36 @@
     },
     "schedule_not_active": {
       "message": "此日程未启用（未到开始时间、已过结束时间或被手动关闭）。"
+    },
+    "invalid_name": {
+      "message": "名称不能为空。"
+    },
+    "invalid_time": {
+      "message": "时间无效。请使用 24 小时制 HH:MM。"
+    },
+    "no_times": {
+      "message": "请至少给出一个时间。"
+    },
+    "too_many_times": {
+      "message": "一个日程每天最多 24 个时间。"
+    },
+    "invalid_interval": {
+      "message": "间隔必须在 0.5 到 48 小时之间。"
+    },
+    "invalid_datetime": {
+      "message": "无法读取该日期和时间。"
+    },
+    "end_before_start": {
+      "message": "结束时间必须晚于开始时间。"
+    },
+    "invalid_window": {
+      "message": "容差窗口必须在 1 到 240 分钟之间。"
+    },
+    "wrong_mode": {
+      "message": "该字段不适用于此日程的模式（时间用于固定时间的日程，间隔用于“每 X 小时”的日程）。"
+    },
+    "nothing_to_update": {
+      "message": "请至少给出一个要更改的字段。"
     }
   },
   "services": {
@@ -172,6 +202,36 @@
         "weeks": {
           "name": "周",
           "description": "ISO 周字符串（例如 2026-W41）。省略则清除全部历史。"
+        }
+      }
+    },
+    "update_schedule": {
+      "name": "更改日程",
+      "description": "更改日程的名称、说明、时间、间隔、开始、结束或容差窗口。切换模式请在集成设置中进行。",
+      "fields": {
+        "name": {
+          "name": "名称"
+        },
+        "description": {
+          "name": "说明"
+        },
+        "fixed_times": {
+          "name": "时间",
+          "description": "仅适用于固定时间的日程：一天中的时间，格式 HH:MM（1 到 24 个）。"
+        },
+        "interval_hours": {
+          "name": "间隔（小时）",
+          "description": "仅适用于“每 X 小时”的日程（0.5 – 48）。"
+        },
+        "start_at": {
+          "name": "开始"
+        },
+        "end_at": {
+          "name": "结束",
+          "description": "留空则移除结束时间。"
+        },
+        "window_minutes": {
+          "name": "容差窗口（分钟）"
         }
       }
     },

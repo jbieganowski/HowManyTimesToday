@@ -22,7 +22,7 @@
 - **Notifications:** at the exact second a term comes due the event
   `how_many_times_today_due` is fired (after the entity took its new state), the card shows
   an in-app message, and an optional push goes through the mobile app.
-- **Entity services** `press_schedule`, `clear_history`, `set_schedule_active`; a press that
+- **Entity services** `press_schedule`, `clear_history`, `set_schedule_active` and `update_schedule` (changes a schedule's name, description, times or interval, start, end and tolerance window; the progress is kept); a press that
   needs an answer fails with a validation error whose translation key is `answer_required`.
 - **State survives restarts**; today's counter is derived from the history and resets at
   midnight. Terms and dates follow the Home Assistant time zone.

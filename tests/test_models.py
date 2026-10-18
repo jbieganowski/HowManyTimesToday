@@ -498,3 +498,88 @@ def test_runtime_roundtrip():
 def test_runtime_from_dict_rejects_a_garbage_timestamp():
     with pytest.raises(ValueError):
         models.ScheduleRuntime.from_dict("s", {"last_press_at": "not-a-date"})
+
+
+# --- changing a stored schedule ------------------------------------------------------------
+
+
+def stored_fixed():
+    return {
+        "id": "s", "name": "Lek", "description": "", "mode": const.MODE_FIXED_TIMES,
+        "fixed_times": ["07:00", "16:00"], "start_at": "2026-10-19T00:00:00", "end_at": None,
+        "window_minutes": 30,
+    }
+
+
+def stored_interval():
+    return {
+        "id": "i", "name": "Woda", "description": "", "mode": const.MODE_INTERVAL,
+        "interval_hours": 12.0, "start_at": "2026-10-19T09:00:00", "end_at": None, "window_minutes": 30,
+    }
+
+
+def update_error(cfg, changes):
+    with pytest.raises(models.ScheduleUpdateError) as err:
+        models.apply_schedule_update(cfg, changes, TZ)
+    return err.value.key
+
+
+def test_update_changes_only_what_is_given_and_leaves_the_original_alone():
+    cfg = stored_fixed()
+    new = models.apply_schedule_update(
+        cfg, {"name": " Lek na serce ", "description": "Po jedzeniu", "window_minutes": 45, "interval_hours": None}, TZ
+    )
+    assert new["name"] == "Lek na serce" and new["description"] == "Po jedzeniu" and new["window_minutes"] == 45
+    assert new["fixed_times"] == ["07:00", "16:00"] and new["mode"] == const.MODE_FIXED_TIMES
+    assert cfg == stored_fixed()
+    models.build_schedule(new, TZ)  # the result is a schedule the engine accepts
+
+
+def test_update_normalises_sorts_and_deduplicates_the_times():
+    new = models.apply_schedule_update(stored_fixed(), {"fixed_times": ["20:00", "8:05", "08:05"]}, TZ)
+    assert new["fixed_times"] == ["08:05", "20:00"]
+
+
+def test_update_sets_and_clears_the_end():
+    new = models.apply_schedule_update(stored_fixed(), {"end_at": "2026-11-01T12:00"}, TZ)
+    assert new["end_at"] == "2026-11-01T12:00:00"
+    assert models.apply_schedule_update(new, {"end_at": ""}, TZ)["end_at"] is None
+    assert models.apply_schedule_update(new, {"end_at": None}, TZ)["end_at"] is None
+
+
+def test_update_changes_the_interval_of_an_interval_schedule():
+    assert models.apply_schedule_update(stored_interval(), {"interval_hours": "6"}, TZ)["interval_hours"] == 6.0
+
+
+@pytest.mark.parametrize(
+    "changes,key",
+    [
+        ({}, "nothing_to_update"),
+        ({"name": None, "unknown": 1}, "nothing_to_update"),
+        ({"name": "   "}, "invalid_name"),
+        ({"fixed_times": []}, "no_times"),
+        ({"fixed_times": ["25:00"]}, "invalid_time"),
+        ({"fixed_times": "08:00"}, "invalid_time"),
+        ({"fixed_times": [f"{h:02d}:00" for h in range(24)] + ["23:30"]}, "too_many_times"),
+        ({"interval_hours": 3}, "wrong_mode"),
+        ({"start_at": "yesterday"}, "invalid_datetime"),
+        ({"end_at": "2026-10-18T10:00"}, "end_before_start"),
+        ({"start_at": "2026-12-01T00:00"}, None),
+        ({"window_minutes": 0}, "invalid_window"),
+        ({"window_minutes": 241}, "invalid_window"),
+        ({"window_minutes": "abc"}, "invalid_window"),
+    ],
+)
+def test_update_rejects_what_cannot_work(changes, key):
+    cfg = stored_fixed()
+    if key is None:  # a start moved past an existing end
+        cfg["end_at"] = "2026-11-01T00:00:00"
+        key = "end_before_start"
+    assert update_error(cfg, changes) == key
+
+
+def test_update_of_an_interval_schedule_rejects_times_and_a_bad_interval():
+    assert update_error(stored_interval(), {"fixed_times": ["08:00"]}) == "wrong_mode"
+    assert update_error(stored_interval(), {"interval_hours": 0.2}) == "invalid_interval"
+    assert update_error(stored_interval(), {"interval_hours": 49}) == "invalid_interval"
+    assert update_error(stored_interval(), {"interval_hours": "x"}) == "invalid_interval"
