@@ -221,8 +221,8 @@ with a validation error whose translation key is `answer_required`.
 ## Card layouts and adding the integration
 
 The card has two looks chosen per card with `layout: card | tile` (default `card`): the
-large card with the description and the expandable history, and a compact tile (circle
-with the number, name, state sentence). A tile presses on a tap (after a short wait, so that a double tap
+large card with the description and the expandable history, and a tile with the content of the Android app's card without the history (circle with the
+number, name, description, state sentence, countdown, "last / total" and the pencil that opens the edit dialog). A tile presses on a tap (after a short wait, so that a double tap
 is not two presses), opens the schedule's edit dialog on a double tap, a double click or
 Alt+Enter (the card editor's form with Reset to "all on time" and Close) and opens the history on
 a long press, a right click or Shift+Enter; its dialogs are attached to the page body so

@@ -135,9 +135,10 @@ const CARD_STRINGS = {
     kind_missed: "MISSED",
     editor_layout_label: "Appearance",
     layout_card: "Card (large)",
-    layout_tile: "Tile (compact)",
+    layout_tile: "Tile (as in the app, no history)",
     history_dialog_title: "History — {name}",
     close_label: "Close",
+    edit_label: "Edit",
   },
   pl: {
     show_history: "▶ pokaż historię",
@@ -206,9 +207,10 @@ const CARD_STRINGS = {
     kind_missed: "POMINIĘTE",
     editor_layout_label: "Wygląd",
     layout_card: "Karta (duża)",
-    layout_tile: "Kafelek (kompaktowy)",
+    layout_tile: "Kafelek (jak w aplikacji, bez historii)",
     history_dialog_title: "Historia — {name}",
     close_label: "Zamknij",
+    edit_label: "Edytuj",
   },
   de: {
     show_history: "▶ Verlauf anzeigen",
@@ -277,9 +279,10 @@ const CARD_STRINGS = {
     kind_missed: "VERPASST",
     editor_layout_label: "Darstellung",
     layout_card: "Karte (groß)",
-    layout_tile: "Kachel (kompakt)",
+    layout_tile: "Kachel (wie in der App, ohne Verlauf)",
     history_dialog_title: "Verlauf — {name}",
     close_label: "Schließen",
+    edit_label: "Bearbeiten",
   },
   ru: {
     show_history: "▶ показать историю",
@@ -348,9 +351,10 @@ const CARD_STRINGS = {
     kind_missed: "ПРОПУЩЕНО",
     editor_layout_label: "Внешний вид",
     layout_card: "Карточка (большая)",
-    layout_tile: "Плитка (компактная)",
+    layout_tile: "Плитка (как в приложении, без истории)",
     history_dialog_title: "История — {name}",
     close_label: "Закрыть",
+    edit_label: "Изменить",
   },
   uk: {
     show_history: "▶ показати історію",
@@ -419,9 +423,10 @@ const CARD_STRINGS = {
     kind_missed: "ПРОПУЩЕНО",
     editor_layout_label: "Вигляд",
     layout_card: "Картка (велика)",
-    layout_tile: "Плитка (компактна)",
+    layout_tile: "Плитка (як у застосунку, без історії)",
     history_dialog_title: "Історія — {name}",
     close_label: "Закрити",
+    edit_label: "Змінити",
   },
   "zh-hans": {
     show_history: "▶ 显示历史",
@@ -490,9 +495,10 @@ const CARD_STRINGS = {
     kind_missed: "已错过",
     editor_layout_label: "外观",
     layout_card: "卡片（大）",
-    layout_tile: "方块（紧凑）",
+    layout_tile: "方块（与应用相同，无历史）",
     history_dialog_title: "历史记录 — {name}",
     close_label: "关闭",
+    edit_label: "编辑",
   },
 };
 
@@ -576,15 +582,15 @@ class HowManyTimesTodayCard extends HTMLElement {
   }
 
   getCardSize() {
-    return this._config && this._config.layout === "tile" ? 1 : 3;
+    return 3;
   }
 
   // Sizing hint for the "sections" dashboard layout when the card is first placed -
-  // a tile is meant to sit compactly among other tiles, the big card wants the
-  // full width it already had before this option existed.
+  // the tile is the app's card without the history, so it is a little shorter than the
+  // big card (and can be made narrower).
   getGridOptions() {
     if (this._config && this._config.layout === "tile") {
-      return { columns: 6, rows: 2, min_columns: 3, min_rows: 2 };
+      return { columns: 12, rows: 3, min_columns: 6, min_rows: 3 };
     }
     return { columns: 12, rows: 4, min_columns: 6, min_rows: 3 };
   }
@@ -859,13 +865,15 @@ class HowManyTimesTodayCard extends HTMLElement {
     this._closeModal();
   }
 
-  // Compact "tile" layout (opt-in via layout: tile): a single row - colour circle,
-  // name, plain-language status - sized to sit among native HA tiles in a sections
-  // dashboard. Tap presses the schedule (same answer dialog as the big card); a
-  // long press/hold, right-click, or Shift+Enter opens the history as a dialog
-  // instead of the big card's inline expandable list, since there isn't room for it.
+  // "Tile" layout (opt-in via layout: tile): the same content as the card in the Android
+  // app - the coloured circle with the number, name, description, the state sentence,
+  // the blinking-number note, the countdown, "last / total" and the pencil - but no
+  // history list. Tap presses the schedule (same answer dialog as the big card), a double
+  // tap or the pencil opens the edit dialog, and a long press, right click or
+  // Shift+Enter opens the history as a dialog.
   _renderTile(state) {
     const root = this.shadowRoot;
+    const locale = this._hass?.language;
     const attrs = this._stateObj.attributes;
     const name = attrs.name || attrs.friendly_name || this._config.entity;
     const color = this._colorFor(state, attrs);
@@ -883,33 +891,49 @@ class HowManyTimesTodayCard extends HTMLElement {
     const plainStatus = this._t(plainStatusKey);
     const notClickable = state === "inactive" || state === "pending";
     const ariaLabel = `${name}: ${plainStatus}`;
+    // like the app: while the term is due NOW (red) the next one is not announced
+    const seconds = attrs.seconds_to_next_expected;
+    const countdownLabel =
+      state === "inactive" || state === "pending" || state === "red" || seconds == null
+        ? ""
+        : seconds >= 0
+        ? `${this._t("in_prefix")} ${formatDuration(seconds)}`
+        : `${this._t("overdue_prefix")} ${formatDuration(seconds)}`;
 
     root.innerHTML = `
       <style>
-        ha-card.tile { padding: 8px 12px; position: relative; box-sizing: border-box; height: 100%; display: flex; align-items: center; }
+        ha-card.tile { padding: 16px; position: relative; box-sizing: border-box; height: 100%; }
         .tile-tap-target {
-          display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;
-          cursor: pointer; outline: none; border-radius: 8px; padding: 4px;
+          display: flex; align-items: flex-start; gap: 16px; cursor: pointer; outline: none;
+          border-radius: 8px; touch-action: manipulation;
         }
-        .tile-tap-target { touch-action: manipulation; }
         .tile-tap-target.not-clickable { cursor: default; }
         .tile-tap-target:focus-visible { outline: 2px solid var(--primary-color, #03a9f4); outline-offset: 2px; }
         .tile-circle {
-          width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+          width: 76px; height: 76px; border-radius: 50%; flex-shrink: 0;
           display: flex; align-items: center; justify-content: center;
-          border: 2px solid rgba(255,255,255,0.5); background: ${color};
+          border: 3px solid rgba(255,255,255,0.5); box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+          background: ${color};
         }
         .tile-circle.blinking-bg { animation: tile-blink-bg 1s step-start infinite; }
         @keyframes tile-blink-bg { 50% { background: #8d5a4a; } }
-        .tile-number { font-size: 1em; font-weight: 700; color: ${numberColor}; line-height: 1; }
+        .tile-number { font-size: 1.7em; font-weight: 700; color: ${numberColor}; line-height: 1; }
         .tile-number.blinking-num { animation: tile-blink-num 0.8s step-start infinite; }
         @keyframes tile-blink-num { 50% { opacity: 0.15; } }
-        .tile-inactive-label { font-size: 0.5em; font-weight: 600; color: #fff; text-align: center; line-height: 1.1; }
+        .tile-inactive-label { font-size: 0.7em; font-weight: 600; color: #fff; text-align: center; }
         .tile-info { flex: 1; min-width: 0; }
-        .tile-name { font-size: 0.95em; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .tile-status { font-size: 0.85em; opacity: 0.85; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tile-name { font-size: 1.1em; font-weight: 600; }
+        .tile-description { font-size: 0.85em; opacity: 0.7; }
+        .tile-status { font-size: 1.1em; font-weight: 700; margin-top: 2px; }
         .tile-status.state-red, .tile-status.state-blinking_brown, .tile-status.state-exceeded { color: #c62828; }
         .tile-status.state-green { color: #2e7d32; }
+        .tile-blink-note { font-size: 1em; font-weight: 700; color: #a85c00; margin-top: 2px; }
+        .tile-countdown { font-size: 0.95em; opacity: 0.8; }
+        .tile-last { font-size: 0.85em; opacity: 0.6; }
+        .tile-edit {
+          flex-shrink: 0; align-self: flex-start; background: none; border: none; cursor: pointer;
+          font-size: 1.4em; line-height: 1; padding: 0 0 8px 8px; color: var(--primary-text-color, inherit);
+        }
       </style>
       <ha-card class="tile">
         <div class="tile-tap-target ${notClickable ? "not-clickable" : ""}" id="tap-target" tabindex="0" role="button" aria-label="${ariaLabel}">
@@ -922,8 +946,13 @@ class HowManyTimesTodayCard extends HTMLElement {
           </div>
           <div class="tile-info">
             <div class="tile-name">${name}</div>
+            ${attrs.description ? `<div class="tile-description">${attrs.description}</div>` : ""}
             <div class="tile-status state-${state}">${plainStatus}</div>
+            ${attrs.number_blinking ? `<div class="tile-blink-note">${this._t("status_number_blinking")}</div>` : ""}
+            ${countdownLabel ? `<div class="tile-countdown">${countdownLabel}</div>` : ""}
+            <div class="tile-last">${this._t("last")}: ${formatTime(attrs.last_pressed_at, locale)} · ${this._t("total")}: ${attrs.count_today ?? 0}/${attrs.planned_count ?? "?"}</div>
           </div>
+          <button type="button" class="tile-edit" id="edit-btn" aria-label="${this._t("edit_label")}" title="${this._t("edit_label")}">✎</button>
         </div>
       </ha-card>
     `;
@@ -947,6 +976,17 @@ class HowManyTimesTodayCard extends HTMLElement {
         this._openHistoryDialog();
       }, HOLD_MS);
     };
+
+    // the pencil is its own control: it must not also count as a tap on the tile
+    const editBtn = root.getElementById("edit-btn");
+    for (const type of ["pointerdown", "pointerup", "keydown", "contextmenu"]) {
+      editBtn.addEventListener(type, (ev) => ev.stopPropagation());
+    }
+    editBtn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      this._openEditDialog();
+    });
+
     tapTarget.addEventListener("pointerdown", (ev) => {
       if (ev.pointerType === "mouse" && ev.button !== 0) return;
       startHold();

@@ -261,7 +261,9 @@ nazwę i opis, godziny (ile razy dziennie i każdą godzinę) albo interwał, a 
 **Zapisz zmiany harmonogramu** stosuje je od razu, podgląd się odświeża, a komunikat pod
 przyciskiem mówi „Zapisano” albo dlaczego zmiana została odrzucona. Postęp i historia
 zostają. Tylko rodzaj harmonogramu (stałe godziny / co X godzin) zmienia się w ustawieniach
-integracji (sekcja 5), do których edytor linkuje. Pole **Wygląd** przełącza kartę między **Karta (duża)**, domyślną, a **Kafelek (kompaktowy)**.
+integracji (sekcja 5), do których edytor linkuje. Pole **Wygląd** przełącza kartę między **Karta (duża)**, domyślną, a **Kafelek**, który pokazuje
+to, co karta w aplikacji na Androida (koło z liczbą, nazwę, opis, zdanie stanu, odliczanie,
+„ostatnio / łącznie” i ołówek) bez historii.
 Każda karta wybiera osobno, więc duże karty i kafelki mogą stać obok siebie, a ten sam
 harmonogram może mieć oba.
 

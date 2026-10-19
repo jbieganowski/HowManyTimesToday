@@ -2,6 +2,15 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.3.0] - 2026-10-20
+
+### Integration
+
+- **The tile shows what the Android app's card shows**, without the history: the circle with
+  the number, name, description, the state sentence, the blinking-number note, the
+  countdown ("in 10 h 46 m"), "Last: ... · total: n/m" and the pencil that opens the edit
+  dialog. While a term is due (red) the next one is not announced, as in the app.
+
 ## [1.2.0] - 2026-10-20
 
 ### Integration

@@ -265,7 +265,8 @@ preview updates, and a message under the button says "Saved" or why the change w
 refused. Progress and history are kept. Only the kind of schedule (fixed times / every
 X hours) is changed in the integration settings (section 5), which the editor links to.
 The **Appearance** field switches the card between **Card (large)**, the default, and
-**Tile (compact)**. Each card chooses on its own, so large cards and tiles can sit side by
+**Tile**, which shows what the Android app's card shows (the circle with the number, name,
+description, state sentence, countdown, "last / total" and the pencil) without the history. Each card chooses on its own, so large cards and tiles can sit side by
 side, and the same schedule can have both.
 
 ```yaml

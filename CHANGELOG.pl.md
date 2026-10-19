@@ -2,6 +2,15 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.3.0] - 2026-10-20
+
+### Integracja
+
+- **Kafelek pokazuje to, co karta w aplikacji na Androida**, bez historii: koło z liczbą,
+  nazwę, opis, zdanie stanu, notkę o migającej liczbie, odliczanie („za 10h 46m”), „Ostatnio:
+  ... · łącznie: n/m” oraz ołówek otwierający okno edycji. Gdy termin jest właśnie teraz
+  (czerwony), następny nie jest zapowiadany, tak jak w aplikacji.
+
 ## [1.2.0] - 2026-10-20
 
 ### Integracja
