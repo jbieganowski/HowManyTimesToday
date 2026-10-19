@@ -200,7 +200,7 @@ def test_the_legend_quotes_the_cards_own_state_sentences_in_every_language():
     card's own strings), so the help never drifts from the button."""
     js = (INTEGRATION / "www" / "how-many-times-today-card.js").read_text(encoding="utf-8")
     order = ["en", "pl", "de", "ru", "uk", "zh-Hans"]  # the order of the language blocks in the card
-    for key in ("status_green", "status_transition", "status_red", "status_blinking_brown", "status_exceeded", "status_number_blinking"):
+    for key in ("status_green", "status_on_plan", "status_transition", "status_red", "status_blinking_brown", "status_exceeded", "status_number_blinking"):
         sentences = re.findall(rf'{key}: "(.*?)"', js)
         assert len(sentences) == len(order), f"{key}: expected one sentence per language, got {len(sentences)}"
         for lang, sentence in zip(order, sentences):

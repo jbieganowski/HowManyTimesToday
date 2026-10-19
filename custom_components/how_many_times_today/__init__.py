@@ -119,11 +119,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 class _CardView(HomeAssistantView):
     """Serves the card's JavaScript from the package.
 
-    The file is re-read on every request and sent with an ETag and
-    `Cache-Control: no-cache`: the browser asks "did it change?" on each page load and
-    gets a cheap 304 when not. So editing the card takes effect on the next page load -
-    no Home Assistant restart and no version number to bump - and there is no versioned
-    URL that a service worker or the browser could keep serving stale.
+    The file is re-read on every request and sent in full with `Cache-Control: no-store`,
+    so editing the card takes effect on the next page load.
     """
 
     url = CARD_URL_PATH
@@ -135,23 +132,23 @@ class _CardView(HomeAssistantView):
         self._path = path
 
     async def get(self, request: web.Request) -> web.Response:
+        agent = (request.headers.get("User-Agent") or "unknown")[:110]
+        # the card reports back (a tiny GET with a query): that it started, or what stopped it
+        if "loaded" in request.query:
+            _LOGGER.warning("Card started in %s: %s", agent, request.query["loaded"][:60])
+            return web.Response(status=204)
+        if "report" in request.query:
+            _LOGGER.warning("Card script problem in %s: %s", agent, request.query["report"][:300])
+            return web.Response(status=204)
         data = await self._hass.async_add_executor_job(self._path.read_bytes)
-        etag = f'"{hashlib.md5(data).hexdigest()}"'  # noqa: S324 - a cache validator, not security
-        headers = {"Cache-Control": "no-cache", "ETag": etag}
-        revalidated = request.headers.get("If-None-Match") == etag
-        # every request for the card is logged (client, whether it was a revalidation and
-        # the result): when a device shows "Custom element doesn't exist" this tells
-        # whether it asked for the card at all
-        _LOGGER.warning(
-            "Card file requested: %s by %s (%s)",
-            "not modified (304)" if revalidated else "sent (200)",
-            (request.headers.get("User-Agent") or "unknown")[:110],
-            request.remote or "?",
-        )
-        if revalidated:
-            return web.Response(status=304, headers=headers)
+        # always sent in full and never kept: a client that holds a copy of it
+        # (a conditional request answered "not modified") has shown the old or no card
+        _LOGGER.warning("Card file requested by %s (%s)", agent, request.remote or "?")
         return web.Response(
-            body=data, content_type="application/javascript", charset="utf-8", headers=headers
+            body=data,
+            content_type="application/javascript",
+            charset="utf-8",
+            headers={"Cache-Control": "no-store"},
         )
 
 

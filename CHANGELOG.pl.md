@@ -2,6 +2,21 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.3.2] - 2026-10-20
+
+### Integracja
+
+- **Zdania na karcie są takie same jak w aplikacji na Androida** we wszystkich językach:
+  „Jesteś na bieżąco”, „Wszystko zgodnie z planem” (zanikający klawisz, gdy następny termin
+  jest jeszcze daleko; „Zbliża się pora” dopiero od 55 % drogi), „TERAZ”, odliczanie
+  „Następne za …”, „Ostatnio / łącznie”. Strona pomocy w oknie Konfiguruj cytuje te same zdania.
+- **Strona, która trzyma starszą kopię karty, przejmuje nowszą**: karty już pokazane
+  rysują się z nowym wyglądem w ciągu sekundy (wcześniej wygrywała pierwsza załadowana
+  kopia, a nowsza była ignorowana).
+- **Plik karty jest zawsze wysyłany w całości** (nigdy „bez zmian”), a karta zgłasza w
+  logu Home Assistanta, że się uruchomiła albo co ją zatrzymało, więc urządzenie pokazujące
+  „Custom element doesn't exist” można rozpoznać.
+
 ## [1.3.1] - 2026-10-20
 
 ### Integracja

@@ -5,11 +5,71 @@
  * No build step: plain custom element.
  */
 
+// Tells the integration (a tiny GET answered with 204, written to the Home Assistant log)
+// that the script started or what stopped it - a device that shows "Custom element doesn't
+// exist" can then be told apart: never asked for, never started, or stopped by an error.
+const CARD_PATH = "/how_many_times_today_files/how-many-times-today-card.js";
+const reportToServer = (kind, text) => {
+  try {
+    new Image().src = `${CARD_PATH}?${kind}=${encodeURIComponent(String(text).slice(0, 280))}&t=${Date.now()}`;
+  } catch (err) {
+    /* reporting must never break the card */
+  }
+};
+window.addEventListener("error", (ev) => {
+  if (ev.filename && ev.filename.includes("how-many-times-today-card")) reportToServer("report", `${ev.message} @${ev.lineno}`);
+});
+window.addEventListener("unhandledrejection", (ev) => {
+  const text = String((ev.reason && (ev.reason.stack || ev.reason.message)) || ev.reason);
+  if (text.includes("how-many-times-today-card")) reportToServer("report", text);
+});
+
 const GREEN = [46, 125, 50];
 const RED = [198, 40, 40];
 const BROWN = [93, 64, 55];
 const PENDING_GRAY = [96, 125, 139];
 const INACTIVE_GRAY = [158, 158, 158];
+
+// The sentence under the name. Like the app: a fading button that is still far from the
+// next term says "all according to plan"; "the time is coming" only from 55 % of the way.
+const APPROACHING_PROGRESS = 0.55;
+function plainStatusKeyOf(state, attrs) {
+  if (state === "transition" && (attrs.color_progress ?? 0) < APPROACHING_PROGRESS) return "status_on_plan";
+  return (
+    {
+      pending: "status_pending",
+      green: "status_green",
+      transition: "status_transition",
+      red: "status_red",
+      blinking_brown: "status_blinking_brown",
+      exceeded: "status_exceeded",
+      inactive: "status_inactive",
+    }[state] || "status_green"
+  );
+}
+
+// An element can only be defined once per page. A page that kept an older copy of this
+// script (a cached start page or script) defines the card first, and a newer copy loaded
+// next - from the dashboard resource - would be ignored. So the newer copy takes the older
+// class over: its methods replace the old ones, and the cards already on the page show the
+// new look at their next redraw.
+function defineOrUpgrade(tag, Cls) {
+  const existing = customElements.get(tag);
+  if (!existing) {
+    customElements.define(tag, Cls);
+    return "defined";
+  }
+  if (existing === Cls) return "same";
+  for (const name of Object.getOwnPropertyNames(Cls.prototype)) {
+    if (name === "constructor") continue;
+    Object.defineProperty(existing.prototype, name, Object.getOwnPropertyDescriptor(Cls.prototype, name));
+  }
+  for (const name of Object.getOwnPropertyNames(Cls)) {
+    if (["length", "name", "prototype"].includes(name)) continue;
+    Object.defineProperty(existing, name, Object.getOwnPropertyDescriptor(Cls, name));
+  }
+  return "upgraded";
+}
 
 function lerp(a, b, t) {
   return a.map((c, i) => Math.round(c + (b[i] - c) * t));
@@ -78,7 +138,7 @@ const CARD_STRINGS = {
     last: "Last",
     total: "total",
     confirm_clear_all: "Clear the entire history for this schedule?",
-    in_prefix: "in",
+    in_prefix: "Next in",
     overdue_prefix: "overdue by",
     entity_not_found: "Entity not found",
     editor_entity_label: "Schedule sensor",
@@ -117,13 +177,14 @@ const CARD_STRINGS = {
     inactive_label: "inactive",
     pending_label: "not started yet",
     status_pending: "Not started yet",
-    status_green: "Done — all good",
-    status_transition: "Getting close",
-    status_red: "NOW — time to do it",
-    status_blinking_brown: "WARNING — overdue!",
+    status_green: "You are up to date",
+    status_on_plan: "All according to plan",
+    status_transition: "The time is coming",
+    status_red: "NOW",
+    status_blinking_brown: "WARNING - overdue!",
     status_exceeded: "Done too many times",
     status_inactive: "Switched off",
-    status_number_blinking: "Blinking number: last time was recorded outside the schedule",
+    status_number_blinking: "Blinking number: the last execution was recorded outside the schedule",
     answer_dialog_title: "What happened at {time}?",
     answer_already_done: "A. It was done, just not recorded",
     answer_do_now: "B. Wasn't done at {time}, doing it now",
@@ -150,8 +211,8 @@ const CARD_STRINGS = {
     last: "Ostatnio",
     total: "łącznie",
     confirm_clear_all: "Wyczyścić całą historię tego harmonogramu?",
-    in_prefix: "za",
-    overdue_prefix: "spóźnienie o",
+    in_prefix: "Następne za",
+    overdue_prefix: "spóźnione o",
     entity_not_found: "Nie znaleziono encji",
     editor_entity_label: "Sensor harmonogramu",
     editor_hint: "Rodzaj harmonogramu (stałe godziny / interwał) zmienisz w ustawieniach integracji, nie tutaj.",
@@ -189,9 +250,10 @@ const CARD_STRINGS = {
     inactive_label: "nieaktywne",
     pending_label: "jeszcze nie wystartował",
     status_pending: "Jeszcze się nie zaczęło",
-    status_green: "Zrobione – wszystko w porządku",
+    status_green: "Jesteś na bieżąco",
+    status_on_plan: "Wszystko zgodnie z planem",
     status_transition: "Zbliża się pora",
-    status_red: "TERAZ – czas to zrobić",
+    status_red: "TERAZ",
     status_blinking_brown: "UWAGA – spóźnione!",
     status_exceeded: "Zrobione za dużo razy",
     status_inactive: "Wyłączone",
@@ -222,7 +284,7 @@ const CARD_STRINGS = {
     last: "Zuletzt",
     total: "gesamt",
     confirm_clear_all: "Den gesamten Verlauf für diesen Zeitplan löschen?",
-    in_prefix: "in",
+    in_prefix: "Nächste in",
     overdue_prefix: "überfällig um",
     entity_not_found: "Entität nicht gefunden",
     editor_entity_label: "Zeitplan-Sensor",
@@ -261,9 +323,10 @@ const CARD_STRINGS = {
     inactive_label: "inaktiv",
     pending_label: "noch nicht gestartet",
     status_pending: "Noch nicht gestartet",
-    status_green: "Erledigt – alles in Ordnung",
+    status_green: "Du bist auf dem Laufenden",
+    status_on_plan: "Alles nach Plan",
     status_transition: "Es wird bald Zeit",
-    status_red: "JETZT – Zeit, es zu tun",
+    status_red: "JETZT",
     status_blinking_brown: "ACHTUNG – überfällig!",
     status_exceeded: "Zu oft erledigt",
     status_inactive: "Ausgeschaltet",
@@ -294,7 +357,7 @@ const CARD_STRINGS = {
     last: "Последнее",
     total: "всего",
     confirm_clear_all: "Очистить всю историю этого расписания?",
-    in_prefix: "через",
+    in_prefix: "Следующее через",
     overdue_prefix: "просрочено на",
     entity_not_found: "Сущность не найдена",
     editor_entity_label: "Сенсор расписания",
@@ -333,9 +396,10 @@ const CARD_STRINGS = {
     inactive_label: "неактивно",
     pending_label: "ещё не началось",
     status_pending: "Ещё не началось",
-    status_green: "Сделано — всё в порядке",
+    status_green: "Вы в графике",
+    status_on_plan: "Всё по плану",
     status_transition: "Скоро пора",
-    status_red: "СЕЙЧАС — пора сделать",
+    status_red: "СЕЙЧАС",
     status_blinking_brown: "ВНИМАНИЕ — просрочено!",
     status_exceeded: "Сделано слишком много раз",
     status_inactive: "Выключено",
@@ -366,7 +430,7 @@ const CARD_STRINGS = {
     last: "Останнє",
     total: "всього",
     confirm_clear_all: "Очистити всю історію цього розкладу?",
-    in_prefix: "через",
+    in_prefix: "Наступне через",
     overdue_prefix: "прострочено на",
     entity_not_found: "Сутність не знайдено",
     editor_entity_label: "Сенсор розкладу",
@@ -405,9 +469,10 @@ const CARD_STRINGS = {
     inactive_label: "неактивно",
     pending_label: "ще не почалося",
     status_pending: "Ще не почалося",
-    status_green: "Зроблено — усе гаразд",
+    status_green: "Ви за графіком",
+    status_on_plan: "Усе за планом",
     status_transition: "Наближається час",
-    status_red: "ЗАРАЗ — час зробити",
+    status_red: "ЗАРАЗ",
     status_blinking_brown: "УВАГА — прострочено!",
     status_exceeded: "Зроблено забагато разів",
     status_inactive: "Вимкнено",
@@ -438,7 +503,7 @@ const CARD_STRINGS = {
     last: "上次",
     total: "共计",
     confirm_clear_all: "确定清除此计划的全部历史吗？",
-    in_prefix: "还有",
+    in_prefix: "下一次还有",
     overdue_prefix: "已超时",
     entity_not_found: "未找到实体",
     editor_entity_label: "计划传感器",
@@ -477,9 +542,10 @@ const CARD_STRINGS = {
     inactive_label: "未启用",
     pending_label: "尚未开始",
     status_pending: "尚未开始",
-    status_green: "已完成——一切正常",
+    status_green: "一切按时",
+    status_on_plan: "一切按计划",
     status_transition: "即将到时间",
-    status_red: "现在——该做了",
+    status_red: "现在",
     status_blinking_brown: "警告——已逾期！",
     status_exceeded: "完成次数过多",
     status_inactive: "已关闭",
@@ -879,15 +945,7 @@ class HowManyTimesTodayCard extends HTMLElement {
     const color = this._colorFor(state, attrs);
     const numberColor = state === "exceeded" ? "#000" : "#fff";
     const bigNumber = state === "inactive" ? null : attrs.count_today ?? 0;
-    const plainStatusKey = {
-      pending: "status_pending",
-      green: "status_green",
-      transition: "status_transition",
-      red: "status_red",
-      blinking_brown: "status_blinking_brown",
-      exceeded: "status_exceeded",
-      inactive: "status_inactive",
-    }[state] || "status_green";
+    const plainStatusKey = plainStatusKeyOf(state, attrs);
     const plainStatus = this._t(plainStatusKey);
     const notClickable = state === "inactive" || state === "pending";
     const ariaLabel = `${name}: ${plainStatus}`;
@@ -1077,15 +1135,7 @@ class HowManyTimesTodayCard extends HTMLElement {
     // card is understandable without having to learn what each color means
     // (important for elderly users in particular) - every state the card can be
     // in while actively running has one of these, nothing is left unexplained.
-    const plainStatusKey = {
-      pending: "status_pending",
-      green: "status_green",
-      transition: "status_transition",
-      red: "status_red",
-      blinking_brown: "status_blinking_brown",
-      exceeded: "status_exceeded",
-      inactive: "status_inactive",
-    }[state] || "status_green";
+    const plainStatusKey = plainStatusKeyOf(state, attrs);
     const plainStatus = this._t(plainStatusKey);
 
     const oldestOpenSlot = (attrs.open_slots && attrs.open_slots[0]) || null;
@@ -1241,9 +1291,7 @@ class HowManyTimesTodayCard extends HTMLElement {
   }
 }
 
-if (!customElements.get("how-many-times-today-card")) {
-  customElements.define("how-many-times-today-card", HowManyTimesTodayCard);
-}
+const cardOutcome = defineOrUpgrade("how-many-times-today-card", HowManyTimesTodayCard);
 
 // --- visual card editor: entity picker restricted to this integration's own
 // schedule sensors (identified by the schedule_id attribute), filled with the
@@ -1666,11 +1714,12 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
   }
 }
 
-if (!customElements.get("how-many-times-today-card-editor")) {
-  customElements.define("how-many-times-today-card-editor", HowManyTimesTodayCardEditor);
-}
+defineOrUpgrade("how-many-times-today-card-editor", HowManyTimesTodayCardEditor);
+
+reportToServer("loaded", customElements.get("how-many-times-today-card") ? cardOutcome : "NOT defined");
 
 window.customCards = window.customCards || [];
+if (!window.customCards.some((c) => c.type === "how-many-times-today-card"))
 window.customCards.push({
   type: "how-many-times-today-card",
   name: "How Many Times Today",

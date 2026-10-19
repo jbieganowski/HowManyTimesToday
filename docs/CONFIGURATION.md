@@ -221,10 +221,10 @@ for the state.
 | State | Sentence on the card |
 | --- | --- |
 | `pending` | Not started yet |
-| `green` | Done — all good |
-| `transition` | Getting close |
-| `red` | NOW — time to do it |
-| `blinking_brown` | WARNING — overdue! |
+| `green` | You are up to date |
+| `transition` | All according to plan (while the next term is still far away), then The time is coming (from 55 % of the way) |
+| `red` | NOW |
+| `blinking_brown` | WARNING - overdue! |
 | `exceeded` | Done too many times |
 | `inactive` | Switched off |
 

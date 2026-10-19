@@ -219,9 +219,9 @@ Karta nie polega samym kolorem: pod nazwą pokazuje krótkie, proste zdanie o st
 | Stan | Zdanie na karcie |
 | --- | --- |
 | `pending` | Jeszcze się nie zaczęło |
-| `green` | Zrobione – wszystko w porządku |
-| `transition` | Zbliża się pora |
-| `red` | TERAZ – czas to zrobić |
+| `green` | Jesteś na bieżąco |
+| `transition` | Wszystko zgodnie z planem (dopóki następny termin jest daleko), potem Zbliża się pora (od 55 % drogi) |
+| `red` | TERAZ |
 | `blinking_brown` | UWAGA – spóźnione! |
 | `exceeded` | Zrobione za dużo razy |
 | `inactive` | Wyłączone |

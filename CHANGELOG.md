@@ -2,6 +2,21 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.3.2] - 2026-10-20
+
+### Integration
+
+- **The card's sentences match the Android app** in every language: "You are up to date",
+  "All according to plan" (a fading button that is still far from the next term; "The time is
+  coming" only from 55 % of the way), "NOW", the countdown "Next in ...", "Last / total". The
+  help page of the Configure dialog quotes the same sentences.
+- **A page that still holds an older copy of the card takes the newer one over**: the cards
+  already shown redraw with the new look within a second (before, the first copy loaded won
+  and the newer one was ignored).
+- **The card file is always sent in full** (never "not modified"), and the card tells the
+  Home Assistant log that it started or what stopped it, so a device that shows "Custom element
+  doesn't exist" can be traced.
+
 ## [1.3.1] - 2026-10-20
 
 ### Integration
