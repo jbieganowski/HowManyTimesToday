@@ -1730,7 +1730,7 @@ function scanPage() {
   const walk = (root) => {
     for (const el of root.querySelectorAll("*")) {
       if (el.localName === "hui-error-card") {
-        const text = String((el._config && el._config.error) || (el.shadowRoot && el.shadowRoot.textContent) || el.textContent || "");
+        const text = String((el._config && (el._config.message || el._config.error)) || (el.shadowRoot && el.shadowRoot.textContent) || el.textContent || "");
         errors.push({ el, text: text.replace(/\s+/g, " ").trim() });
       } else if (el.localName === "how-many-times-today-card") {
         ours += 1;

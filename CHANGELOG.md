@@ -2,6 +2,13 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.3.6] - 2026-10-20
+
+### Integration
+
+- The card reads the message of an error card from the field Home Assistant really uses, so
+  the rebuild of its leftover error cards and the report of their text work.
+
 ## [1.3.5] - 2026-10-20
 
 ### Integration

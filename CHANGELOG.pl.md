@@ -2,6 +2,13 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.3.6] - 2026-10-20
+
+### Integracja
+
+- Karta czyta komunikat karty błędu z pola, którego naprawdę używa Home Assistant, więc
+  odbudowanie jej pozostałych kart błędu i raport o ich treści działają.
+
 ## [1.3.5] - 2026-10-20
 
 ### Integracja
