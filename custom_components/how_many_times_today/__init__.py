@@ -138,7 +138,17 @@ class _CardView(HomeAssistantView):
         data = await self._hass.async_add_executor_job(self._path.read_bytes)
         etag = f'"{hashlib.md5(data).hexdigest()}"'  # noqa: S324 - a cache validator, not security
         headers = {"Cache-Control": "no-cache", "ETag": etag}
-        if request.headers.get("If-None-Match") == etag:
+        revalidated = request.headers.get("If-None-Match") == etag
+        # every request for the card is logged (client, whether it was a revalidation and
+        # the result): when a device shows "Custom element doesn't exist" this tells
+        # whether it asked for the card at all
+        _LOGGER.warning(
+            "Card file requested: %s by %s (%s)",
+            "not modified (304)" if revalidated else "sent (200)",
+            (request.headers.get("User-Agent") or "unknown")[:110],
+            request.remote or "?",
+        )
+        if revalidated:
             return web.Response(status=304, headers=headers)
         return web.Response(
             body=data, content_type="application/javascript", charset="utf-8", headers=headers

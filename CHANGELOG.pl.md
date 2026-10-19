@@ -2,6 +2,14 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.3.1] - 2026-10-20
+
+### Integracja
+
+- Każde żądanie o plik karty jest zapisywane w logu (nazwa klienta, czy było
+  sprawdzeniem aktualności i wynik), więc urządzenie, które pokazuje „Custom element
+  doesn't exist”, można rozpoznać: karta nie została w ogóle zażądana albo nie dotarła.
+
 ## [1.3.0] - 2026-10-20
 
 ### Integracja

@@ -2,6 +2,14 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.3.1] - 2026-10-20
+
+### Integration
+
+- Every request for the card file is logged (the client's name, whether it was a
+  revalidation, and the result), so a device that shows "Custom element doesn't exist"
+  can be traced to a card that was never requested or never arrived.
+
 ## [1.3.0] - 2026-10-20
 
 ### Integration
