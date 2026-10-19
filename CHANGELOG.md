@@ -2,6 +2,16 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.1.2] - 2026-10-19
+
+### Integration
+
+- **Fixed:** an app or browser that kept the card script cached under its address (the Home
+  Assistant app on a phone kept showing "Custom element doesn't exist" after an update)
+  now fetches it again: the card's address carries the integration version
+  (`...card.js?v=1.1.2`), both as the extra module and as the dashboard resource, which is
+  updated by itself on every new version.
+
 ## [1.1.1] - 2026-10-18
 
 ### Integration

@@ -2,6 +2,16 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.1.2] - 2026-10-19
+
+### Integracja
+
+- **Poprawka:** aplikacja lub przeglądarka, która trzymała skrypt karty w pamięci podręcznej
+  pod jego adresem (aplikacja Home Assistant na telefonie po aktualizacji dalej pokazywała
+  „Custom element doesn't exist”), pobiera go teraz od nowa: adres karty zawiera wersję
+  integracji (`...card.js?v=1.1.2`), zarówno jako dodatkowy moduł, jak i zasób pulpitu,
+  który sam aktualizuje się przy każdej nowej wersji.
+
 ## [1.1.1] - 2026-10-18
 
 ### Integracja

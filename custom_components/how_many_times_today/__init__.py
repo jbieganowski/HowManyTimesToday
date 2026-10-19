@@ -108,8 +108,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_options_updated))
 
-    await _async_register_frontend_card(hass)
-    await _async_ensure_dashboard_resource(hass)  # every setup: it is removed with the entry
+    # the version in the URL makes every client fetch the card again after an update (some
+    # apps keep a script cached under its address however it is served)
+    card_url = f"{CARD_URL_PATH}?v={coordinator.version}"
+    await _async_register_frontend_card(hass, card_url)
+    await _async_ensure_dashboard_resource(hass, card_url)  # every setup: removed with the entry
     return True
 
 
@@ -142,7 +145,7 @@ class _CardView(HomeAssistantView):
         )
 
 
-async def _async_register_frontend_card(hass: HomeAssistant) -> None:
+async def _async_register_frontend_card(hass: HomeAssistant, card_url: str = CARD_URL_PATH) -> None:
     """Serve the bundled Lovelace card and auto-inject it, so users never have to
     add a Resource manually in Settings -> Dashboards (one-click install only).
     """
@@ -168,7 +171,7 @@ async def _async_register_frontend_card(hass: HomeAssistant) -> None:
 
     from homeassistant.components.frontend import add_extra_js_url
 
-    add_extra_js_url(hass, CARD_URL_PATH)
+    add_extra_js_url(hass, card_url)
 
 
 def _storage_resources(hass: HomeAssistant):
@@ -181,7 +184,7 @@ def _storage_resources(hass: HomeAssistant):
     return resources
 
 
-async def _async_ensure_dashboard_resource(hass: HomeAssistant) -> None:
+async def _async_ensure_dashboard_resource(hass: HomeAssistant, card_url: str = CARD_URL_PATH) -> None:
     """Also register the card as a dashboard resource. The dashboard loads its resources
     itself, the way every other custom card is loaded, so the card is defined whatever
     happens to the extra module above (on a busy page that one sometimes never ran and the
@@ -192,9 +195,11 @@ async def _async_ensure_dashboard_resource(hass: HomeAssistant) -> None:
         if resources is None:
             return
         await resources.async_get_info()  # makes sure the stored list is loaded
-        if any(_is_card_resource(item) for item in resources.async_items()):
-            return
-        await resources.async_create_item({"res_type": "module", "url": CARD_URL_PATH})
+        existing = [item for item in resources.async_items() if _is_card_resource(item)]
+        if not existing:
+            await resources.async_create_item({"res_type": "module", "url": card_url})
+        elif existing[0].get("url") != card_url:  # a new version: the address changes with it
+            await resources.async_update_item(existing[0]["id"], {"res_type": "module", "url": card_url})
     except Exception:  # noqa: BLE001 - the extra module still loads the card
         _LOGGER.debug("Could not register the card as a dashboard resource", exc_info=True)
 
