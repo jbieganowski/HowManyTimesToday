@@ -2,6 +2,13 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.3.5] - 2026-10-20
+
+### Integration
+
+- The page report of the card is split into short lines (one per error card), because the
+  log keeps only the start of each report.
+
 ## [1.3.4] - 2026-10-20
 
 ### Integration

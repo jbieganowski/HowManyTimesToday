@@ -1752,8 +1752,9 @@ for (const delay of [400, 2500, 7000, 16000]) {
         if (text.includes("how-many-times-today")) el.dispatchEvent(new CustomEvent("ll-rebuild", { bubbles: true, composed: true }));
       }
       if (delay >= 7000 && (firstErrorCount > 0 || errors.length > 0)) {
-        const texts = errors.slice(0, 3).map((e) => e.text.slice(0, 110)).join(" || ");
-        reportToServer("loaded", `page ${location.pathname.slice(0, 40)} at ${delay / 1000}s: error cards ${errors.length}, our cards ${ours} drawn ${drawn}: ${texts}`);
+        // the log keeps the first 60 characters of each report, so: one short line per error card
+        reportToServer("loaded", `${delay / 1000}s e${errors.length} o${ours} d${drawn}`);
+        errors.slice(0, 3).forEach((e, n) => reportToServer("loaded", `E${n + 1}: ${e.text.slice(0, 54)}`));
       }
     } catch (err) {
       reportToServer("report", `page scan failed: ${err && err.message}`);

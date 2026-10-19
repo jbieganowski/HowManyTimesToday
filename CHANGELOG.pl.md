@@ -2,6 +2,13 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.3.5] - 2026-10-20
+
+### Integracja
+
+- Raport karty o stronie jest podzielony na krótkie linie (po jednej na kartę błędu), bo log
+  zachowuje tylko początek każdego raportu.
+
 ## [1.3.4] - 2026-10-20
 
 ### Integracja
