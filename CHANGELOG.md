@@ -2,6 +2,17 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.2.0] - 2026-10-20
+
+### Integration
+
+- **Edit a schedule from the tile.** A double tap or double click on a tile (or Alt+Enter)
+  opens a dialog with the schedule's fields (name, description, switch on/off, times or
+  interval, start, end, tolerance window) and the buttons **Save schedule changes**,
+  **Reset to "all on time"** and **Close**. A single tap still presses, after a short
+  wait (about a third of a second) so that a double tap does not press twice.
+- **Reset to "all on time" in the card editor** as well, below the save button.
+
 ## [1.1.2] - 2026-10-19
 
 ### Integration

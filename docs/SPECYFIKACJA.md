@@ -224,7 +224,9 @@ tłumaczenia `answer_required`.
 
 Karta ma dwa wyglądy wybierane osobno dla każdej karty przez `layout: card | tile`
 (domyślnie `card`): dużą kartę z opisem i rozwijaną historią oraz zwarty kafelek (kółko z
-liczbą, nazwa, zdanie stanu). Kafelek naciska po dotknięciu, a historię otwiera po długim
+liczbą, nazwa, zdanie stanu). Kafelek naciska po dotknięciu (po krótkiej chwili, żeby podwójne dotknięcie nie były dwoma
+naciśnięciami), okno edycji harmonogramu otwiera po podwójnym dotknięciu, podwójnym kliknięciu
+lub Alt+Enter (formularz z edytora karty z Resetuj do „wszystko o czasie” i Zamknij), a historię po długim
 przytrzymaniu, prawym kliku lub Shift+Enter; jego okna są doczepione do body strony, więc
 nie zależą od wysokości kafelka. Przepływ konfiguracji tworzy jedyny wpis od razu (bez
 formularza) i przyjmuje import, który uruchamia samo `how_many_times_today:` w

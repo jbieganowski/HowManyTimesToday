@@ -222,7 +222,9 @@ with a validation error whose translation key is `answer_required`.
 
 The card has two looks chosen per card with `layout: card | tile` (default `card`): the
 large card with the description and the expandable history, and a compact tile (circle
-with the number, name, state sentence). A tile presses on a tap and opens the history on
+with the number, name, state sentence). A tile presses on a tap (after a short wait, so that a double tap
+is not two presses), opens the schedule's edit dialog on a double tap, a double click or
+Alt+Enter (the card editor's form with Reset to "all on time" and Close) and opens the history on
 a long press, a right click or Shift+Enter; its dialogs are attached to the page body so
 they do not depend on the tile's height. The config flow creates the single entry at once
 (no form) and accepts an import, which is triggered by a bare `how_many_times_today:` line

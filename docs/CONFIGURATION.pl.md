@@ -273,9 +273,16 @@ layout: tile      # card (domyślnie) albo tile
 
 ![Kafelek (mały) obok dużej karty](images/screenshot-tile.jpg)
 
-Na kafelku **dotknięcie** naciska klawisz (z tym samym pytaniem, gdy jest potrzebne), a
+Na kafelku **dotknięcie** naciska klawisz (z tym samym pytaniem, gdy jest potrzebne, po
+krótkiej chwili, żeby podwójne dotknięcie nie były dwoma naciśnięciami), **podwójne
+dotknięcie** lub podwójne kliknięcie (albo Alt+Enter) otwiera okno edycji harmonogramu, a
 **długie przytrzymanie**, prawy klik lub Shift+Enter otwiera historię z opcjami jej
-czyszczenia:
+czyszczenia. Okno edycji ma te same pola co edytor karty oraz **Resetuj do „wszystko o
+czasie”** (sekcja 5), który oznacza wszystko, co dziś już minęło, jako zrobione o czasie:
+
+![Okno edycji otwarte podwójnym dotknięciem](images/screenshot-tile-edit.jpg)
+
+Historia:
 
 ![Historia otwarta z kafelka](images/screenshot-tile-history.jpg)
 

@@ -276,9 +276,16 @@ layout: tile      # card (default) or tile
 
 ![A tile (the small one) next to a large card](images/screenshot-tile.jpg)
 
-On a tile, a **tap** presses the button (with the same question when one is needed), and
-a **long press**, a right click or Shift+Enter opens the history with the options to
-clear it:
+On a tile, a **tap** presses the button (with the same question when one is needed, after
+a short wait so that a double tap is not two presses), a **double tap** or double click (or
+Alt+Enter) opens the schedule's edit dialog, and a **long press**, a right click or
+Shift+Enter opens the history with the options to clear it. The edit dialog has the same
+fields as the card editor plus **Reset to "all on time"** (section 5), which marks
+everything that has already passed today as done on time:
+
+![The edit dialog opened with a double tap](images/screenshot-tile-edit.jpg)
+
+The history:
 
 ![The history opened from a tile](images/screenshot-tile-history.jpg)
 

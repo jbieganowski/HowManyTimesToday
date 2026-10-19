@@ -2,6 +2,18 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.2.0] - 2026-10-20
+
+### Integracja
+
+- **Edycja harmonogramu z kafelka.** Podwójne dotknięcie lub podwójne kliknięcie kafelka
+  (albo Alt+Enter) otwiera okno z polami harmonogramu (nazwa, opis, włączenie/wyłączenie,
+  godziny lub interwał, start, koniec, okno tolerancji) i przyciskami **Zapisz zmiany
+  harmonogramu**, **Resetuj do „wszystko o czasie”** oraz **Zamknij**. Pojedyncze dotknięcie
+  nadal naciska klawisz, ale po krótkiej chwili (około jednej trzeciej sekundy), żeby
+  podwójne dotknięcie nie nacisnęło dwa razy.
+- **Resetuj do „wszystko o czasie” także w edytorze karty**, pod przyciskiem zapisu.
+
 ## [1.1.2] - 2026-10-19
 
 ### Integracja

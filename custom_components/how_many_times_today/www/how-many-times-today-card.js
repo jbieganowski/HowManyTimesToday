@@ -99,6 +99,10 @@ const CARD_STRINGS = {
     editor_window_label: "Tolerance window (minutes)",
     editor_save_button: "Save schedule changes",
     editor_saved_message: "Saved",
+    editor_reset_button: "Reset to \"all on time\"",
+    editor_reset_confirm: "Mark everything that has already passed today as done on time? Today's history of this schedule will be replaced.",
+    editor_reset_done: "Reset done",
+    error_schedule_not_active: "This schedule is switched off or has not started yet",
     editor_generic_error: "Could not save the changes",
     error_nothing_to_update: "Nothing to save — change something first",
     error_invalid_name: "Please enter a name",
@@ -166,6 +170,10 @@ const CARD_STRINGS = {
     editor_window_label: "Okno tolerancji (minuty)",
     editor_save_button: "Zapisz zmiany harmonogramu",
     editor_saved_message: "Zapisano",
+    editor_reset_button: "Resetuj do „wszystko o czasie”",
+    editor_reset_confirm: "Oznaczyć wszystko, co dziś już minęło, jako zrobione o czasie? Dzisiejsza historia tego harmonogramu zostanie zastąpiona.",
+    editor_reset_done: "Zresetowano",
+    error_schedule_not_active: "Ten harmonogram jest wyłączony albo jeszcze się nie zaczął",
     editor_generic_error: "Nie udało się zapisać zmian",
     error_nothing_to_update: "Nie ma czego zapisać – najpierw coś zmień",
     error_invalid_name: "Wpisz nazwę",
@@ -233,6 +241,10 @@ const CARD_STRINGS = {
     editor_window_label: "Toleranzfenster (Minuten)",
     editor_save_button: "Änderungen am Zeitplan speichern",
     editor_saved_message: "Gespeichert",
+    editor_reset_button: "Zurücksetzen auf „alles pünktlich“",
+    editor_reset_confirm: "Alles, was heute schon fällig war, als pünktlich erledigt markieren? Der heutige Verlauf dieses Zeitplans wird ersetzt.",
+    editor_reset_done: "Zurückgesetzt",
+    error_schedule_not_active: "Dieser Zeitplan ist ausgeschaltet oder noch nicht gestartet",
     editor_generic_error: "Änderungen konnten nicht gespeichert werden",
     error_nothing_to_update: "Nichts zu speichern – ändere zuerst etwas",
     error_invalid_name: "Bitte gib einen Namen ein",
@@ -300,6 +312,10 @@ const CARD_STRINGS = {
     editor_window_label: "Окно допуска (минуты)",
     editor_save_button: "Сохранить изменения расписания",
     editor_saved_message: "Сохранено",
+    editor_reset_button: "Сбросить в «всё вовремя»",
+    editor_reset_confirm: "Отметить всё, что уже наступило сегодня, как сделанное вовремя? Сегодняшняя история этого расписания будет заменена.",
+    editor_reset_done: "Сброшено",
+    error_schedule_not_active: "Это расписание выключено или ещё не началось",
     editor_generic_error: "Не удалось сохранить изменения",
     error_nothing_to_update: "Нечего сохранять – сначала что-нибудь измените",
     error_invalid_name: "Введите название",
@@ -367,6 +383,10 @@ const CARD_STRINGS = {
     editor_window_label: "Вікно допуску (хвилини)",
     editor_save_button: "Зберегти зміни розкладу",
     editor_saved_message: "Збережено",
+    editor_reset_button: "Скинути до «все вчасно»",
+    editor_reset_confirm: "Позначити все, що вже настало сьогодні, як зроблене вчасно? Сьогоднішню історію цього розкладу буде замінено.",
+    editor_reset_done: "Скинуто",
+    error_schedule_not_active: "Цей розклад вимкнено або ще не розпочато",
     editor_generic_error: "Не вдалося зберегти зміни",
     error_nothing_to_update: "Нічого зберігати – спочатку щось змініть",
     error_invalid_name: "Введіть назву",
@@ -434,6 +454,10 @@ const CARD_STRINGS = {
     editor_window_label: "容差窗口（分钟）",
     editor_save_button: "保存日程更改",
     editor_saved_message: "已保存",
+    editor_reset_button: "重置为“全部按时”",
+    editor_reset_confirm: "将今天已到期的全部标记为按时完成？该日程今天的历史将被替换。",
+    editor_reset_done: "已重置",
+    error_schedule_not_active: "该日程已关闭或尚未开始",
     editor_generic_error: "无法保存更改",
     error_nothing_to_update: "没有可保存的内容——请先做出修改",
     error_invalid_name: "请输入名称",
@@ -543,6 +567,7 @@ class HowManyTimesTodayCard extends HTMLElement {
 
   set hass(hass) {
     this._hass = hass;
+    if (this._editorEl) this._editorEl.hass = hass;
     // `hass` can arrive before setConfig(): nothing to show until the config is there
     if (!this._config) return;
     const stateObj = hass.states[this._config.entity];
@@ -737,7 +762,7 @@ class HowManyTimesTodayCard extends HTMLElement {
   // A dialog appended straight to <body> (outside both the card's shadow root and
   // the dashboard's own card wrapper) so it isn't clipped to the tile's own small
   // height and isn't affected by a transformed ancestor breaking position:fixed.
-  _openModal(innerHtml) {
+  _openModal(innerHtml, wide = false) {
     this._closeModal();
     const overlay = document.createElement("div");
     overlay.style.cssText =
@@ -747,7 +772,7 @@ class HowManyTimesTodayCard extends HTMLElement {
       <style>
         .hmtt-modal-box {
           background: var(--card-background-color, white); color: var(--primary-text-color, black);
-          padding: 16px; border-radius: 8px; max-width: 320px; max-height: 80vh; overflow-y: auto;
+          padding: 16px; border-radius: 8px; max-width: ${wide ? 460 : 320}px; width: ${wide ? "92vw" : "auto"}; max-height: 80vh; overflow-y: auto;
           box-shadow: 0 4px 16px rgba(0,0,0,0.4); font-family: var(--paper-font-body1_-_font-family, inherit);
         }
         .hmtt-modal-box h3 { margin: 0 0 12px 0; font-size: 1em; }
@@ -769,10 +794,22 @@ class HowManyTimesTodayCard extends HTMLElement {
   }
 
   _closeModal() {
+    this._editorEl = null;
     if (this._modalEl) {
       this._modalEl.remove();
       this._modalEl = null;
     }
+  }
+
+  // Double tap / double click on the tile (or Alt+Enter): the schedule's edit dialog, the
+  // same fields as the card editor, with Save and "Reset to all on time".
+  _openEditDialog() {
+    if (!this._hass || !this._config || !this._config.entity) return;
+    const box = this._openModal('<div id="hmtt-edit-host"></div>', true);
+    const editor = document.createElement("how-many-times-today-card-editor");
+    box.querySelector("#hmtt-edit-host").appendChild(editor);
+    editor.renderStandalone(this._hass, this._config.entity, () => this._closeModal());
+    this._editorEl = editor;
   }
 
   _onClearAll() {
@@ -854,6 +891,7 @@ class HowManyTimesTodayCard extends HTMLElement {
           display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0;
           cursor: pointer; outline: none; border-radius: 8px; padding: 4px;
         }
+        .tile-tap-target { touch-action: manipulation; }
         .tile-tap-target.not-clickable { cursor: default; }
         .tile-tap-target:focus-visible { outline: 2px solid var(--primary-color, #03a9f4); outline-offset: 2px; }
         .tile-circle {
@@ -892,6 +930,7 @@ class HowManyTimesTodayCard extends HTMLElement {
 
     const tapTarget = root.getElementById("tap-target");
     const HOLD_MS = 550;
+    const DOUBLE_TAP_MS = 320;
     let holdTimer = null;
     let holdTriggered = false;
     const clearHoldTimer = () => {
@@ -919,7 +958,23 @@ class HowManyTimesTodayCard extends HTMLElement {
       }
       const wasHold = holdTriggered;
       clearHoldTimer();
-      if (!wasHold) this._onPress();
+      if (wasHold) return;
+      // One tap presses, but only after a short wait: a second tap inside it is a
+      // double tap that opens the edit dialog instead of pressing twice. The state is
+      // kept on the card because the tile is redrawn every second.
+      const now = Date.now();
+      if (this._pendingPress && now - this._lastTapAt < DOUBLE_TAP_MS) {
+        clearTimeout(this._pendingPress);
+        this._pendingPress = null;
+        this._lastTapAt = 0;
+        this._openEditDialog();
+        return;
+      }
+      this._lastTapAt = now;
+      this._pendingPress = setTimeout(() => {
+        this._pendingPress = null;
+        this._onPress();
+      }, DOUBLE_TAP_MS);
     });
     tapTarget.addEventListener("pointerleave", clearHoldTimer);
     tapTarget.addEventListener("pointercancel", clearHoldTimer);
@@ -931,6 +986,9 @@ class HowManyTimesTodayCard extends HTMLElement {
       if (ev.key === "Enter" && ev.shiftKey) {
         ev.preventDefault();
         this._openHistoryDialog();
+      } else if (ev.key === "Enter" && ev.altKey) {
+        ev.preventDefault();
+        this._openEditDialog();
       } else if (ev.key === "Enter" || ev.key === " " || ev.key === "Spacebar") {
         ev.preventDefault();
         this._onPress();
@@ -1157,6 +1215,10 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
   }
 
   set hass(hass) {
+    if (this._standalone) {
+      this._hass = hass; // the form is built once; never rebuilt under the user's typing
+      return;
+    }
     const firstTime = !this._hass;
     this._hass = hass;
     if (this._picker) {
@@ -1170,21 +1232,8 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
     }
   }
 
-  _entityFilter(stateObj) {
-    return !!(stateObj.attributes && stateObj.attributes.schedule_id !== undefined);
-  }
-
-  _t(key, placeholders) {
-    return translate(this._hass?.language, key, placeholders);
-  }
-
-  _render() {
-    // Home Assistant sets `hass` before the config on a fresh editor element, so both
-    // may be missing on the first call; render once the config has arrived
-    if (!this._hass || !this._config) return;
-    if (!this.shadowRoot) this.attachShadow({ mode: "open" });
-
-    this.shadowRoot.innerHTML = `
+  _styles() {
+    return `
       <style>
         .wrap { padding: 12px 0; }
         .hint { margin: 16px 0 8px; color: var(--secondary-text-color); line-height: 1.4; }
@@ -1222,14 +1271,51 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
         .save-status { margin-top: 10px; font-weight: 600; }
         .save-status.ok { color: #2e7d32; }
         .save-status.err { color: #c62828; }
+        .extra-row { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+        .secondary-button {
+          width: 100%; padding: 10px; font-size: 1em; cursor: pointer; border-radius: 6px;
+          border: 1px solid var(--divider-color, #ccc); background: none; color: var(--primary-text-color, black);
+        }
+        .secondary-button:disabled { opacity: 0.6; cursor: default; }
         h3.section { font-size: 1em; margin: 20px 0 4px; }
         .live-notice {
           margin: 16px 0; padding: 10px 12px; border-radius: 6px; font-size: 0.85em; line-height: 1.4;
           background: var(--warning-color, #fff3cd); color: #7a5b00; border: 1px solid #e0c36a;
         }
       </style>
-      <div class="wrap"></div>
     `;
+  }
+
+  // Used by the card itself (tile double tap): only the schedule form, in a dialog,
+  // with a Close button - no entity picker or layout choice.
+  renderStandalone(hass, entityId, onClose) {
+    this._standalone = true;
+    this._onClose = onClose;
+    this._hass = hass;
+    this._config = { entity: entityId };
+    if (!this.shadowRoot) this.attachShadow({ mode: "open" });
+    this.shadowRoot.innerHTML = `${this._styles()}<div class="wrap"></div>`;
+    const formContainer = document.createElement("div");
+    this._formContainer = formContainer;
+    this.shadowRoot.querySelector(".wrap").appendChild(formContainer);
+    this._renderScheduleForm();
+  }
+
+  _entityFilter(stateObj) {
+    return !!(stateObj.attributes && stateObj.attributes.schedule_id !== undefined);
+  }
+
+  _t(key, placeholders) {
+    return translate(this._hass?.language, key, placeholders);
+  }
+
+  _render() {
+    // Home Assistant sets `hass` before the config on a fresh editor element, so both
+    // may be missing on the first call; render once the config has arrived
+    if (!this._hass || !this._config) return;
+    if (!this.shadowRoot) this.attachShadow({ mode: "open" });
+
+    this.shadowRoot.innerHTML = `${this._styles()}<div class="wrap"></div>`;
 
     const wrap = this.shadowRoot.querySelector(".wrap");
 
@@ -1328,7 +1414,7 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
     const endInitial = toLocalInputValue(attrs.end_at);
 
     container.innerHTML = `
-      <div class="live-notice">${this._t("editor_live_notice")}</div>
+      ${this._standalone ? "" : `<div class="live-notice">${this._t("editor_live_notice")}</div>`}
       <h3 class="section">${this._t("editor_section_schedule")}</h3>
       <div class="field">
         <label>${this._t("editor_name_label")}</label>
@@ -1378,6 +1464,10 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
         <button type="button" class="save-button" id="f-save">${this._t("editor_save_button")}</button>
         <div class="save-status" id="f-status"></div>
       </div>
+      <div class="extra-row">
+        <button type="button" class="secondary-button" id="f-reset">${this._t("editor_reset_button")}</button>
+        ${this._standalone ? `<button type="button" class="secondary-button" id="f-close">${this._t("close_label")}</button>` : ""}
+      </div>
     `;
 
     if (mode === "fixed_times") {
@@ -1396,6 +1486,9 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
     });
 
     container.querySelector("#f-save").addEventListener("click", () => this._onSave(mode));
+    container.querySelector("#f-reset").addEventListener("click", () => this._onReset());
+    const closeBtn = container.querySelector("#f-close");
+    if (closeBtn) closeBtn.addEventListener("click", () => this._onClose && this._onClose());
 
     // Active/inactive takes effect immediately (it's a different backend service
     // than the rest of the form, not something that waits for "Save")
@@ -1436,6 +1529,36 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
 
   _currentTimesValues() {
     return [...this._formContainer.querySelectorAll(".f-time")].map((el) => el.value || "09:00");
+  }
+
+  // HA's own error text is not localized, so the translation key is mapped here.
+  _errorMessage(err) {
+    const key = err?.translation_key || err?.error?.translation_key;
+    const errorKey = key ? `error_${key}` : null;
+    if (errorKey && CARD_STRINGS.en[errorKey]) return this._t(errorKey);
+    return err?.message || err?.error?.message || this._t("editor_generic_error");
+  }
+
+  // "Reset to all on time": everything that has already come due today counts as done
+  // on time (today's history is rewritten, see the reset_schedule service).
+  async _onReset() {
+    const container = this._formContainer;
+    const status = container.querySelector("#f-status");
+    const button = container.querySelector("#f-reset");
+    if (!confirm(this._t("editor_reset_confirm"))) return;
+    status.textContent = "";
+    status.className = "save-status";
+    button.disabled = true;
+    try {
+      await this._hass.callService(DOMAIN, "reset_schedule", {}, { entity_id: this._config.entity });
+      status.textContent = this._t("editor_reset_done");
+      status.className = "save-status ok";
+    } catch (err) {
+      status.textContent = this._errorMessage(err);
+      status.className = "save-status err";
+    } finally {
+      button.disabled = false;
+    }
   }
 
   async _onSave(mode) {
