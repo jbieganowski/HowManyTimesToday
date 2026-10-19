@@ -2,6 +2,14 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.3.4] - 2026-10-20
+
+### Integration
+
+- The card reports to the log what the page shows after it started (the texts of any error
+  cards and how many of its own cards are drawn), so a device that still shows an error can
+  be traced to its exact message.
+
 ## [1.3.3] - 2026-10-20
 
 ### Integration

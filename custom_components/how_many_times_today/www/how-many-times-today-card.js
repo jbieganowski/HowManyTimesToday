@@ -1721,33 +1721,42 @@ reportToServer("loaded", customElements.get("how-many-times-today-card") ? cardO
 // Dashboard cards of this type that were built before the element existed show an error
 // card ("Custom element doesn't exist"). Home Assistant rebuilds them when the element gets
 // defined, but some clients (the Android app) were seen not to: ask for the rebuild
-// ourselves, and report what is left (the card's text) so that it can be traced.
-function ourErrorCards() {
-  const found = [];
+// ourselves, and report what the page shows (the error cards' texts, how many of our cards
+// are there and drawn) so that a device that still fails can be traced.
+function scanPage() {
+  const errors = [];
+  let ours = 0;
+  let drawn = 0;
   const walk = (root) => {
     for (const el of root.querySelectorAll("*")) {
       if (el.localName === "hui-error-card") {
         const text = String((el._config && el._config.error) || (el.shadowRoot && el.shadowRoot.textContent) || el.textContent || "");
-        if (text.includes("how-many-times-today")) found.push({ el, text: text.replace(/\s+/g, " ").trim() });
+        errors.push({ el, text: text.replace(/\s+/g, " ").trim() });
+      } else if (el.localName === "how-many-times-today-card") {
+        ours += 1;
+        if (el.shadowRoot && el.shadowRoot.querySelector("ha-card")) drawn += 1;
       }
       if (el.shadowRoot) walk(el.shadowRoot);
     }
   };
   walk(document);
-  return found;
+  return { errors, ours, drawn };
 }
-let healedFirst = null;
-for (const delay of [400, 2500, 7000]) {
+let firstErrorCount = null;
+for (const delay of [400, 2500, 7000, 16000]) {
   setTimeout(() => {
     try {
-      const errors = ourErrorCards();
-      if (healedFirst === null) healedFirst = errors.length;
-      for (const { el } of errors) el.dispatchEvent(new CustomEvent("ll-rebuild", { bubbles: true, composed: true }));
-      if (delay === 7000 && (healedFirst > 0 || errors.length > 0)) {
-        reportToServer("loaded", `error cards found ${healedFirst}, left after rebuild ${errors.length}${errors[0] ? ": " + errors[0].text.slice(0, 120) : ""}`);
+      const { errors, ours, drawn } = scanPage();
+      if (firstErrorCount === null) firstErrorCount = errors.length;
+      for (const { el, text } of errors) {
+        if (text.includes("how-many-times-today")) el.dispatchEvent(new CustomEvent("ll-rebuild", { bubbles: true, composed: true }));
+      }
+      if (delay >= 7000 && (firstErrorCount > 0 || errors.length > 0)) {
+        const texts = errors.slice(0, 3).map((e) => e.text.slice(0, 110)).join(" || ");
+        reportToServer("loaded", `page ${location.pathname.slice(0, 40)} at ${delay / 1000}s: error cards ${errors.length}, our cards ${ours} drawn ${drawn}: ${texts}`);
       }
     } catch (err) {
-      reportToServer("report", `rebuild failed: ${err && err.message}`);
+      reportToServer("report", `page scan failed: ${err && err.message}`);
     }
   }, delay);
 }

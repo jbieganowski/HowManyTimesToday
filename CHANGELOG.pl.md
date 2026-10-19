@@ -2,6 +2,14 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.3.4] - 2026-10-20
+
+### Integracja
+
+- Karta zgłasza do logu, co pokazuje strona po jej uruchomieniu (teksty ewentualnych kart
+  błędu i ile jej własnych kart jest narysowanych), więc urządzenie, które dalej pokazuje
+  błąd, można rozpoznać po dokładnym komunikacie.
+
 ## [1.3.3] - 2026-10-20
 
 ### Integracja
