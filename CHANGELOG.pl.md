@@ -2,6 +2,15 @@
 
 ([English version](CHANGELOG.md))
 
+## [1.3.3] - 2026-10-20
+
+### Integracja
+
+- **Karty błędu tej karty odbudowuje sama karta.** Niektóre klienty (aplikacja Home Assistant
+  na telefonie) uruchamiały kartę poprawnie, a mimo to na pulpicie zostawały karty „Custom element
+  doesn't exist” zbudowane przed nią. Po zdefiniowaniu karta prosi teraz o odbudowanie
+  takich kart i zgłasza w logu, ile ich znalazła i co zostało.
+
 ## [1.3.2] - 2026-10-20
 
 ### Integracja

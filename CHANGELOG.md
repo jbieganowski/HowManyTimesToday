@@ -2,6 +2,16 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [1.3.3] - 2026-10-20
+
+### Integration
+
+- **Error cards of this card are rebuilt by the card itself.** Some clients (the Home Assistant
+  app on a phone) were seen to start the card correctly and still leave the "Custom element
+  doesn't exist" cards built before it on the dashboard. Once the card is defined it now asks
+  for those cards to be rebuilt and reports in the log how many were found and what is
+  left.
+
 ## [1.3.2] - 2026-10-20
 
 ### Integration

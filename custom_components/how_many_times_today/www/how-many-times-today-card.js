@@ -1718,6 +1718,40 @@ defineOrUpgrade("how-many-times-today-card-editor", HowManyTimesTodayCardEditor)
 
 reportToServer("loaded", customElements.get("how-many-times-today-card") ? cardOutcome : "NOT defined");
 
+// Dashboard cards of this type that were built before the element existed show an error
+// card ("Custom element doesn't exist"). Home Assistant rebuilds them when the element gets
+// defined, but some clients (the Android app) were seen not to: ask for the rebuild
+// ourselves, and report what is left (the card's text) so that it can be traced.
+function ourErrorCards() {
+  const found = [];
+  const walk = (root) => {
+    for (const el of root.querySelectorAll("*")) {
+      if (el.localName === "hui-error-card") {
+        const text = String((el._config && el._config.error) || (el.shadowRoot && el.shadowRoot.textContent) || el.textContent || "");
+        if (text.includes("how-many-times-today")) found.push({ el, text: text.replace(/\s+/g, " ").trim() });
+      }
+      if (el.shadowRoot) walk(el.shadowRoot);
+    }
+  };
+  walk(document);
+  return found;
+}
+let healedFirst = null;
+for (const delay of [400, 2500, 7000]) {
+  setTimeout(() => {
+    try {
+      const errors = ourErrorCards();
+      if (healedFirst === null) healedFirst = errors.length;
+      for (const { el } of errors) el.dispatchEvent(new CustomEvent("ll-rebuild", { bubbles: true, composed: true }));
+      if (delay === 7000 && (healedFirst > 0 || errors.length > 0)) {
+        reportToServer("loaded", `error cards found ${healedFirst}, left after rebuild ${errors.length}${errors[0] ? ": " + errors[0].text.slice(0, 120) : ""}`);
+      }
+    } catch (err) {
+      reportToServer("report", `rebuild failed: ${err && err.message}`);
+    }
+  }, delay);
+}
+
 window.customCards = window.customCards || [];
 if (!window.customCards.some((c) => c.type === "how-many-times-today-card"))
 window.customCards.push({
