@@ -2,6 +2,27 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [2.1.0] - 2026-10-22
+
+### Integration
+
+- **A press between two terms always asks.** There is no "last tenth of the gap" any more:
+  when nothing is open and the coming term's tolerance window has not begun, at any
+  distance from the term, the card asks whether this is the **coming occurrence, only done
+  now** (`done_early`: the coming term is closed and counts, the button goes on from green,
+  it never turns red for that term and the next feeding shown is the one after it) or an
+  **extra** one (`extra`: +1, outside the schedule, the term stays due, as before). The
+  question names the coming term's time. When the coming term is already closed there is no
+  question: the press is an extra. A press without the answer fails with
+  `early_answer_required` (an answer that does not fit, such as `do_now`, does too), so an
+  automation that presses a schedule between its terms must pass `answer: done_early` or
+  `extra` (the example in the configuration guide shows how).
+
+### Documentation
+
+- Configuration guide, specification and the physical-button example (EN + PL) describe the
+  new rule; 171 tests.
+
 ## [2.0.0] - 2026-10-22
 
 The integration now has what the latest Android app has. A major version: the state

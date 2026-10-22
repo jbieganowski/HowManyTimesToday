@@ -39,8 +39,8 @@ KIND_MISSED = "missed"  # "POMINIĘTE": a term nobody confirmed
 ANSWER_ALREADY_DONE = "already_done"  # A: it was done at the term, just not recorded
 ANSWER_DO_NOW = "do_now"  # B: it was not done at the term, doing it now
 ANSWER_EXTRA = "extra"  # C: done at the term, and this is an additional one
-# answer to the "pressed a little too early" question: it was done ahead of time (closes
-# the coming term); the other answer there is ANSWER_EXTRA (an additional execution)
+# answer to the "pressed between two terms" question: this is the coming occurrence, done
+# now (closes the coming term); the other answer there is ANSWER_EXTRA (an additional one)
 ANSWER_DONE_EARLY = "done_early"
 ANSWERS = [ANSWER_ALREADY_DONE, ANSWER_DO_NOW, ANSWER_EXTRA, ANSWER_DONE_EARLY]
 
@@ -114,10 +114,6 @@ LEGACY_SOUNDS = {
 # text size steps of the cards (like the app: 85 % ... 175 %)
 FONT_SCALES = [0.85, 1.0, 1.15, 1.3, 1.5, 1.75]
 DEFAULT_FONT_SCALE = 1.0
-
-# a press in the last share of the gap before the tolerance window of the coming term
-# counts as "too early" and asks whether it was done ahead of time
-EARLY_ZONE_FRACTION = 0.10
 
 UPDATE_INTERVAL_SECONDS = 30
 HISTORY_ATTRIBUTE_LIMIT = 50  # newest entries exposed on the sensor

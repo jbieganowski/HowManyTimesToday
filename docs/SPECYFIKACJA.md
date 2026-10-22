@@ -108,29 +108,34 @@ ten termin:
 
 Przy kilku otwartych terminach (07:00 pominięty i 16:00 już czerwony) jedno naciśnięcie
 zamyka jeden termin, od najstarszego; kolejne obsługuje następny. Gdy żaden termin nie
-jest otwarty i naciśnięcie nie przypada tuż przed terminem (patrz niżej), pytania nie ma:
-naciśnięcie zapisuje się jako POZA HARMONOGRAMEM, a liczba miga. Drugie naciśnięcie w oknie już zamkniętego terminu to także takie dodatkowe
+jest otwarty, a naciśnięcie wypada między dwoma terminami (patrz niżej), decyduje odpowiedź;
+gdy nadchodzący termin jest już zamknięty, pytania nie ma: naciśnięcie zapisuje się jako
+POZA HARMONOGRAMEM, a liczba miga. Drugie naciśnięcie w oknie już zamkniętego terminu to także takie dodatkowe
 wykonanie.
 
 <p align="center">
   <img src="images/diagram-window-answers.pl.svg" alt="Naciśnięcie w oknie lub poza nim" width="100%">
 </p>
 
-## Naciśnięcie trochę za wcześnie
+## Naciśnięcie między dwoma terminami
 
-Gdy żaden termin nie jest otwarty, naciśnięcie *przed* nadchodzącym terminem i przed
-otwarciem jego okna jest **wczesne**. Jeśli wypada w ostatniej dziesiątej części odstępu od
-poprzedniego terminu (termin 16:00 po 07:00: od 15:06 do początku okna 15:30; w trybie co X
-godzin dziesiąta część X), pytanie brzmi: czy zadanie **wykonano przed czasem**?
+Gdy żaden termin nie jest otwarty, a okno tolerancji nadchodzącego terminu jeszcze się nie
+zaczęło, naciśnięcie wypada **między dwoma terminami** — w dowolnej odległości od
+nadchodzącego terminu, bez limitu czasu. Pytanie brzmi: czy to jest **nadchodzące
+wystąpienie, tylko wykonane teraz**, czy dodatkowe?
 
 | Odpowiedź | Termin | Licznik | Historia |
 | --- | --- | --- | --- |
-| `done_early` — tak, przed czasem | nadchodzący termin zostaje zamknięty | +1 | zgodnie z harmonogramem, z godziną terminu |
+| `done_early` — nadchodzące wystąpienie, wykonane teraz | nadchodzący termin zostaje zamknięty (przeskoczony, bo „właśnie wystąpił”) | +1 | zgodnie z harmonogramem, z godziną terminu |
 | `extra` — dodatkowe | pozostaje należny | +1 | POZA HARMONOGRAMEM |
 
-Naciśnięcie wcześniejsze niż ta dziesiąta część zapisuje się po prostu poza harmonogramem,
-bez pytania. Sensor pokazuje `early_by_seconds`, gdy naciśnięcie byłoby wczesne; naciśnięcie
-bez odpowiedzi kończy się błędem `early_answer_required`.
+Po `done_early` klawisz idzie dalej od zielonego (przejście zaczyna się od tego naciśnięcia),
+nigdy nie robi się czerwony dla przeskoczonego terminu, a pokazywane następne karmienie to to
+po nim. Po `extra` wszystko działa jak dotąd: liczba miga, nadchodzący termin pozostaje
+należny. Jeśli nadchodzący termin jest już zamknięty (wcześniejsze `done_early`), pytania nie
+ma: naciśnięcie jest po prostu dodatkowe, zapisane poza harmonogramem. Pytanie podaje
+godzinę nadchodzącego terminu. Sensor pokazuje `early_by_seconds`, gdy naciśnięcie zadałoby
+pytanie; naciśnięcie bez odpowiedzi kończy się błędem `early_answer_required`.
 
 ## Dźwięki przypomnień, rozmiar tekstu i kontrast
 

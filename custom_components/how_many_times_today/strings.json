@@ -93,7 +93,7 @@
       },
       "legend": {
         "title": "How to read the card",
-        "description": "Every schedule has one button. The **colour and the sentence under the name** tell you what to do:\n\n- **Green** — “You are up to date” / “All according to plan”. The last term was confirmed.\n- **Fading to red** — “The time is coming”. The next term is approaching.\n- **Red** — “NOW”. A term is due: press the button (inside the tolerance window it counts as on time).\n- **Blinking black** — “WARNING - overdue!”. A term was not confirmed in time: press the button and answer the question — A: it was done but not recorded, B: it was not done and you are doing it now, C: it was done and this is an additional one.\n- **Red with a black number** — “Done too many times”. More executions today than planned.\n- **Grey** — “Switched off” or “Not started yet”. The schedule takes no presses. A switched-off schedule (or one past its end) is hidden on the dashboard and shows grey only while you edit it; switch it back on in the card editor.\n\nThe **big number** is how many times it was done today. If it **blinks** (“Blinking number: the last execution was recorded outside the schedule”), the last press was outside the schedule.\n\n**Pressed a little too early?** Just before the tolerance window of the coming term (in the last tenth of the gap since the previous term) the card asks whether it was done ahead of time (then it counts for the coming term) or is an extra one.\n\n**Sound, text size, contrast:** in *Global settings* choose the default reminder sound and its volume, the text size of the cards and high contrast. Each schedule can have its own sound and volume."
+        "description": "Every schedule has one button. The **colour and the sentence under the name** tell you what to do:\n\n- **Green** — “You are up to date” / “All according to plan”. The last term was confirmed.\n- **Fading to red** — “The time is coming”. The next term is approaching.\n- **Red** — “NOW”. A term is due: press the button (inside the tolerance window it counts as on time).\n- **Blinking black** — “WARNING - overdue!”. A term was not confirmed in time: press the button and answer the question — A: it was done but not recorded, B: it was not done and you are doing it now, C: it was done and this is an additional one.\n- **Red with a black number** — “Done too many times”. More executions today than planned.\n- **Grey** — “Switched off” or “Not started yet”. The schedule takes no presses. A switched-off schedule (or one past its end) is hidden on the dashboard and shows grey only while you edit it; switch it back on in the card editor.\n\nThe **big number** is how many times it was done today. If it **blinks** (“Blinking number: the last execution was recorded outside the schedule”), the last press was outside the schedule.\n\n**Pressed between two terms?** When nothing is due and the coming term's tolerance window has not begun, the card asks whether this is the coming occurrence, only done now (it counts for that term, the button goes on from green and the schedule's next point is the one after it), or an extra one.\n\n**Sound, text size, contrast:** in *Global settings* choose the default reminder sound and its volume, the text size of the cards and high contrast. Each schedule can have its own sound and volume."
       },
       "reset_schedules": {
         "title": "Reset to \"all on time\"",
@@ -142,7 +142,7 @@
         "already_done": "It was done at that time, it just was not recorded",
         "do_now": "It was not done then - I am doing it now",
         "extra": "It was done then, and this is an additional one",
-        "done_early": "It was done ahead of time (it counts for the coming term)"
+        "done_early": "It is the coming occurrence, done now (it counts for the coming term)"
       }
     },
     "sound": {
@@ -263,7 +263,7 @@
       "message": "Give at least one field to change."
     },
     "early_answer_required": {
-      "message": "This press is a little too early before the coming term and needs an answer (done_early or extra)."
+      "message": "This press falls between two terms and needs an answer (done_early: the coming occurrence done now, or extra)."
     },
     "invalid_sound": {
       "message": "Unknown reminder sound."
@@ -279,7 +279,7 @@
       "fields": {
         "answer": {
           "name": "Answer",
-          "description": "Needed when pressing outside the tolerance window while a term is still open, or a little too early before the coming term (the answer_required attribute is true). Values: already_done, do_now, extra, done_early."
+          "description": "Needed when pressing outside the tolerance window while a term is still open, or between two terms (the answer_required attribute is true, or early_by_seconds is set). Values: already_done, do_now, extra, done_early."
         }
       }
     },

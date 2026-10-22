@@ -93,7 +93,7 @@
       },
       "legend": {
         "title": "Jak czytać kartę",
-        "description": "Każdy harmonogram ma jeden klawisz. **Kolor i zdanie pod nazwą** mówią, co robić:\n\n- **Zielony** — „Jesteś na bieżąco” / „Wszystko zgodnie z planem”. Ostatni termin został potwierdzony.\n- **Przechodzący w czerwony** — „Zbliża się pora”. Zbliża się następny termin.\n- **Czerwony** — „TERAZ”. Termin przypadł: naciśnij klawisz (w oknie tolerancji liczy się jako na czas).\n- **Migający czarny** — „UWAGA – spóźnione!”. Termin nie został potwierdzony na czas: naciśnij klawisz i odpowiedz na pytanie — A: było zrobione, tylko nie zapisane, B: nie zrobiono i robisz to teraz, C: zrobiono i to jest dodatkowe wykonanie.\n- **Czerwony z czarną liczbą** — „Zrobione za dużo razy”. Dziś więcej wykonań niż zaplanowano.\n- **Szary** — „Wyłączone” lub „Jeszcze się nie zaczęło”. Harmonogram nie przyjmuje naciśnięć. Harmonogram wyłączony (lub po terminie końca) jest ukryty na pulpicie i szary jest tylko podczas edycji pulpitu; włączysz go ponownie w edytorze karty.\n\n**Duża liczba** to ile razy zrobiono to dzisiaj. Jeśli **miga** („Migająca liczba: ostatnie wykonanie zapisano poza planem”), ostatnie naciśnięcie było poza harmonogramem.\n\n**Naciśnięcie trochę za wcześnie?** Tuż przed oknem tolerancji nadchodzącego terminu (w ostatniej dziesiątej części odstępu od poprzedniego terminu) karta pyta, czy zadanie wykonano przed czasem (wtedy liczy się na nadchodzący termin), czy to zdarzenie dodatkowe.\n\n**Dźwięk, rozmiar tekstu, kontrast:** w *Ustawieniach globalnych* wybierasz domyślny dźwięk przypomnienia i jego głośność, rozmiar tekstu na kartach i wysoki kontrast. Każdy harmonogram może mieć własny dźwięk i głośność."
+        "description": "Każdy harmonogram ma jeden klawisz. **Kolor i zdanie pod nazwą** mówią, co robić:\n\n- **Zielony** — „Jesteś na bieżąco” / „Wszystko zgodnie z planem”. Ostatni termin został potwierdzony.\n- **Przechodzący w czerwony** — „Zbliża się pora”. Zbliża się następny termin.\n- **Czerwony** — „TERAZ”. Termin przypadł: naciśnij klawisz (w oknie tolerancji liczy się jako na czas).\n- **Migający czarny** — „UWAGA – spóźnione!”. Termin nie został potwierdzony na czas: naciśnij klawisz i odpowiedz na pytanie — A: było zrobione, tylko nie zapisane, B: nie zrobiono i robisz to teraz, C: zrobiono i to jest dodatkowe wykonanie.\n- **Czerwony z czarną liczbą** — „Zrobione za dużo razy”. Dziś więcej wykonań niż zaplanowano.\n- **Szary** — „Wyłączone” lub „Jeszcze się nie zaczęło”. Harmonogram nie przyjmuje naciśnięć. Harmonogram wyłączony (lub po terminie końca) jest ukryty na pulpicie i szary jest tylko podczas edycji pulpitu; włączysz go ponownie w edytorze karty.\n\n**Duża liczba** to ile razy zrobiono to dzisiaj. Jeśli **miga** („Migająca liczba: ostatnie wykonanie zapisano poza planem”), ostatnie naciśnięcie było poza harmonogramem.\n\n**Naciśnięcie między terminami?** Gdy nic nie jest należne, a okno tolerancji nadchodzącego terminu jeszcze się nie zaczęło, karta pyta, czy to jest nadchodzące wystąpienie, tylko wykonane teraz (liczy się na ten termin, klawisz idzie dalej od zielonego, a następnym punktem harmonogramu jest ten po nim), czy dodatkowe.\n\n**Dźwięk, rozmiar tekstu, kontrast:** w *Ustawieniach globalnych* wybierasz domyślny dźwięk przypomnienia i jego głośność, rozmiar tekstu na kartach i wysoki kontrast. Każdy harmonogram może mieć własny dźwięk i głośność."
       },
       "reset_schedules": {
         "title": "Reset do „wszystko na czas”",
@@ -142,7 +142,7 @@
         "already_done": "Było zrobione w tym terminie, tylko nie zapisano",
         "do_now": "Nie zrobiono wtedy - robię to teraz",
         "extra": "Zrobiono wtedy, a to jest dodatkowe wykonanie",
-        "done_early": "Zrobione przed czasem (liczy się na nadchodzący termin)"
+        "done_early": "To nadchodzące wystąpienie, wykonane teraz (liczy się na nadchodzący termin)"
       }
     },
     "sound": {
@@ -263,7 +263,7 @@
       "message": "Podaj co najmniej jedno pole do zmiany."
     },
     "early_answer_required": {
-      "message": "Ten klawisz został naciśnięty trochę za wcześnie przed nadchodzącym terminem i wymaga odpowiedzi (done_early lub extra)."
+      "message": "To naciśnięcie wypada między dwoma terminami i wymaga odpowiedzi (done_early: nadchodzące wystąpienie wykonane teraz, albo extra)."
     },
     "invalid_sound": {
       "message": "Nieznany dźwięk przypomnienia."
@@ -279,7 +279,7 @@
       "fields": {
         "answer": {
           "name": "Odpowiedź",
-          "description": "Potrzebna przy naciśnięciu poza oknem tolerancji, gdy termin jest jeszcze otwarty, albo trochę za wcześnie przed nadchodzącym terminem (atrybut answer_required ma wartość true). Wartości: already_done, do_now, extra, done_early."
+          "description": "Potrzebna przy naciśnięciu poza oknem tolerancji, gdy termin jest jeszcze otwarty, albo między dwoma terminami (atrybut answer_required ma wartość true lub ustawione jest early_by_seconds). Wartości: already_done, do_now, extra, done_early."
         }
       }
     },

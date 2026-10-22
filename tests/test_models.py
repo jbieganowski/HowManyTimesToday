@@ -278,18 +278,18 @@ def test_several_open_terms_are_closed_one_per_press_oldest_first():
 
 def test_press_with_no_open_term_outside_every_window_is_an_extra_and_the_number_blinks():
     sim = Sim(fixed(), created=at(12))
-    entries = sim.press(at(12))
+    entries = sim.press(at(12), const.ANSWER_EXTRA)
     assert [(e["kind"], e["outside_schedule"], e["scheduled_at"]) for e in entries] == [("outside", True, None)]
     assert sim.status(at(12)).number_blinking is True
 
 
 def test_the_next_press_stops_the_number_blinking_and_is_judged_afresh():
     sim = Sim(fixed(), created=at(12))
-    sim.press(at(12))
+    sim.press(at(12), const.ANSWER_EXTRA)
     assert sim.status(at(12)).number_blinking is True
-    sim.press(at(12, 5))  # another extra: 2 of 2, still within the count -> blinks again
+    sim.press(at(12, 5), const.ANSWER_EXTRA)  # another extra: 2 of 2, still within the count -> blinks again
     assert sim.status(at(12, 5)).number_blinking is True
-    sim.press(at(12, 10))  # 3 of 2: over the planned count, no blinking
+    sim.press(at(12, 10), const.ANSWER_EXTRA)  # 3 of 2: over the planned count, no blinking
     st = sim.status(at(12, 10))
     assert st.number_blinking is False and st.state == const.STATE_EXCEEDED
 
@@ -297,7 +297,7 @@ def test_the_next_press_stops_the_number_blinking_and_is_judged_afresh():
 def test_a_second_press_inside_an_already_closed_window_is_an_extra():
     sim = Sim(fixed())
     sim.press(at(7))  # closes the 07:00 term in time
-    entries = sim.press(at(7, 5))
+    entries = sim.press(at(7, 5), const.ANSWER_EXTRA)
     assert entries[0]["kind"] == "outside" and entries[0]["outside_schedule"] is True
 
 
@@ -307,7 +307,7 @@ def test_a_second_press_inside_an_already_closed_window_is_an_extra():
 def test_exceeding_the_planned_count_is_red_with_no_blinking_until_midnight():
     sim = Sim(fixed(times=("07:00", "16:00", "21:00")), created=at(12))
     for minute in (0, 1, 2, 3, 4):
-        sim.press(at(12, minute))
+        sim.press(at(12, minute), const.ANSWER_EXTRA)
     st = sim.status(at(12, 4))
     assert (st.count_today, st.planned_count) == (5, 3)
     assert st.count_exceeded is True and st.state == const.STATE_EXCEEDED
@@ -319,8 +319,8 @@ def test_exceeding_the_planned_count_is_red_with_no_blinking_until_midnight():
 
 def test_black_takes_priority_over_exceeded():
     sim = Sim(fixed(times=("07:00",)), created=at(0))
-    sim.press(at(1))
-    sim.press(at(2))  # 2 of 1: exceeded
+    sim.press(at(1), const.ANSWER_EXTRA)
+    sim.press(at(2), const.ANSWER_EXTRA)  # 2 of 1: exceeded
     assert sim.state(at(3)) == const.STATE_EXCEEDED
     assert sim.state(at(7, 31)) == const.STATE_BLINKING_BLACK
 
@@ -354,7 +354,7 @@ def test_an_open_term_from_yesterday_stays_open_after_midnight():
 
 def test_colour_progress_runs_from_the_last_press_to_the_next_term():
     sim = Sim(fixed(times=("16:00",)), created=at(0, 0))
-    sim.press(at(8))  # outside the window: an extra, but it still restarts the fade
+    sim.press(at(8), const.ANSWER_EXTRA)  # outside the window: an extra, but it still restarts the fade
     assert sim.status(at(8)).state == const.STATE_GREEN and sim.status(at(8)).color_progress == 0.0
     st = sim.status(at(12))  # half way between 08:00 and 16:00
     assert st.state == const.STATE_TRANSITION and st.color_progress == pytest.approx(0.5)
@@ -657,17 +657,46 @@ def test_an_extra_at_the_early_question_is_outside_the_schedule_and_the_term_sta
     assert sim.state(at(16, 1)) == const.STATE_RED
 
 
-def test_a_press_more_than_a_tenth_before_the_term_is_just_outside_the_schedule():
-    sim = Sim(fixed(), created=at(14, 0))
-    entries = sim.press(at(15, 0))
+def test_a_press_far_before_the_term_asks_the_same_question():
+    """There is no limit of time: any press between two terms asks, not only a late one."""
+    sim = Sim(fixed(), created=at(8, 0))
+    with pytest.raises(models.EarlyAnswerRequired):
+        sim.press(at(9, 0))
+    entries = sim.press(at(9, 0), const.ANSWER_EXTRA)
+    assert [e["kind"] for e in entries] == [const.KIND_OUTSIDE]
+    assert sim.status(at(9, 0)).early_by_seconds is not None  # the 16:00 term stays due and ahead
+
+
+def test_an_answer_of_the_late_question_does_not_fit_the_early_one():
+    sim = Sim(fixed(), created=at(8, 0))
+    with pytest.raises(models.EarlyAnswerRequired):
+        sim.press(at(9, 0), const.ANSWER_DO_NOW)
+
+
+def test_done_far_ahead_skips_the_coming_term_and_the_cycle_goes_on_from_green():
+    sim = Sim(fixed(), created=at(8, 0))
+    entries = sim.press(at(9, 0), const.ANSWER_DONE_EARLY)
+    assert [(e["kind"], e["scheduled_at"], e["count_delta"]) for e in entries] == [("on_schedule", at(16).isoformat(), 1)]
+    st = sim.status(at(9, 0))
+    assert st.state == const.STATE_GREEN and st.count_today == 1
+    assert st.next_expected_at == at(7, d=20)  # the next feeding is the one after the skipped term
+    sim.tick(at(16, 5))
+    assert sim.state(at(16, 5)) != const.STATE_BLINKING_BLACK  # 16:00 never turns red
+
+
+def test_when_the_coming_term_is_already_closed_a_press_is_simply_an_extra():
+    sim = Sim(fixed(), created=at(8, 0))
+    sim.press(at(9, 0), const.ANSWER_DONE_EARLY)  # closes 16:00
+    assert sim.status(at(10, 0)).early_by_seconds is None
+    entries = sim.press(at(10, 0))  # no question: the coming term is done already
     assert [e["kind"] for e in entries] == [const.KIND_OUTSIDE]
 
 
-def test_the_early_zone_of_an_interval_schedule_is_a_tenth_of_the_interval():
-    sim = Sim(interval(8, start="2026-10-19T00:00:00"), created=at(10, 0))
-    sim.tick(at(15, 20))  # terms 00:00, 08:00, 16:00; the zone before 16:00 is 15:12 - 15:30
-    assert sim.status(at(15, 20)).early_by_seconds == 40 * 60
-    assert sim.status(at(14, 0)).early_by_seconds is None
+def test_between_two_terms_every_press_asks_until_the_coming_window_opens():
+    sim = Sim(interval(8, start="2026-10-19T00:00:00"), created=at(10, 0))  # terms 00:00, 08:00, 16:00
+    sim.tick(at(14, 0))
+    assert sim.status(at(14, 0)).early_by_seconds == 2 * 3600
+    assert sim.status(at(15, 45)).early_by_seconds is None  # inside the window of 16:00: on time
 
 
 def test_nothing_is_asked_early_while_a_term_is_open():

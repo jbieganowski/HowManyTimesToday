@@ -37,7 +37,6 @@ from .const import (
     DEFAULT_VOLUME,
     DEFAULT_WINDOW_MINUTES,
     DUE_NOTIFY_GRACE_SECONDS,
-    EARLY_ZONE_FRACTION,
     KIND_EXTRA,
     KIND_MISSED,
     KIND_ON_SCHEDULE,
@@ -74,8 +73,8 @@ class AnswerRequired(Exception):
 
 
 class EarlyAnswerRequired(Exception):
-    """A press came a little too early before the coming term (the last tenth of the gap,
-    before the tolerance window): it needs the answer "done ahead of time" or "extra"."""
+    """A press came between two terms (nothing open, the coming term's tolerance window not
+    begun): it needs the answer "this is the coming occurrence, done now" or "extra"."""
 
     def __init__(self, term: datetime, early_by: timedelta) -> None:
         super().__init__("early press")
@@ -426,17 +425,6 @@ def _pattern_next(s: Schedule, term: datetime) -> datetime:
     return datetime.combine(term.date() + timedelta(days=1), s.fixed_times[0], tzinfo=term.tzinfo)
 
 
-def _pattern_prev(s: Schedule, term: datetime) -> datetime:
-    """The term of the periodic pattern before `term` (to measure the gap before it)."""
-    if s.mode == MODE_INTERVAL:
-        return _add(term, -timedelta(hours=s.interval_hours))
-    for t in reversed(s.fixed_times):
-        candidate = datetime.combine(term.date(), t, tzinfo=term.tzinfo)
-        if candidate < term:
-            return candidate
-    return datetime.combine(term.date() - timedelta(days=1), s.fixed_times[-1], tzinfo=term.tzinfo)
-
-
 def gap_after(s: Schedule, term: datetime) -> timedelta:
     """Time from `term` to the following term (the last one of a day counts to the
     first one of the next day)."""
@@ -638,10 +626,11 @@ def answer_required(s: Schedule, rt: ScheduleRuntime, now: datetime) -> bool:
 
 
 def early_press(s: Schedule, rt: ScheduleRuntime, now: datetime) -> tuple[datetime, timedelta] | None:
-    """A press now is "too early" when nothing is open (late or due), the coming term is no
-    more than a tenth of the gap since the previous term away, and its tolerance window has
-    not begun (inside the window a press counts as on time). Returns the term and by how
-    much it is early, else None."""
+    """A press now falls between two terms when nothing is open (late or due) and the coming
+    term's tolerance window has not begun (inside the window a press counts as on time, and
+    when the coming term is already closed the press is simply an extra). Then it needs the
+    answer: the coming occurrence done now, or an extra. Returns the coming term and how
+    much earlier than it we are, else None."""
     if activity(s, rt, now) != "active" or _open_terms(rt):
         return None
     upcoming = next(occurrences_after(s, now), None)
@@ -649,9 +638,6 @@ def early_press(s: Schedule, rt: ScheduleRuntime, now: datetime) -> tuple[dateti
         return None
     early_by = _diff(upcoming, now)
     if early_by <= s.window:
-        return None
-    gap = _diff(upcoming, _pattern_prev(s, upcoming))
-    if early_by > gap * EARLY_ZONE_FRACTION:
         return None
     return upcoming, early_by
 
@@ -670,9 +656,9 @@ def press(
     - outside its window: the answer decides - A (already done: closed, +1), B (do it
       now: closed late, +1, outside the schedule), C (done then and again now: closed,
       +2, one entry of each); without an answer AnswerRequired is raised;
-    - no open term, a little too early before the coming term (see early_press): the
-      answer decides - done ahead of time (the coming term is closed, +1) or an extra
-      execution (+1, outside the schedule); without an answer EarlyAnswerRequired;
+    - no open term, between two terms (see early_press): the answer decides - the coming
+      occurrence done now (the coming term is closed, +1, the cycle goes on from green) or
+      an extra execution (+1, outside the schedule); without an answer EarlyAnswerRequired;
     - no open term: an upcoming term whose window has opened is closed in advance,
       otherwise the press is an extra, outside the schedule.
     Blinking of the number starts after an outside press that stays within the planned
@@ -707,16 +693,14 @@ def press(
         rt.occurrences[term.isoformat()] = {"status": RESOLVED, "missed": rt.occurrences[term.isoformat()]["missed"]}
     elif (early := early_press(s, rt, now)) is not None:
         coming, early_by = early
-        if answer is None:
-            raise EarlyAnswerRequired(coming, early_by)
+        if answer not in (ANSWER_DONE_EARLY, ANSWER_EXTRA):
+            raise EarlyAnswerRequired(coming, early_by)  # no answer, or one that does not fit here
         if answer == ANSWER_DONE_EARLY:
             rt.occurrences[coming.isoformat()] = {"status": RESOLVED, "missed": False}
             entries.append(make_entry(now, KIND_ON_SCHEDULE, coming, False, 1))
-        elif answer == ANSWER_EXTRA:
+        else:
             entries.append(make_entry(now, KIND_OUTSIDE, None, True, 1))
             outside = True
-        else:
-            raise ValueError(f"Unknown answer: {answer!r}")
     else:
         upcoming = next(occurrences_after(s, now), None)
         if (

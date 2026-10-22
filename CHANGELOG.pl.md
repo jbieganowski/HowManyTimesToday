@@ -2,6 +2,28 @@
 
 ([English version](CHANGELOG.md))
 
+## [2.1.0] - 2026-10-22
+
+### Integracja
+
+- **Naciśnięcie między dwoma terminami zawsze pyta.** Nie ma już „ostatniej dziesiątej części
+  odstępu”: gdy nic nie jest otwarte, a okno tolerancji nadchodzącego terminu jeszcze się nie
+  zaczęło, w dowolnej odległości od terminu, karta pyta, czy to jest **nadchodzące
+  wystąpienie, tylko wykonane teraz** (`done_early`: nadchodzący termin zostaje zamknięty i
+  się liczy, klawisz idzie dalej od zielonego, nie robi się dla niego czerwony, a pokazywane
+  następne karmienie to to po nim), czy **dodatkowe** (`extra`: +1, poza harmonogramem,
+  termin pozostaje należny, jak dotąd). Pytanie podaje godzinę nadchodzącego terminu. Gdy
+  nadchodzący termin jest już zamknięty, pytania nie ma: naciśnięcie jest dodatkowe.
+  Naciśnięcie bez odpowiedzi kończy się błędem `early_answer_required` (tak samo odpowiedź,
+  która tu nie pasuje, np. `do_now`), więc automatyzacja naciskająca harmonogram między
+  jego terminami musi przekazać `answer: done_early` albo `extra` (przykład w przewodniku
+  konfiguracji).
+
+### Dokumentacja
+
+- Przewodnik konfiguracji, specyfikacja i przykład z fizycznym przyciskiem (EN + PL) opisują
+  nową zasadę; 171 testów.
+
 ## [2.0.0] - 2026-10-22
 
 Integracja ma teraz to, co najnowsza aplikacja na Androida. Wersja główna: stan

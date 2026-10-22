@@ -2,10 +2,10 @@
   <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbfaf8"/><stop offset="1" stop-color="#f1efe9"/></linearGradient><marker id="m2e7d32" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2e7d32"/></marker><marker id="m5c3d82" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c3d82"/></marker><marker id="m6b6859" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#6b6859"/></marker></defs>
   <rect x="1" y="1" width="998" height="538" rx="24" fill="url(#bg)" stroke="#ddd8cc" stroke-width="2"/>
   <text x="40" y="52" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#2b2b28" text-anchor="start">How the unit tests run without Home Assistant</text>
-  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">168 tests; the code under test is unchanged</text>
+  <text x="40" y="80" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" fill="#6b6859" text-anchor="start">171 tests; the code under test is unchanged</text>
   <rect x="40" y="105" width="260" height="66" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
   <text x="170.0" y="129" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_models.py</text>
-  <text x="170.0" y="147" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">88 tests: the engine</text>
+  <text x="170.0" y="147" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">91 tests: the engine</text>
   <rect x="40" y="183" width="260" height="66" rx="12" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.8"/>
   <text x="170.0" y="207" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" fill="#2e7d32" text-anchor="middle">test_coordinator.py</text>
   <text x="170.0" y="225" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="middle">28 tests</text>

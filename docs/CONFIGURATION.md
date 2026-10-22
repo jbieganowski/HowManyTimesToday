@@ -121,12 +121,14 @@ A **term** is a moment a schedule is due. Each term has a tolerance window (defa
 - **Outside the window, a term is open** — Home Assistant asks which of three things
   happened, about the **oldest open term**. The card shows the question; automations
   pass the answer in the `answer` field.
-- **Outside the window, nothing open, a little too early** — in the last tenth of the gap
-  since the previous term, just before the term's window opens (for a term at 16:00 after
-  one at 07:00 that is 15:06 – 15:30), the card asks whether the task was **done ahead of
-  time**. `done_early` closes the coming term on schedule (+1); `extra` is an additional
-  execution outside the schedule (+1) and the term stays due. The sensor shows how early it
-  is in `early_by_seconds`; a press without an answer fails with `early_answer_required`.
+- **Between two terms (nothing open, the coming term's window not begun)** — at any
+  distance from the term, the card asks whether this is the **coming occurrence, only done
+  now**, or an extra one. `done_early` closes the coming term (+1): the button goes on from
+  green, never turns red for that term, and the next feeding shown is the one after it.
+  `extra` is an additional execution outside the schedule (+1) and the coming term stays
+  due. If the coming term is already closed, there is no question: the press is an extra.
+  The sensor shows `early_by_seconds` while a press would ask; a press without the answer
+  fails with `early_answer_required`.
 - **Outside the window, nothing open** — it is an extra execution, logged as
   **OUTSIDE THE SCHEDULE**; the number on the button blinks.
 
@@ -424,10 +426,25 @@ actions:
     entity_id: sensor.heart_medication
     attribute: answer_required
     state: false
-  - action: how_many_times_today.press_schedule
-    target:
-      entity_id: sensor.heart_medication
+  - choose:
+      # between two terms a press needs an answer: here "the coming occurrence, done now"
+      - conditions:
+          - condition: template
+            value_template: "{{ state_attr('sensor.heart_medication', 'early_by_seconds') is not none }}"
+        sequence:
+          - action: how_many_times_today.press_schedule
+            target:
+              entity_id: sensor.heart_medication
+            data:
+              answer: done_early
+    default:
+      - action: how_many_times_today.press_schedule
+        target:
+          entity_id: sensor.heart_medication
 ```
+
+Since 2.1.0 a press between two terms needs an answer (`early_by_seconds` is set then); a
+press without one fails with `early_answer_required`.
 
 ## 12. Troubleshooting
 

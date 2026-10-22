@@ -106,29 +106,32 @@ the window of the oldest open term asks a question about that term:
 | C `extra` — done at the term, and this is an additional one | closed as in A | +2 | as A, plus OUTSIDE THE SCHEDULE |
 
 With several open terms (07:00 missed and 16:00 already red) one press closes one term,
-oldest first; the next press handles the next. When no term is open and the press is not
-just before a term (see below) there is no question: the press is logged OUTSIDE THE
-SCHEDULE and the number blinks. A second press inside the
+oldest first; the next press handles the next. When no term is open and the press falls between two
+terms (see below) the answer decides; with the coming term already closed there is no
+question: the press is logged OUTSIDE THE SCHEDULE and the number blinks. A second press inside the
 window of an already closed term is such an extra execution too.
 
 <p align="center">
   <img src="images/diagram-window-answers.svg" alt="Pressing inside or outside the window" width="100%">
 </p>
 
-## Pressing a little too early
+## Pressing between two terms
 
-When no term is open, a press *before* the coming term and before its window opens is
-**early**. If it falls in the last tenth of the gap since the previous term (a term at
-16:00 after one at 07:00: from 15:06 to the window start 15:30; in every X hours mode a
-tenth of X), the question is: was it **done ahead of time**?
+When no term is open and the coming term's tolerance window has not begun, a press falls
+**between two terms** — at any distance from the coming term, there is no time limit. The
+question is: is this the **coming occurrence, only done now**, or an extra one?
 
 | Answer | Term | Count | History |
 | --- | --- | --- | --- |
-| `done_early` — yes, ahead of time | the coming term is closed | +1 | on schedule, with the term's time |
+| `done_early` — the coming occurrence, done now | the coming term is closed (skipped, it "just happened") | +1 | on schedule, with the term's time |
 | `extra` — an additional one | stays due | +1 | OUTSIDE THE SCHEDULE |
 
-A press earlier than that tenth is simply logged outside the schedule, without a question.
-The sensor shows `early_by_seconds` while a press would be early; a press without the answer
+After `done_early` the button goes on from green (the fade restarts at this press), never
+turns red for the skipped term and the next feeding shown is the one after it. After
+`extra` everything behaves as before: the number blinks, the coming term stays due. If the
+coming term is already closed (an earlier `done_early`), there is no question: the press is
+simply an extra, logged outside the schedule. The question names the coming term's time.
+The sensor shows `early_by_seconds` while a press would ask; a press without the answer
 fails with `early_answer_required`.
 
 ## Reminder sounds, text size and contrast

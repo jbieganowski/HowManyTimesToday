@@ -96,7 +96,7 @@ def test_the_number_blinking_flag_survives_a_restart():
         entry = make_entry([cfg_fixed()])
         CLOCK["now"] = at(12)
         coord = await start(entry)
-        await coord.async_press("s1")  # outside every window -> the number blinks
+        await coord.async_press("s1", const.ANSWER_EXTRA)  # outside every window -> the number blinks
         assert coord.status("s1").number_blinking is True
         assert (await start(entry)).status("s1").number_blinking is True
 
@@ -108,7 +108,7 @@ def test_corrupt_saved_state_is_ignored_and_other_schedules_still_restore():
         entry = make_entry([cfg_fixed("a"), cfg_fixed("b", name="Karma")])
         CLOCK["now"] = at(12)
         coord = await start(entry)
-        await coord.async_press("b")
+        await coord.async_press("b", const.ANSWER_EXTRA)
         FakeStore.saved[f"{const.STORAGE_KEY_STATE_PREFIX}_e1"]["a"] = {"last_press_at": "garbage"}
 
         restarted = await start(entry)
@@ -345,8 +345,8 @@ def test_editing_a_schedule_keeps_its_progress_and_removing_one_drops_its_data()
         entry = make_entry([cfg_fixed("a"), cfg_fixed("b", name="Karma")])
         CLOCK["now"] = at(12)
         coord = await start(entry)
-        await coord.async_press("a")
-        await coord.async_press("b")
+        await coord.async_press("a", const.ANSWER_EXTRA)
+        await coord.async_press("b", const.ANSWER_EXTRA)
         entry.options[const.CONF_SCHEDULES] = [cfg_fixed("a", times=("07:00", "16:00", "21:00"))]
         await coord.async_options_updated()
         assert coord.runtime["a"].last_press_at == at(12)  # edited: progress kept
@@ -395,7 +395,7 @@ def test_update_schedule_stores_the_change_and_keeps_the_progress():
         CLOCK["now"] = at(12)
         hass = FakeHass()
         coord = await start(entry, hass)
-        await coord.async_press("a")
+        await coord.async_press("a", const.ANSWER_EXTRA)
         await coord.async_update_schedule("a", {"name": "  Lek rano ", "fixed_times": ["8:00", "20:00", "13:00"]})
         stored = entry.options[const.CONF_SCHEDULES]
         assert stored[0]["name"] == "Lek rano" and stored[0]["fixed_times"] == ["08:00", "13:00", "20:00"]
@@ -475,7 +475,7 @@ def test_reset_undoes_pointless_presses_the_counter_is_back_to_the_terms_due():
         await coord.async_press("a")  # 07:00, in advance: correct
         CLOCK["now"] = at(14)
         for _ in range(3):  # pressed by mistake
-            await coord.async_press("a", const.ANSWER_DO_NOW)
+            await coord.async_press("a", const.ANSWER_EXTRA)
         assert coord.status("a").count_exceeded and coord.status("a").state == const.STATE_EXCEEDED
         await coord.async_reset_to_on_schedule(["a"])
         status = coord.status("a")

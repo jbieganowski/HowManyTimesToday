@@ -120,12 +120,15 @@ pokazuje się jako należny; terminy starsze niż okno tolerancji nie są nadrab
 - **Poza oknem, termin otwarty** — Home Assistant pyta, który z trzech przypadków
   zaszedł, o **najstarszy otwarty termin**. Pytanie pokazuje karta; automatyzacje
   przekazują odpowiedź w polu `answer`.
-- **Poza oknem, nic otwartego, trochę za wcześnie** — w ostatniej dziesiątej części odstępu
-  od poprzedniego terminu, tuż przed otwarciem okna terminu (dla terminu 16:00 po 07:00 to
-  15:06 – 15:30), karta pyta, czy zadanie wykonano **przed czasem**. `done_early` zamyka
-  nadchodzący termin zgodnie z harmonogramem (+1); `extra` to dodatkowe wykonanie poza
-  harmonogramem (+1), a termin pozostaje należny. Sensor pokazuje, jak wcześnie jest, w
-  `early_by_seconds`; naciśnięcie bez odpowiedzi kończy się błędem `early_answer_required`.
+- **Między dwoma terminami (nic otwartego, okno nadchodzącego terminu jeszcze się nie
+  zaczęło)** — w dowolnej odległości od terminu karta pyta, czy to jest **nadchodzące
+  wystąpienie, tylko wykonane teraz**, czy dodatkowe. `done_early` zamyka nadchodzący termin
+  (+1): klawisz idzie dalej od zielonego, nigdy nie robi się dla tego terminu czerwony, a
+  pokazywane następne karmienie to to po nim. `extra` to dodatkowe wykonanie poza
+  harmonogramem (+1), a nadchodzący termin pozostaje należny. Jeśli nadchodzący termin jest
+  już zamknięty, pytania nie ma: naciśnięcie jest dodatkowe. Sensor pokazuje
+  `early_by_seconds`, gdy naciśnięcie zadałoby pytanie; naciśnięcie bez odpowiedzi kończy
+  się błędem `early_answer_required`.
 - **Poza oknem, nic otwartego** — to dodatkowe wykonanie, zapisane jako **POZA
   HARMONOGRAMEM**; liczba na klawiszu miga.
 
@@ -422,10 +425,25 @@ actions:
     entity_id: sensor.lek_na_serce
     attribute: answer_required
     state: false
-  - action: how_many_times_today.press_schedule
-    target:
-      entity_id: sensor.lek_na_serce
+  - choose:
+      # między dwoma terminami naciśnięcie wymaga odpowiedzi: tu „nadchodzące wystąpienie, wykonane teraz”
+      - conditions:
+          - condition: template
+            value_template: "{{ state_attr('sensor.lek_na_serce', 'early_by_seconds') is not none }}"
+        sequence:
+          - action: how_many_times_today.press_schedule
+            target:
+              entity_id: sensor.lek_na_serce
+            data:
+              answer: done_early
+    default:
+      - action: how_many_times_today.press_schedule
+        target:
+          entity_id: sensor.lek_na_serce
 ```
+
+Od wersji 2.1.0 naciśnięcie między dwoma terminami wymaga odpowiedzi (`early_by_seconds` jest
+wtedy ustawione); bez niej kończy się błędem `early_answer_required`.
 
 ## 12. Rozwiązywanie problemów
 
