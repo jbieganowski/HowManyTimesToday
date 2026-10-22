@@ -18,7 +18,8 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.util import dt as dt_util
 
 from .const import (
-    CONF_GLOBAL_SOUND,
+    CONF_FONT_SCALE,
+    CONF_HIGH_CONTRAST,
     CONF_NOTIFY_SERVICE,
     CONF_SCHEDULE_ID,
     CONF_SCHEDULES,
@@ -26,7 +27,8 @@ from .const import (
     EVENT_DUE,
     SIGNAL_SCHEDULES_UPDATED,
     UPDATE_INTERVAL_SECONDS,
-    AVAILABLE_SOUNDS,
+    DEFAULT_FONT_SCALE,
+    FONT_SCALES,
 )
 from .models import (
     OPEN,
@@ -39,10 +41,12 @@ from .models import (
     apply_schedule_update,
     build_schedule,
     compute_status,
+    global_sound_settings,
     new_runtime,
     next_boundary,
     press,
     reset_to_on_schedule,
+    sound_for,
 )
 from .store import HistoryStore, ScheduleStateStore
 
@@ -66,6 +70,7 @@ class HowManyTimesTodayCoordinator(DataUpdateCoordinator[None]):
         )
         self.entry = entry
         self.version = ""  # from manifest.json, set by async_setup_entry
+        self.build = ""  # the date the card file was last changed, set by async_setup_entry
         self.state_store = ScheduleStateStore(hass, entry.entry_id)
         self.history = HistoryStore(hass, entry.entry_id)
         self.schedules: dict[str, Schedule] = {}
@@ -81,8 +86,20 @@ class HowManyTimesTodayCoordinator(DataUpdateCoordinator[None]):
         return self.entry.options.get(CONF_SCHEDULES, [])
 
     @property
-    def sound(self) -> str:
-        return self.entry.options.get(CONF_GLOBAL_SOUND, AVAILABLE_SOUNDS[0])
+    def font_scale(self) -> float:
+        """The text size of the cards (a step of FONT_SCALES)."""
+        value = self.entry.options.get(CONF_FONT_SCALE, DEFAULT_FONT_SCALE)
+        return value if value in FONT_SCALES else DEFAULT_FONT_SCALE
+
+    @property
+    def high_contrast(self) -> bool:
+        return bool(self.entry.options.get(CONF_HIGH_CONTRAST, False))
+
+    def sound_of(self, schedule_id: str) -> tuple[str, int]:
+        """The reminder sound id and the volume level (0-4) of a schedule: its own, else
+        the default of the integration."""
+        default_sound, default_volume = global_sound_settings(self.entry.options)
+        return sound_for(self.schedules[schedule_id], default_sound, default_volume)
 
     @property
     def notify_service(self) -> str | None:

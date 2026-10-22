@@ -24,9 +24,15 @@ window.addEventListener("unhandledrejection", (ev) => {
   if (text.includes("how-many-times-today-card")) reportToServer("report", text);
 });
 
-const GREEN = [46, 125, 50];
-const RED = [198, 40, 40];
-const BROWN = [93, 64, 55];
+// the colours of the Android app: green, then yellow ("the time is coming"), then red
+const GREEN = [24, 160, 64];
+const AMBER = [255, 193, 7];
+const RED = [214, 30, 30];
+const BLACK = [0, 0, 0];
+// the button stays plain green up to this share of the way to the next term
+const GREEN_HOLD_PROGRESS = 0.35;
+// the light phase of the blinking black button (strong contrast with black)
+const BLACK_BLINK = "#e8e8e8";
 const PENDING_GRAY = [96, 125, 139];
 const INACTIVE_GRAY = [158, 158, 158];
 
@@ -41,7 +47,7 @@ function plainStatusKeyOf(state, attrs) {
       green: "status_green",
       transition: "status_transition",
       red: "status_red",
-      blinking_brown: "status_blinking_brown",
+      blinking_black: "status_blinking_black",
       exceeded: "status_exceeded",
       inactive: "status_inactive",
     }[state] || "status_green"
@@ -77,6 +83,14 @@ function lerp(a, b, t) {
 
 function rgb(arr) {
   return `rgb(${arr[0]}, ${arr[1]}, ${arr[2]})`;
+}
+
+// green until 35 % of the way, then to yellow (reached at 55 %, "the time is coming"), then to red
+function transitionColor(progress) {
+  const t = Math.max(0, Math.min(1, progress));
+  if (t < GREEN_HOLD_PROGRESS) return GREEN;
+  if (t < APPROACHING_PROGRESS) return lerp(GREEN, AMBER, (t - GREEN_HOLD_PROGRESS) / (APPROACHING_PROGRESS - GREEN_HOLD_PROGRESS));
+  return lerp(AMBER, RED, (t - APPROACHING_PROGRESS) / (1 - APPROACHING_PROGRESS));
 }
 
 function formatDuration(totalSeconds) {
@@ -181,7 +195,7 @@ const CARD_STRINGS = {
     status_on_plan: "All according to plan",
     status_transition: "The time is coming",
     status_red: "NOW",
-    status_blinking_brown: "WARNING - overdue!",
+    status_blinking_black: "WARNING - overdue!",
     status_exceeded: "Done too many times",
     status_inactive: "Switched off",
     status_number_blinking: "Blinking number: the last execution was recorded outside the schedule",
@@ -200,6 +214,69 @@ const CARD_STRINGS = {
     history_dialog_title: "History — {name}",
     close_label: "Close",
     edit_label: "Edit",
+    early_title: "You pressed the button {x} too early.",
+    early_question: "Did you do it ahead of time?",
+    early_yes: "Yes, I did it ahead of time",
+    early_extra: "It is an extra one",
+    sound_label: "Reminder sound",
+    volume_label: "Reminder volume",
+    sound_default: "Default",
+    preview_label: "Play",
+    help_label: "Help",
+    help_title: "Help",
+    help_toc: "Table of contents",
+    help_g_intro: "Introduction",
+    help_g_schedules: "Schedules",
+    help_g_notif: "Reminders and settings",
+    help_g_data: "History and data",
+    help_h_what: "What is this for?",
+    help_p_what: "This card helps you remember to do something at the right times every day, for example to take a pill, feed the cat or drink water. Every such thing is a schedule with its own big round button. When you have done it, tap the button.",
+    help_h_colors: "How to read the button",
+    help_p_colors: "The big number on the button shows how many times you did it today. The colour and the words under the name tell you what to do: green - all is well, yellow and orange - the time is coming, red - do it now, blinking black - you are late. If the number blinks, the last time was saved outside the plan. Red with a black number means you did it more times today than needed. A grey button means this schedule is switched off or has not started yet. At midnight the number goes back to zero.",
+    help_h_press: "How to confirm that you did it",
+    help_p_press: "Tap the round button when you have done it. If you do it close to the set time (by default up to half an hour earlier or later), everything is fine. If you tap a little earlier than that, you are asked whether you really did it ahead of time or whether this is an extra one. If you tap later, you are asked what happened: A - I did it earlier but did not record it, B - I did not do it and I am doing it now, C - I did it earlier and this is an extra time. If you tap when nothing is due, it is saved as done outside the plan.",
+    help_h_add: "How to add and change a schedule",
+    help_p_add: "New schedules are added in Settings, Devices & services, How Many Times Today, Configure. Type a name (for example Heart medication). Choose how often: at fixed times (1 to 24 times a day, each at its own time) or every few hours. Set when it starts and, if needed, when it ends. The pencil on a tile (or a double tap on it) lets you change the schedule. The button \"Reset to all on time\" fixes a mistake: it marks everything that has already passed today as done on time.",
+    help_h_notif: "Reminders, sound and text size",
+    help_p_notif: "At the set time the card shows a message and plays the reminder sound while the dashboard is open. With a phone chosen in the global settings you also get a push notification. In the global settings you choose the default sound and its volume (each schedule can have its own, in its edit dialog), the text size of the cards and high contrast.",
+    help_h_history: "History",
+    help_p_history: "Hold a tile (or right-click it), or tap \"show history\" on the large card. Entries done outside the plan and missed ones are in bold. You can clear the whole history or only chosen weeks.",
+    help_h_privacy: "Your data",
+    help_p_privacy: "Everything stays in your Home Assistant. There is no account and no cloud, and no data is collected.",
+    help_author: "Author: {author}",
+    help_version: "Version",
+    help_build: "Build",
+    help_font: "Text size",
+    help_contrast: "High contrast",
+    sound_group_gentle: "gentle",
+    sound_group_medium: "medium",
+    sound_group_strong: "strong",
+    sound_group_verystrong: "very strong",
+    sound_group_melody: "melody",
+    sound_group_seasonal: "seasonal",
+    sound_delikatny_dzwonek: "Soft chime",
+    sound_pozytywka: "Music box",
+    sound_harfa: "Harp",
+    sound_dzwonek: "Bell",
+    sound_gitara: "Guitar",
+    sound_marimba: "Marimba",
+    sound_sygnal: "Beeps",
+    sound_fanfara: "Fanfare",
+    sound_budzik: "Alarm clock",
+    sound_sos: "SOS (Morse code)",
+    sound_alarm: "Alarm",
+    sound_syrena: "Siren",
+    sound_wlaz_kotek: "Kitten on the fence (Polish song)",
+    sound_kreskowka: "Cheerful cartoon tune",
+    sound_pop_weasel: "Pop Goes the Weasel",
+    sound_boze_narodzenie: "Christmas",
+    sound_wielkanoc_kurczaczek: "Easter: chick",
+    sound_wielkanoc_dzwony: "Easter: bells",
+    volume_0: "Sound off",
+    volume_1: "Quiet",
+    volume_2: "Medium",
+    volume_3: "Loud",
+    volume_4: "Very loud",
   },
   pl: {
     show_history: "▶ pokaż historię",
@@ -254,7 +331,7 @@ const CARD_STRINGS = {
     status_on_plan: "Wszystko zgodnie z planem",
     status_transition: "Zbliża się pora",
     status_red: "TERAZ",
-    status_blinking_brown: "UWAGA – spóźnione!",
+    status_blinking_black: "UWAGA – spóźnione!",
     status_exceeded: "Zrobione za dużo razy",
     status_inactive: "Wyłączone",
     status_number_blinking: "Migająca liczba: ostatnie wykonanie zapisano poza planem",
@@ -273,6 +350,69 @@ const CARD_STRINGS = {
     history_dialog_title: "Historia — {name}",
     close_label: "Zamknij",
     edit_label: "Edytuj",
+    early_title: "Wcisnąłeś klawisz o {x} za wcześnie.",
+    early_question: "Czy wykonałeś zadanie przed czasem?",
+    early_yes: "Tak, wykonałem zadanie przed czasem",
+    early_extra: "To zdarzenie nadmiarowe",
+    sound_label: "Dźwięk przypomnienia",
+    volume_label: "Głośność przypomnienia",
+    sound_default: "Domyślny",
+    preview_label: "Odtwórz",
+    help_label: "Pomoc",
+    help_title: "Pomoc",
+    help_toc: "Spis treści",
+    help_g_intro: "Wprowadzenie",
+    help_g_schedules: "Harmonogramy",
+    help_g_notif: "Przypomnienia i ustawienia",
+    help_g_data: "Historia i dane",
+    help_h_what: "Do czego to służy?",
+    help_p_what: "Ta karta pomaga pamiętać o wykonaniu czegoś o właściwych porach każdego dnia, na przykład o wzięciu tabletki, nakarmieniu kota czy wypiciu wody. Każda taka rzecz to harmonogram z własnym dużym okrągłym klawiszem. Gdy to zrobisz, dotknij klawisza.",
+    help_h_colors: "Jak czytać klawisz",
+    help_p_colors: "Duża liczba na klawiszu pokazuje, ile razy zrobiłeś to dzisiaj. Kolor i słowa pod nazwą mówią, co robić: zielony - wszystko w porządku, żółty i pomarańczowy - zbliża się pora, czerwony - zrób to teraz, migający czarny - jesteś spóźniony. Jeśli liczba miga, ostatni raz został zapisany poza planem. Czerwony z czarną liczbą oznacza, że dziś zrobiłeś to więcej razy, niż trzeba. Szary klawisz oznacza, że harmonogram jest wyłączony albo jeszcze się nie zaczął. O północy liczba wraca do zera.",
+    help_h_press: "Jak potwierdzić, że zadanie wykonano",
+    help_p_press: "Dotknij okrągłego klawisza, gdy to zrobisz. Jeśli zrobisz to blisko ustalonej pory (domyślnie do pół godziny wcześniej lub później), wszystko jest w porządku. Jeśli dotkniesz trochę wcześniej, karta zapyta, czy naprawdę zrobiłeś to przed czasem, czy to zdarzenie dodatkowe. Jeśli dotkniesz później, zapyta, co się stało: A - zrobiłem wcześniej, ale nie zapisałem, B - nie zrobiłem i robię to teraz, C - zrobiłem wcześniej i to jest dodatkowy raz. Jeśli dotkniesz, gdy nic nie jest wymagane, zapisze się to jako wykonane poza planem.",
+    help_h_add: "Jak dodać i zmienić harmonogram",
+    help_p_add: "Nowe harmonogramy dodajesz w Ustawieniach, Urządzenia i usługi, How Many Times Today, Konfiguruj. Wpisz nazwę (na przykład Lek na serce). Wybierz, jak często: o stałych godzinach (od 1 do 24 razy dziennie, każde o własnej porze) albo co kilka godzin. Ustaw, kiedy się zaczyna i w razie potrzeby kiedy kończy. Ołówek na kafelku (albo dwukrotne dotknięcie) pozwala zmienić harmonogram. Przycisk „Resetuj do „wszystko o czasie”” naprawia pomyłkę: oznacza wszystko, co dziś już minęło, jako zrobione o czasie.",
+    help_h_notif: "Przypomnienia, dźwięk i rozmiar tekstu",
+    help_p_notif: "O ustalonej porze karta pokazuje komunikat i odtwarza dźwięk przypomnienia, gdy pulpit jest otwarty. Jeśli w ustawieniach globalnych wybierzesz telefon, dostaniesz też powiadomienie push. W ustawieniach globalnych wybierasz domyślny dźwięk i jego głośność (każdy harmonogram może mieć własne, w oknie edycji), rozmiar tekstu na kartach i wysoki kontrast.",
+    help_h_history: "Historia",
+    help_p_history: "Przytrzymaj kafelek (albo kliknij go prawym przyciskiem) lub dotknij „pokaż historię” na dużej karcie. Wpisy wykonane poza planem i pominięte są pogrubione. Możesz wyczyścić całą historię albo tylko wybrane tygodnie.",
+    help_h_privacy: "Twoje dane",
+    help_p_privacy: "Wszystko zostaje w Twoim Home Assistancie. Nie ma konta ani chmury, a żadne dane nie są zbierane.",
+    help_author: "Autor: {author}",
+    help_version: "Wersja",
+    help_build: "Kompilacja",
+    help_font: "Rozmiar tekstu",
+    help_contrast: "Wysoki kontrast",
+    sound_group_gentle: "delikatny",
+    sound_group_medium: "średni",
+    sound_group_strong: "mocny",
+    sound_group_verystrong: "bardzo mocny",
+    sound_group_melody: "melodia",
+    sound_group_seasonal: "okolicznościowy",
+    sound_delikatny_dzwonek: "Delikatny dzwonek",
+    sound_pozytywka: "Pozytywka",
+    sound_harfa: "Harfa",
+    sound_dzwonek: "Dzwonek",
+    sound_gitara: "Gitara",
+    sound_marimba: "Marimba",
+    sound_sygnal: "Sygnał",
+    sound_fanfara: "Fanfara",
+    sound_budzik: "Budzik",
+    sound_sos: "SOS (alfabet Morse'a)",
+    sound_alarm: "Alarm",
+    sound_syrena: "Syrena",
+    sound_wlaz_kotek: "Wlazł kotek na płotek",
+    sound_kreskowka: "Wesoła kreskówka",
+    sound_pop_weasel: "Pop Goes the Weasel (Łasica)",
+    sound_boze_narodzenie: "Boże Narodzenie",
+    sound_wielkanoc_kurczaczek: "Wielkanoc: kurczaczek",
+    sound_wielkanoc_dzwony: "Wielkanoc: dzwony",
+    volume_0: "Wyłącz dźwięk",
+    volume_1: "Cicho",
+    volume_2: "Średnio",
+    volume_3: "Głośno",
+    volume_4: "Bardzo głośno",
   },
   de: {
     show_history: "▶ Verlauf anzeigen",
@@ -327,7 +467,7 @@ const CARD_STRINGS = {
     status_on_plan: "Alles nach Plan",
     status_transition: "Es wird bald Zeit",
     status_red: "JETZT",
-    status_blinking_brown: "ACHTUNG – überfällig!",
+    status_blinking_black: "ACHTUNG – überfällig!",
     status_exceeded: "Zu oft erledigt",
     status_inactive: "Ausgeschaltet",
     status_number_blinking: "Blinkende Zahl: letztes Mal außerhalb des Zeitplans erfasst",
@@ -346,6 +486,69 @@ const CARD_STRINGS = {
     history_dialog_title: "Verlauf — {name}",
     close_label: "Schließen",
     edit_label: "Bearbeiten",
+    early_title: "Du hast die Taste {x} zu früh gedrückt.",
+    early_question: "Hast du es vorzeitig erledigt?",
+    early_yes: "Ja, ich habe es vorzeitig erledigt",
+    early_extra: "Es ist eine zusätzliche Ausführung",
+    sound_label: "Erinnerungston",
+    volume_label: "Erinnerungslautstärke",
+    sound_default: "Standard",
+    preview_label: "Abspielen",
+    help_label: "Hilfe",
+    help_title: "Hilfe",
+    help_toc: "Inhaltsverzeichnis",
+    help_g_intro: "Einführung",
+    help_g_schedules: "Zeitpläne",
+    help_g_notif: "Erinnerungen und Einstellungen",
+    help_g_data: "Verlauf und Daten",
+    help_h_what: "Wofür ist das?",
+    help_p_what: "Diese Karte hilft dir, etwas jeden Tag zur richtigen Zeit nicht zu vergessen, zum Beispiel eine Tablette zu nehmen, die Katze zu füttern oder Wasser zu trinken. Jede solche Sache ist ein Zeitplan mit einer eigenen großen runden Taste. Wenn du es getan hast, tippe auf die Taste.",
+    help_h_colors: "So liest du die Taste",
+    help_p_colors: "Die große Zahl auf der Taste zeigt, wie oft du es heute getan hast. Die Farbe und die Worte unter dem Namen sagen dir, was zu tun ist: grün - alles in Ordnung, gelb und orange - die Zeit naht, rot - jetzt tun, blinkend schwarz - du bist zu spät. Blinkt die Zahl, wurde das letzte Mal außerhalb des Plans gespeichert. Rot mit schwarzer Zahl bedeutet, dass du es heute öfter getan hast als nötig. Eine graue Taste bedeutet, dass der Zeitplan ausgeschaltet ist oder noch nicht begonnen hat. Um Mitternacht springt die Zahl auf null.",
+    help_h_press: "So bestätigst du, dass es erledigt ist",
+    help_p_press: "Tippe auf die runde Taste, wenn du es getan hast. Geschieht es nahe der festgelegten Zeit (standardmäßig bis eine halbe Stunde früher oder später), ist alles in Ordnung. Tippst du etwas früher, wirst du gefragt, ob du es wirklich vorzeitig erledigt hast oder ob es eine zusätzliche Ausführung ist. Tippst du später, wirst du gefragt, was passiert ist: A - ich habe es früher getan, aber nicht erfasst, B - ich habe es nicht getan und tue es jetzt, C - ich habe es früher getan und dies ist ein zusätzliches Mal. Tippst du, wenn nichts fällig ist, wird es als außerhalb des Plans erledigt gespeichert.",
+    help_h_add: "So fügst du einen Zeitplan hinzu oder änderst ihn",
+    help_p_add: "Neue Zeitpläne fügst du unter Einstellungen, Geräte & Dienste, How Many Times Today, Konfigurieren hinzu. Gib einen Namen ein (zum Beispiel Herzmedikament). Wähle, wie oft: zu festen Uhrzeiten (1 bis 24 Mal täglich, jeweils zu eigener Zeit) oder alle paar Stunden. Lege fest, wann er beginnt und bei Bedarf endet. Der Stift auf einer Kachel (oder ein Doppeltippen) ändert den Zeitplan. Die Schaltfläche „Auf ‚alles pünktlich‘ zurücksetzen“ behebt einen Fehler: Sie markiert alles, was heute schon fällig war, als pünktlich erledigt.",
+    help_h_notif: "Erinnerungen, Ton und Textgröße",
+    help_p_notif: "Zur festgelegten Zeit zeigt die Karte eine Meldung und spielt den Erinnerungston ab, solange das Dashboard geöffnet ist. Mit einem in den globalen Einstellungen gewählten Telefon bekommst du auch eine Push-Benachrichtigung. In den globalen Einstellungen wählst du den Standardton und seine Lautstärke (jeder Zeitplan kann im Bearbeiten-Dialog einen eigenen haben), die Textgröße der Karten und hohen Kontrast.",
+    help_h_history: "Verlauf",
+    help_p_history: "Halte eine Kachel gedrückt (oder klicke mit rechts) oder tippe auf der großen Karte auf „Verlauf anzeigen“. Einträge außerhalb des Plans und verpasste sind fett. Du kannst den ganzen Verlauf oder nur bestimmte Wochen löschen.",
+    help_h_privacy: "Deine Daten",
+    help_p_privacy: "Alles bleibt in deinem Home Assistant. Es gibt kein Konto und keine Cloud, und es werden keine Daten gesammelt.",
+    help_author: "Autor: {author}",
+    help_version: "Version",
+    help_build: "Build",
+    help_font: "Textgröße",
+    help_contrast: "Hoher Kontrast",
+    sound_group_gentle: "sanft",
+    sound_group_medium: "mittel",
+    sound_group_strong: "stark",
+    sound_group_verystrong: "sehr stark",
+    sound_group_melody: "Melodie",
+    sound_group_seasonal: "saisonal",
+    sound_delikatny_dzwonek: "Sanftes Glöckchen",
+    sound_pozytywka: "Spieluhr",
+    sound_harfa: "Harfe",
+    sound_dzwonek: "Glocke",
+    sound_gitara: "Gitarre",
+    sound_marimba: "Marimba",
+    sound_sygnal: "Signaltöne",
+    sound_fanfara: "Fanfare",
+    sound_budzik: "Wecker",
+    sound_sos: "SOS (Morsecode)",
+    sound_alarm: "Alarm",
+    sound_syrena: "Sirene",
+    sound_wlaz_kotek: "Kätzchen auf dem Zaun (polnisches Lied)",
+    sound_kreskowka: "Fröhliche Zeichentrickmelodie",
+    sound_pop_weasel: "Pop Goes the Weasel",
+    sound_boze_narodzenie: "Weihnachten",
+    sound_wielkanoc_kurczaczek: "Ostern: Küken",
+    sound_wielkanoc_dzwony: "Ostern: Glocken",
+    volume_0: "Ton aus",
+    volume_1: "Leise",
+    volume_2: "Mittel",
+    volume_3: "Laut",
+    volume_4: "Sehr laut",
   },
   ru: {
     show_history: "▶ показать историю",
@@ -400,7 +603,7 @@ const CARD_STRINGS = {
     status_on_plan: "Всё по плану",
     status_transition: "Скоро пора",
     status_red: "СЕЙЧАС",
-    status_blinking_brown: "ВНИМАНИЕ — просрочено!",
+    status_blinking_black: "ВНИМАНИЕ — просрочено!",
     status_exceeded: "Сделано слишком много раз",
     status_inactive: "Выключено",
     status_number_blinking: "Мигающее число: последнее выполнение записано вне расписания",
@@ -419,6 +622,69 @@ const CARD_STRINGS = {
     history_dialog_title: "История — {name}",
     close_label: "Закрыть",
     edit_label: "Изменить",
+    early_title: "Вы нажали кнопку на {x} раньше времени.",
+    early_question: "Вы сделали это заранее?",
+    early_yes: "Да, я сделал(а) это заранее",
+    early_extra: "Это дополнительное выполнение",
+    sound_label: "Звук напоминания",
+    volume_label: "Громкость напоминания",
+    sound_default: "По умолчанию",
+    preview_label: "Воспроизвести",
+    help_label: "Справка",
+    help_title: "Справка",
+    help_toc: "Содержание",
+    help_g_intro: "Введение",
+    help_g_schedules: "Расписания",
+    help_g_notif: "Напоминания и настройки",
+    help_g_data: "История и данные",
+    help_h_what: "Для чего это?",
+    help_p_what: "Эта карточка помогает не забыть сделать что-то в нужное время каждый день, например принять таблетку, покормить кошку или выпить воды. Каждое такое дело — это расписание с собственной большой круглой кнопкой. Когда вы это сделали, нажмите кнопку.",
+    help_h_colors: "Как читать кнопку",
+    help_p_colors: "Большое число на кнопке показывает, сколько раз вы сделали это сегодня. Цвет и слова под названием подсказывают, что делать: зелёный — всё в порядке, жёлтый и оранжевый — скоро время, красный — сделайте это сейчас, мигающий чёрный — вы опаздываете. Если число мигает, последний раз записан вне плана. Красный с чёрным числом означает, что сегодня сделано больше раз, чем нужно. Серая кнопка означает, что расписание выключено или ещё не началось. В полночь число возвращается к нулю.",
+    help_h_press: "Как подтвердить, что вы это сделали",
+    help_p_press: "Нажмите круглую кнопку, когда сделаете это. Если вы делаете это близко к назначенному времени (по умолчанию в пределах получаса раньше или позже), всё в порядке. Если нажмёте чуть раньше, вас спросят, сделано ли это заранее или это дополнительное выполнение. Если нажмёте позже, спросят, что произошло: A — я сделал(а) раньше, но не записал(а), B — не сделал(а) и делаю сейчас, C — сделал(а) раньше, и это ещё один раз. Если нажать, когда ничего не нужно, это будет записано как выполненное вне плана.",
+    help_h_add: "Как добавить и изменить расписание",
+    help_p_add: "Новые расписания добавляются в Настройки, Устройства и службы, How Many Times Today, Настроить. Введите название (например, Лекарство для сердца). Выберите, как часто: в фиксированное время (от 1 до 24 раз в день, каждый раз в своё время) или каждые несколько часов. Укажите, когда оно начинается и при необходимости заканчивается. Карандаш на плитке (или двойное нажатие) позволяет изменить расписание. Кнопка «Сбросить до «всё вовремя»» исправляет ошибку: отмечает всё, что сегодня уже наступило, как выполненное вовремя.",
+    help_h_notif: "Напоминания, звук и размер текста",
+    help_p_notif: "В назначенное время карточка показывает сообщение и воспроизводит звук напоминания, пока открыта панель. Если в общих настройках выбран телефон, приходит и push-уведомление. В общих настройках выбираются звук по умолчанию и его громкость (у каждого расписания может быть свой, в окне редактирования), размер текста на карточках и высокая контрастность.",
+    help_h_history: "История",
+    help_p_history: "Удерживайте плитку (или щёлкните правой кнопкой) либо нажмите «показать историю» на большой карточке. Записи вне плана и пропущенные выделены жирным. Можно очистить всю историю или только выбранные недели.",
+    help_h_privacy: "Ваши данные",
+    help_p_privacy: "Всё остаётся в вашем Home Assistant. Нет учётной записи и облака, данные не собираются.",
+    help_author: "Автор: {author}",
+    help_version: "Версия",
+    help_build: "Сборка",
+    help_font: "Размер текста",
+    help_contrast: "Высокая контрастность",
+    sound_group_gentle: "мягкий",
+    sound_group_medium: "средний",
+    sound_group_strong: "сильный",
+    sound_group_verystrong: "очень сильный",
+    sound_group_melody: "мелодия",
+    sound_group_seasonal: "праздничный",
+    sound_delikatny_dzwonek: "Мягкий звонок",
+    sound_pozytywka: "Музыкальная шкатулка",
+    sound_harfa: "Арфа",
+    sound_dzwonek: "Звонок",
+    sound_gitara: "Гитара",
+    sound_marimba: "Маримба",
+    sound_sygnal: "Сигнал",
+    sound_fanfara: "Фанфары",
+    sound_budzik: "Будильник",
+    sound_sos: "SOS (азбука Морзе)",
+    sound_alarm: "Тревога",
+    sound_syrena: "Сирена",
+    sound_wlaz_kotek: "Котёнок на заборе (польская песенка)",
+    sound_kreskowka: "Весёлая мультяшная мелодия",
+    sound_pop_weasel: "Pop Goes the Weasel",
+    sound_boze_narodzenie: "Рождество",
+    sound_wielkanoc_kurczaczek: "Пасха: цыплёнок",
+    sound_wielkanoc_dzwony: "Пасха: колокола",
+    volume_0: "Без звука",
+    volume_1: "Тихо",
+    volume_2: "Средне",
+    volume_3: "Громко",
+    volume_4: "Очень громко",
   },
   uk: {
     show_history: "▶ показати історію",
@@ -473,7 +739,7 @@ const CARD_STRINGS = {
     status_on_plan: "Усе за планом",
     status_transition: "Наближається час",
     status_red: "ЗАРАЗ",
-    status_blinking_brown: "УВАГА — прострочено!",
+    status_blinking_black: "УВАГА — прострочено!",
     status_exceeded: "Зроблено забагато разів",
     status_inactive: "Вимкнено",
     status_number_blinking: "Миготливе число: останнє виконання записано поза розкладом",
@@ -492,6 +758,69 @@ const CARD_STRINGS = {
     history_dialog_title: "Історія — {name}",
     close_label: "Закрити",
     edit_label: "Змінити",
+    early_title: "Ви натиснули кнопку на {x} раніше.",
+    early_question: "Ви зробили це наперед?",
+    early_yes: "Так, я зробив(ла) це наперед",
+    early_extra: "Це додаткове виконання",
+    sound_label: "Звук нагадування",
+    volume_label: "Гучність нагадування",
+    sound_default: "Типовий",
+    preview_label: "Відтворити",
+    help_label: "Довідка",
+    help_title: "Довідка",
+    help_toc: "Зміст",
+    help_g_intro: "Вступ",
+    help_g_schedules: "Розклади",
+    help_g_notif: "Нагадування та налаштування",
+    help_g_data: "Історія та дані",
+    help_h_what: "Для чого це?",
+    help_p_what: "Ця картка допомагає не забути зробити щось у потрібний час щодня, наприклад випити пігулку, погодувати кота чи випити води. Кожна така справа — це розклад із власною великою круглою кнопкою. Коли ви це зробили, натисніть кнопку.",
+    help_h_colors: "Як читати кнопку",
+    help_p_colors: "Велике число на кнопці показує, скільки разів ви зробили це сьогодні. Колір і слова під назвою підказують, що робити: зелений — усе гаразд, жовтий і помаранчевий — наближається час, червоний — зробіть це зараз, блимаючий чорний — ви запізнюєтесь. Якщо число блимає, останній раз записано поза планом. Червоний із чорним числом означає, що сьогодні зроблено більше разів, ніж потрібно. Сіра кнопка означає, що розклад вимкнено або він ще не почався. Опівночі число повертається до нуля.",
+    help_h_press: "Як підтвердити, що ви це зробили",
+    help_p_press: "Натисніть круглу кнопку, коли зробите це. Якщо ви робите це близько до призначеного часу (типово в межах півгодини раніше чи пізніше), усе гаразд. Якщо натиснете трохи раніше, вас запитають, чи справді зроблено це наперед, чи це додаткове виконання. Якщо натиснете пізніше, запитають, що сталося: A — я зробив(ла) раніше, але не записав(ла), B — не зробив(ла) і роблю зараз, C — зробив(ла) раніше, і це ще один раз. Якщо натиснути, коли нічого не потрібно, це буде записано як виконане поза планом.",
+    help_h_add: "Як додати та змінити розклад",
+    help_p_add: "Нові розклади додаються в Налаштування, Пристрої та служби, How Many Times Today, Налаштувати. Введіть назву (наприклад, Ліки для серця). Виберіть, як часто: у фіксований час (від 1 до 24 разів на день, щоразу у свій час) або кожні кілька годин. Вкажіть, коли починається і за потреби закінчується. Олівець на плитці (або подвійне натискання) дає змогу змінити розклад. Кнопка «Скинути до «усе вчасно»» виправляє помилку: позначає все, що сьогодні вже настало, як виконане вчасно.",
+    help_h_notif: "Нагадування, звук і розмір тексту",
+    help_p_notif: "У призначений час картка показує повідомлення та відтворює звук нагадування, поки відкрито панель. Якщо в загальних налаштуваннях вибрано телефон, приходить і push-сповіщення. У загальних налаштуваннях вибирають типовий звук і його гучність (кожен розклад може мати власний, у вікні редагування), розмір тексту на картках і високу контрастність.",
+    help_h_history: "Історія",
+    help_p_history: "Утримуйте плитку (або клацніть правою кнопкою) чи натисніть «показати історію» на великій картці. Записи поза планом і пропущені виділено жирним. Можна очистити всю історію або лише вибрані тижні.",
+    help_h_privacy: "Ваші дані",
+    help_p_privacy: "Усе залишається у вашому Home Assistant. Немає облікового запису й хмари, дані не збираються.",
+    help_author: "Автор: {author}",
+    help_version: "Версія",
+    help_build: "Збірка",
+    help_font: "Розмір тексту",
+    help_contrast: "Висока контрастність",
+    sound_group_gentle: "м'який",
+    sound_group_medium: "середній",
+    sound_group_strong: "сильний",
+    sound_group_verystrong: "дуже сильний",
+    sound_group_melody: "мелодія",
+    sound_group_seasonal: "святковий",
+    sound_delikatny_dzwonek: "М'який дзвіночок",
+    sound_pozytywka: "Музична скринька",
+    sound_harfa: "Арфа",
+    sound_dzwonek: "Дзвінок",
+    sound_gitara: "Гітара",
+    sound_marimba: "Маримба",
+    sound_sygnal: "Сигнал",
+    sound_fanfara: "Фанфари",
+    sound_budzik: "Будильник",
+    sound_sos: "SOS (абетка Морзе)",
+    sound_alarm: "Тривога",
+    sound_syrena: "Сирена",
+    sound_wlaz_kotek: "Кошеня на паркані (польська пісенька)",
+    sound_kreskowka: "Весела мультяшна мелодія",
+    sound_pop_weasel: "Pop Goes the Weasel",
+    sound_boze_narodzenie: "Різдво",
+    sound_wielkanoc_kurczaczek: "Великдень: курча",
+    sound_wielkanoc_dzwony: "Великдень: дзвони",
+    volume_0: "Без звуку",
+    volume_1: "Тихо",
+    volume_2: "Середньо",
+    volume_3: "Голосно",
+    volume_4: "Дуже голосно",
   },
   "zh-hans": {
     show_history: "▶ 显示历史",
@@ -546,7 +875,7 @@ const CARD_STRINGS = {
     status_on_plan: "一切按计划",
     status_transition: "即将到时间",
     status_red: "现在",
-    status_blinking_brown: "警告——已逾期！",
+    status_blinking_black: "警告——已逾期！",
     status_exceeded: "完成次数过多",
     status_inactive: "已关闭",
     status_number_blinking: "数字闪烁：上次执行记录在计划之外",
@@ -565,6 +894,69 @@ const CARD_STRINGS = {
     history_dialog_title: "历史记录 — {name}",
     close_label: "关闭",
     edit_label: "编辑",
+    early_title: "您提前 {x} 按下了按钮。",
+    early_question: "您是提前完成的吗？",
+    early_yes: "是的，我提前完成了",
+    early_extra: "这是额外的一次",
+    sound_label: "提醒声音",
+    volume_label: "提醒音量",
+    sound_default: "默认",
+    preview_label: "播放",
+    help_label: "帮助",
+    help_title: "帮助",
+    help_toc: "目录",
+    help_g_intro: "简介",
+    help_g_schedules: "日程",
+    help_g_notif: "提醒与设置",
+    help_g_data: "历史与数据",
+    help_h_what: "这是做什么用的？",
+    help_p_what: "这张卡片帮助您每天在合适的时间记得做某件事，例如吃药、喂猫或喝水。每一件这样的事就是一个日程，有自己的大圆按钮。做完之后，点按这个按钮。",
+    help_h_colors: "如何看按钮",
+    help_p_colors: "按钮上的大数字表示您今天做了多少次。颜色和名称下方的文字告诉您该做什么：绿色——一切正常，黄色和橙色——时间快到了，红色——现在就做，闪烁的黑色——您已迟到。如果数字闪烁，说明最近一次是在计划之外记录的。红色加黑色数字表示今天做的次数超过了需要。灰色按钮表示该日程已关闭或尚未开始。午夜时数字归零。",
+    help_h_press: "如何确认已经完成",
+    help_p_press: "做完后点按圆按钮。如果在设定时间附近完成（默认前后半小时内），一切正常。如果按得稍早，会询问您是真的提前完成，还是额外的一次。如果按得较晚，会询问发生了什么：A——我之前做了但没有记录，B——我没做，现在正在做，C——我之前做了，这是额外的一次。如果在没有待办时按下，则记为计划之外完成。",
+    help_h_add: "如何添加和更改日程",
+    help_p_add: "新日程在 设置、设备与服务、How Many Times Today、配置 中添加。输入名称（例如“心脏药”）。选择频率：固定时间（每天 1 到 24 次，各有自己的时间）或每隔几小时。设定开始时间，必要时设定结束时间。磁贴上的铅笔（或双击）可更改日程。“重置为‘全部按时’”按钮用于纠正错误：把今天已到时间的所有事项标记为按时完成。",
+    help_h_notif: "提醒、声音和文字大小",
+    help_p_notif: "到设定时间，只要仪表盘打开，卡片会显示消息并播放提醒声音。如果在全局设置中选择了手机，还会收到推送通知。在全局设置中选择默认声音及其音量（每个日程可在其编辑对话框中设置自己的）、卡片文字大小和高对比度。",
+    help_h_history: "历史",
+    help_p_history: "长按磁贴（或右键点击），或在大卡片上点按“显示历史”。计划之外的和错过的记录以粗体显示。您可以清除全部历史，也可以只清除所选的周。",
+    help_h_privacy: "您的数据",
+    help_p_privacy: "一切都保留在您的 Home Assistant 中。没有账户，没有云，也不收集任何数据。",
+    help_author: "作者：{author}",
+    help_version: "版本",
+    help_build: "构建",
+    help_font: "文字大小",
+    help_contrast: "高对比度",
+    sound_group_gentle: "轻柔",
+    sound_group_medium: "中等",
+    sound_group_strong: "强",
+    sound_group_verystrong: "很强",
+    sound_group_melody: "旋律",
+    sound_group_seasonal: "节日",
+    sound_delikatny_dzwonek: "轻柔铃声",
+    sound_pozytywka: "八音盒",
+    sound_harfa: "竖琴",
+    sound_dzwonek: "铃声",
+    sound_gitara: "吉他",
+    sound_marimba: "马林巴",
+    sound_sygnal: "提示音",
+    sound_fanfara: "号角",
+    sound_budzik: "闹钟",
+    sound_sos: "SOS（摩尔斯电码）",
+    sound_alarm: "警报",
+    sound_syrena: "警笛",
+    sound_wlaz_kotek: "小猫爬上栅栏（波兰儿歌）",
+    sound_kreskowka: "欢快的卡通旋律",
+    sound_pop_weasel: "Pop Goes the Weasel",
+    sound_boze_narodzenie: "圣诞节",
+    sound_wielkanoc_kurczaczek: "复活节：小鸡",
+    sound_wielkanoc_dzwony: "复活节：钟声",
+    volume_0: "关闭声音",
+    volume_1: "轻",
+    volume_2: "中",
+    volume_3: "响",
+    volume_4: "很响",
   },
 };
 
@@ -580,38 +972,23 @@ function translate(hassLanguage, key, placeholders) {
   return text;
 }
 
-// --- tiny synthesized alert tones, no audio asset files required ---
-const SOUND_PATTERNS = {
-  chime: [[880, 0.12], [1320, 0.18]],
-  bell: [[1046, 0.3]],
-  alert: [[660, 0.1], [0, 0.05], [660, 0.1], [0, 0.05], [660, 0.1]],
-  gentle: [[523, 0.25]],
-  none: [],
-};
+// --- reminder sounds: the ogg files the integration serves (id + volume level 1-4; 0 = silence) ---
+const SOUNDS_PATH = "/how_many_times_today_files/sounds";
+const SOUND_IDS = ["delikatny_dzwonek", "pozytywka", "harfa", "dzwonek", "gitara", "marimba", "sygnal", "fanfara",
+  "budzik", "sos", "alarm", "syrena", "wlaz_kotek", "kreskowka", "pop_weasel", "boze_narodzenie",
+  "wielkanoc_kurczaczek", "wielkanoc_dzwony"];
+const SOUND_GROUP_OF = { delikatny_dzwonek: "gentle", pozytywka: "gentle", harfa: "gentle", dzwonek: "medium",
+  gitara: "medium", marimba: "medium", sygnal: "strong", fanfara: "strong", budzik: "strong", sos: "strong",
+  alarm: "verystrong", syrena: "verystrong", wlaz_kotek: "melody", kreskowka: "melody", pop_weasel: "melody",
+  boze_narodzenie: "seasonal", wielkanoc_kurczaczek: "seasonal", wielkanoc_dzwony: "seasonal" };
 
-let sharedAudioCtx = null;
-function playSound(name) {
-  const pattern = SOUND_PATTERNS[name];
-  if (!pattern || !pattern.length) return;
+function playSound(id, level) {
+  const volume = Number(level);
+  if (!id || !SOUND_IDS.includes(id) || !(volume >= 1 && volume <= 4)) return;
   try {
-    sharedAudioCtx = sharedAudioCtx || new (window.AudioContext || window.webkitAudioContext)();
-    const ctx = sharedAudioCtx;
-    let t = ctx.currentTime;
-    for (const [freq, dur] of pattern) {
-      if (freq > 0) {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.frequency.value = freq;
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.0001, t);
-        gain.gain.exponentialRampToValueAtTime(0.2, t + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-        osc.connect(gain).connect(ctx.destination);
-        osc.start(t);
-        osc.stop(t + dur + 0.02);
-      }
-      t += dur;
-    }
+    const audio = new Audio(`${SOUNDS_PATH}/${id}_${Math.round(volume)}.ogg`);
+    const started = audio.play();
+    if (started && started.catch) started.catch(() => {}); // blocked before the first tap: not fatal
   } catch (err) {
     // audio can legitimately fail (autoplay policy before first user gesture); non-fatal
   }
@@ -717,13 +1094,33 @@ class HowManyTimesTodayCard extends HTMLElement {
           })
         );
       }
-      if (state === "red" || state === "blinking_brown") {
-        playSound(this._stateObj.attributes.sound);
+      if (state === "red" || state === "blinking_black") {
+        playSound(this._stateObj.attributes.sound, this._stateObj.attributes.volume);
       }
       this._lastState = state;
     }
 
     this._render();
+  }
+
+  // The text size and the high-contrast option come from the integration's global settings
+  // (the sensor's font_scale / high_contrast attributes), the same for every card.
+  _appearanceStyle(attrs) {
+    const scale = Number(attrs.font_scale) || 1;
+    let css = "";
+    if (scale !== 1) {
+      css += `ha-card { font-size: ${scale}em; } .tile-circle { width: ${76 * scale}px; height: ${76 * scale}px; } .button { width: ${72 * scale}px; height: ${72 * scale}px; }`;
+    }
+    if (attrs.high_contrast) {
+      css += `ha-card { background: #000; color: #fff; font-weight: 700; }
+        .tile-description, .description, .tile-countdown, .countdown, .tile-last, .last { opacity: 1; }
+        .tile-status.state-green, .plain-status.state-green { color: #69f0ae; }
+        .tile-status.state-red, .tile-status.state-blinking_black, .tile-status.state-exceeded,
+        .plain-status.state-red, .plain-status.state-blinking_black, .plain-status.state-exceeded { color: #ff8a80; }
+        .tile-blink-note, .number-blink-note { color: #ffd54f; }
+        .tile-edit, .tile-help, .help-btn, .history-toggle { color: #fff; }`;
+    }
+    return css ? `<style>${css}</style>` : "";
   }
 
   _colorFor(state, attrs) {
@@ -733,8 +1130,8 @@ class HowManyTimesTodayCard extends HTMLElement {
       case "red":
       case "exceeded":
         return rgb(RED);
-      case "blinking_brown":
-        return rgb(BROWN);
+      case "blinking_black":
+        return rgb(BLACK);
       case "pending":
         return rgb(PENDING_GRAY);
       case "inactive":
@@ -742,7 +1139,7 @@ class HowManyTimesTodayCard extends HTMLElement {
       case "transition":
       default: {
         const p = typeof attrs.color_progress === "number" ? attrs.color_progress : 0;
-        return rgb(lerp(GREEN, RED, Math.max(0, Math.min(1, p))));
+        return rgb(transitionColor(p));
       }
     }
   }
@@ -751,6 +1148,11 @@ class HowManyTimesTodayCard extends HTMLElement {
     const attrs = this._stateObj.attributes;
     if (attrs.answer_required) {
       this._openAnswerDialog();
+      return;
+    }
+    // a little too early before the coming term: ask whether it was done ahead of time
+    if (attrs.early_by_seconds != null) {
+      this._openAnswerDialog("early");
       return;
     }
     if (this._stateObj.state === "inactive" || this._stateObj.state === "pending") {
@@ -771,6 +1173,10 @@ class HowManyTimesTodayCard extends HTMLElement {
       const key = err?.translation_key || err?.error?.translation_key;
       if (code === "service_validation_error" && key === "answer_required") {
         this._openAnswerDialog();
+        return;
+      }
+      if (code === "service_validation_error" && key === "early_answer_required") {
+        this._openAnswerDialog("early");
         return;
       }
       if (code === "service_validation_error" && key === "schedule_not_active") {
@@ -800,21 +1206,44 @@ class HowManyTimesTodayCard extends HTMLElement {
   // The big card has room to show a dialog positioned over itself; a tile does not,
   // so its dialogs (answer + history) are appended to the document body instead -
   // see _openModal(). Both share the exact same answer/press logic either way.
-  _openAnswerDialog() {
+  // What the answer dialog asks: a press while a term is open and late (A/B/C), or a press a
+  // little too early before the coming term (done ahead of time / an extra one).
+  _answerParts() {
+    const attrs = this._stateObj.attributes;
+    if (this._answerKind === "early") {
+      const x = formatDuration(attrs.early_by_seconds ?? 0);
+      return {
+        title: `${this._t("early_title", { x })}<br>${this._t("early_question")}`,
+        buttons: [
+          ["answer-done-early", this._t("early_yes"), "done_early"],
+          ["answer-extra", this._t("early_extra"), "extra"],
+        ],
+      };
+    }
+    const oldestOpenSlot = (attrs.open_slots && attrs.open_slots[0]) || null;
+    const time = oldestOpenSlot ? formatTime(oldestOpenSlot.scheduled_at, this._hass?.language) : "?";
+    return {
+      title: this._t("answer_dialog_title", { time }),
+      buttons: [
+        ["answer-already-done", this._t("answer_already_done", { time }), "already_done"],
+        ["answer-do-now", this._t("answer_do_now", { time }), "do_now"],
+        ["answer-extra", this._t("answer_extra", { time }), "extra"],
+      ],
+    };
+  }
+
+  _openAnswerDialog(kind = "late") {
+    this._answerKind = kind;
     if (this._config.layout === "tile") {
-      const attrs = this._stateObj.attributes;
-      const oldestOpenSlot = (attrs.open_slots && attrs.open_slots[0]) || null;
-      const time = oldestOpenSlot ? formatTime(oldestOpenSlot.scheduled_at, this._hass?.language) : "?";
+      const parts = this._answerParts();
       const box = this._openModal(`
-        <h3>${this._t("answer_dialog_title", { time })}</h3>
-        <button id="answer-already-done">${this._t("answer_already_done", { time })}</button>
-        <button id="answer-do-now">${this._t("answer_do_now", { time })}</button>
-        <button id="answer-extra">${this._t("answer_extra", { time })}</button>
+        <h3>${parts.title}</h3>
+        ${parts.buttons.map(([id, label]) => `<button id="${id}">${label}</button>`).join("")}
         <button id="answer-cancel">${this._t("answer_cancel")}</button>
       `);
-      box.querySelector("#answer-already-done").addEventListener("click", () => this._onAnswer("already_done"));
-      box.querySelector("#answer-do-now").addEventListener("click", () => this._onAnswer("do_now"));
-      box.querySelector("#answer-extra").addEventListener("click", () => this._onAnswer("extra"));
+      for (const [id, , answer] of parts.buttons) {
+        box.querySelector(`#${id}`).addEventListener("click", () => this._onAnswer(answer));
+      }
       box.querySelector("#answer-cancel").addEventListener("click", () => this._closeModal());
       return;
     }
@@ -882,6 +1311,86 @@ class HowManyTimesTodayCard extends HTMLElement {
     box.querySelector("#hmtt-edit-host").appendChild(editor);
     editor.renderStandalone(this._hass, this._config.entity, () => this._closeModal());
     this._editorEl = editor;
+  }
+
+  // Help (the same template as the app: the version in the title bar, A- / A+ and high
+  // contrast, the table of contents in a frame with groups, then the author and the build).
+  _openHelpDialog() {
+    const attrs = (this._stateObj && this._stateObj.attributes) || {};
+    const sizes = [0.85, 1, 1.15, 1.3, 1.5, 1.75];
+    let index = sizes.indexOf(Number(attrs.font_scale));
+    if (index < 0) index = 1;
+    let contrast = !!attrs.high_contrast;
+    const groups = [
+      ["help_g_intro", ["what", "colors"]],
+      ["help_g_schedules", ["press", "add"]],
+      ["help_g_notif", ["notif"]],
+      ["help_g_data", ["history", "privacy"]],
+    ];
+    const box = this._openModal('<div id="hmtt-help"></div>', true);
+    const host = box.querySelector("#hmtt-help");
+    const paint = () => {
+      const colors = contrast ? "background:#000;color:#fff;" : "";
+      host.innerHTML = `
+        <style>
+          #hmtt-help .hbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+          #hmtt-help .hbar b { font-size: 1.05em; }
+          #hmtt-help .hbtn { display: inline-block; width: auto; margin: 0 0 0 4px; padding: 4px 8px; }
+          #hmtt-help nav { border: 1px solid var(--divider-color, #888); border-radius: 6px; padding: 8px 12px; margin-bottom: 12px; }
+          #hmtt-help nav ul { margin: 2px 0 6px; padding-left: 18px; }
+          #hmtt-help nav a { cursor: pointer; text-decoration: underline; }
+          #hmtt-help h4 { margin: 14px 0 4px; }
+          #hmtt-help p { margin: 0 0 8px; line-height: 1.45; }
+          #hmtt-help .hfoot { margin-top: 12px; opacity: 0.85; font-size: 0.9em; }
+        </style>
+        <div style="${colors} font-size:${sizes[index]}em; ${contrast ? "font-weight:700;" : ""} padding:8px; border-radius:6px;">
+          <div class="hbar">
+            <b>${this._t("help_title")} · How Many Times Today ${attrs.version || ""}</b>
+            <span>
+              <button type="button" class="hbtn" id="h-minus" aria-label="${this._t("help_font")} -">A-</button>
+              <button type="button" class="hbtn" id="h-plus" aria-label="${this._t("help_font")} +">A+</button>
+              <button type="button" class="hbtn" id="h-contrast" aria-label="${this._t("help_contrast")}" title="${this._t("help_contrast")}">◐</button>
+            </span>
+          </div>
+          <nav><b>${this._t("help_toc")}</b>
+            ${groups
+              .map(
+                ([g, ids]) => `<div><i>${this._t(g)}</i><ul>${ids
+                  .map((id) => `<li><a data-target="hmtt-help-${id}">${this._t("help_h_" + id)}</a></li>`)
+                  .join("")}</ul></div>`
+              )
+              .join("")}
+          </nav>
+          ${groups
+            .flatMap(([, ids]) => ids)
+            .map((id) => `<h4 id="hmtt-help-${id}">${this._t("help_h_" + id)}</h4><p>${this._t("help_p_" + id)}</p>`)
+            .join("")}
+          <div class="hfoot">${this._t("help_author", { author: attrs.author || "Jacek Bieganowski" })}<br>
+            ${this._t("help_version")} ${attrs.version || "?"}${attrs.build ? ` · ${this._t("help_build")} ${attrs.build}` : ""}</div>
+          <button type="button" id="h-close" style="margin-top:12px">${this._t("close_label")}</button>
+        </div>
+      `;
+      host.querySelector("#h-minus").addEventListener("click", () => {
+        index = Math.max(0, index - 1);
+        paint();
+      });
+      host.querySelector("#h-plus").addEventListener("click", () => {
+        index = Math.min(sizes.length - 1, index + 1);
+        paint();
+      });
+      host.querySelector("#h-contrast").addEventListener("click", () => {
+        contrast = !contrast;
+        paint();
+      });
+      host.querySelector("#h-close").addEventListener("click", () => this._closeModal());
+      for (const link of host.querySelectorAll("nav a")) {
+        link.addEventListener("click", () => {
+          const target = host.querySelector(`#${link.dataset.target}`);
+          if (target) target.scrollIntoView({ block: "start" });
+        });
+      }
+    };
+    paint();
   }
 
   _onClearAll() {
@@ -974,7 +1483,10 @@ class HowManyTimesTodayCard extends HTMLElement {
           background: ${color};
         }
         .tile-circle.blinking-bg { animation: tile-blink-bg 1s step-start infinite; }
-        @keyframes tile-blink-bg { 50% { background: #8d5a4a; } }
+        @keyframes tile-blink-bg { 50% { background: ${BLACK_BLINK}; } }
+        @keyframes tile-blink-numcol { 50% { color: #000; } }
+        .tile-circle.blinking-bg .tile-number { animation: tile-blink-numcol 1s step-start infinite; }
+        .tile-circle.blinking-bg .tile-number.blinking-num { animation: tile-blink-numcol 1s step-start infinite, tile-blink-num 0.8s step-start infinite; }
         .tile-number { font-size: 1.7em; font-weight: 700; color: ${numberColor}; line-height: 1; }
         .tile-number.blinking-num { animation: tile-blink-num 0.8s step-start infinite; }
         @keyframes tile-blink-num { 50% { opacity: 0.15; } }
@@ -983,7 +1495,7 @@ class HowManyTimesTodayCard extends HTMLElement {
         .tile-name { font-size: 1.1em; font-weight: 600; }
         .tile-description { font-size: 0.85em; opacity: 0.7; }
         .tile-status { font-size: 1.1em; font-weight: 700; margin-top: 2px; }
-        .tile-status.state-red, .tile-status.state-blinking_brown, .tile-status.state-exceeded { color: #c62828; }
+        .tile-status.state-red, .tile-status.state-blinking_black, .tile-status.state-exceeded { color: #c62828; }
         .tile-status.state-green { color: #2e7d32; }
         .tile-blink-note { font-size: 1em; font-weight: 700; color: #a85c00; margin-top: 2px; }
         .tile-countdown { font-size: 0.95em; opacity: 0.8; }
@@ -993,9 +1505,10 @@ class HowManyTimesTodayCard extends HTMLElement {
           font-size: 1.4em; line-height: 1; padding: 0 0 8px 8px; color: var(--primary-text-color, inherit);
         }
       </style>
+      ${this._appearanceStyle(attrs)}
       <ha-card class="tile">
         <div class="tile-tap-target ${notClickable ? "not-clickable" : ""}" id="tap-target" tabindex="0" role="button" aria-label="${ariaLabel}">
-          <div class="tile-circle ${state === "blinking_brown" ? "blinking-bg" : ""}">
+          <div class="tile-circle ${state === "blinking_black" ? "blinking-bg" : ""}">
             ${
               bigNumber === null
                 ? `<div class="tile-inactive-label">${this._t("inactive_label")}</div>`
@@ -1011,6 +1524,7 @@ class HowManyTimesTodayCard extends HTMLElement {
             <div class="tile-last">${this._t("last")}: ${formatTime(attrs.last_pressed_at, locale)} · ${this._t("total")}: ${attrs.count_today ?? 0}/${attrs.planned_count ?? "?"}</div>
           </div>
           <button type="button" class="tile-edit" id="edit-btn" aria-label="${this._t("edit_label")}" title="${this._t("edit_label")}">✎</button>
+          <button type="button" class="tile-edit tile-help" id="help-btn" aria-label="${this._t("help_label")}" title="${this._t("help_label")}">?</button>
         </div>
       </ha-card>
     `;
@@ -1037,12 +1551,19 @@ class HowManyTimesTodayCard extends HTMLElement {
 
     // the pencil is its own control: it must not also count as a tap on the tile
     const editBtn = root.getElementById("edit-btn");
-    for (const type of ["pointerdown", "pointerup", "keydown", "contextmenu"]) {
-      editBtn.addEventListener(type, (ev) => ev.stopPropagation());
+    const helpBtn = root.getElementById("help-btn");
+    for (const button of [editBtn, helpBtn]) {
+      for (const type of ["pointerdown", "pointerup", "keydown", "contextmenu"]) {
+        button.addEventListener(type, (ev) => ev.stopPropagation());
+      }
     }
     editBtn.addEventListener("click", (ev) => {
       ev.stopPropagation();
       this._openEditDialog();
+    });
+    helpBtn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      this._openHelpDialog();
     });
 
     tapTarget.addEventListener("pointerdown", (ev) => {
@@ -1138,11 +1659,11 @@ class HowManyTimesTodayCard extends HTMLElement {
     const plainStatusKey = plainStatusKeyOf(state, attrs);
     const plainStatus = this._t(plainStatusKey);
 
-    const oldestOpenSlot = (attrs.open_slots && attrs.open_slots[0]) || null;
-
     root.innerHTML = `
       <style>
         ha-card { padding: 16px; position: relative; }
+        .help-btn { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+          border: 1px solid var(--divider-color, #ccc); background: none; color: var(--primary-text-color, inherit); font-weight: 700; }
         .row { display: flex; align-items: center; gap: 16px; }
         .button {
           width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0;
@@ -1153,7 +1674,10 @@ class HowManyTimesTodayCard extends HTMLElement {
         }
         .button.not-clickable { cursor: default; }
         .button.blinking-bg { animation: blink-bg 1s step-start infinite; }
-        @keyframes blink-bg { 50% { background: #8d5a4a; } }
+        @keyframes blink-bg { 50% { background: ${BLACK_BLINK}; } }
+        @keyframes blink-numcol { 50% { color: #000; } }
+        .button.blinking-bg .number { animation: blink-numcol 1s step-start infinite; }
+        .button.blinking-bg .number.blinking-num { animation: blink-numcol 1s step-start infinite, blink-num 0.8s step-start infinite; }
         .number { font-size: 1.6em; font-weight: 700; color: ${numberColor}; line-height: 1; }
         .number.blinking-num { animation: blink-num 0.8s step-start infinite; }
         @keyframes blink-num { 50% { opacity: 0.15; } }
@@ -1162,7 +1686,7 @@ class HowManyTimesTodayCard extends HTMLElement {
         .name { font-size: 1.1em; font-weight: 600; }
         .description { font-size: 0.85em; opacity: 0.7; }
         .plain-status { font-size: 1.15em; font-weight: 700; margin-top: 2px; }
-        .plain-status.state-red, .plain-status.state-blinking_brown, .plain-status.state-exceeded {
+        .plain-status.state-red, .plain-status.state-blinking_black, .plain-status.state-exceeded {
           color: #c62828;
         }
         .plain-status.state-green { color: #2e7d32; }
@@ -1187,9 +1711,11 @@ class HowManyTimesTodayCard extends HTMLElement {
         .dialog-box h3 { margin: 0 0 12px 0; font-size: 1em; }
         .dialog-box button { display: block; width: 100%; text-align: left; padding: 8px; margin-bottom: 6px; cursor: pointer; }
       </style>
+      ${this._appearanceStyle(attrs)}
       <ha-card>
+        <button type="button" class="help-btn" id="help-btn" aria-label="${this._t("help_label")}" title="${this._t("help_label")}">?</button>
         <div class="row">
-          <div class="button ${state === "blinking_brown" ? "blinking-bg" : ""} ${state === "inactive" || state === "pending" ? "not-clickable" : ""}" id="btn">
+          <div class="button ${state === "blinking_black" ? "blinking-bg" : ""} ${state === "inactive" || state === "pending" ? "not-clickable" : ""}" id="btn">
             ${
               bigNumber === null
                 ? `<div class="inactive-label">${this._t("inactive_label")}</div>`
@@ -1207,11 +1733,15 @@ class HowManyTimesTodayCard extends HTMLElement {
         </div>
         <div class="history-toggle" id="toggle">${this._historyOpen ? this._t("hide_history") : this._t("show_history")}</div>
         ${this._historyOpen ? this._renderHistory(history, weeks, locale) : ""}
-        ${this._answerDialogOpen ? this._renderAnswerDialog(oldestOpenSlot, locale) : ""}
+        ${this._answerDialogOpen ? this._renderAnswerDialog() : ""}
       </ha-card>
     `;
 
     root.getElementById("btn").addEventListener("click", () => this._onPress());
+    root.getElementById("help-btn").addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      this._openHelpDialog();
+    });
     root.getElementById("toggle").addEventListener("click", () => this._toggleHistory());
 
     if (this._historyOpen) {
@@ -1227,22 +1757,20 @@ class HowManyTimesTodayCard extends HTMLElement {
     }
 
     if (this._answerDialogOpen) {
-      root.getElementById("answer-already-done")?.addEventListener("click", () => this._onAnswer("already_done"));
-      root.getElementById("answer-do-now")?.addEventListener("click", () => this._onAnswer("do_now"));
-      root.getElementById("answer-extra")?.addEventListener("click", () => this._onAnswer("extra"));
+      for (const [id, , answer] of this._answerParts().buttons) {
+        root.getElementById(id)?.addEventListener("click", () => this._onAnswer(answer));
+      }
       root.getElementById("answer-cancel")?.addEventListener("click", () => this._closeAnswerDialog());
     }
   }
 
-  _renderAnswerDialog(oldestOpenSlot, locale) {
-    const time = oldestOpenSlot ? formatTime(oldestOpenSlot.scheduled_at, locale) : "?";
+  _renderAnswerDialog() {
+    const parts = this._answerParts();
     return `
       <div class="dialog-backdrop">
         <div class="dialog-box">
-          <h3>${this._t("answer_dialog_title", { time })}</h3>
-          <button id="answer-already-done">${this._t("answer_already_done", { time })}</button>
-          <button id="answer-do-now">${this._t("answer_do_now", { time })}</button>
-          <button id="answer-extra">${this._t("answer_extra", { time })}</button>
+          <h3>${parts.title}</h3>
+          ${parts.buttons.map(([id, label]) => `<button id="${id}">${label}</button>`).join("")}
           <button id="answer-cancel">${this._t("answer_cancel")}</button>
         </div>
       </div>
@@ -1344,7 +1872,7 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
         .time-row label { margin: 0; min-width: 90px; font-size: 0.9em; color: var(--secondary-text-color); }
         details.advanced { margin-top: 16px; border-top: 1px solid var(--divider-color, #ccc); padding-top: 8px; }
         details.advanced summary { cursor: pointer; font-weight: 600; }
-        details.advanced button {
+        #f-preview, details.advanced button {
           margin-top: 4px; padding: 6px 10px; cursor: pointer;
           border: 1px solid var(--divider-color, #ccc); border-radius: 4px; background: none;
           color: var(--primary-text-color, black);
@@ -1516,6 +2044,21 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
         <input type="checkbox" id="f-active" ${attrs.active ? "checked" : ""}>
         <label for="f-active">${this._t("editor_active_label")}</label>
       </div>
+      <div class="field">
+        <label>${this._t("sound_label")}</label>
+        <select id="f-sound">
+          <option value="default">${this._t("sound_default")}</option>
+          ${SOUND_IDS.map((id) => `<option value="${id}" ${attrs.own_sound === id ? "selected" : ""}>${this._t("sound_" + id)} · ${this._t("sound_group_" + SOUND_GROUP_OF[id])}</option>`).join("")}
+        </select>
+      </div>
+      <div class="field">
+        <label>${this._t("volume_label")}</label>
+        <select id="f-volume">
+          <option value="default">${this._t("sound_default")}</option>
+          ${[0, 1, 2, 3, 4].map((v) => `<option value="${v}" ${attrs.own_volume === v ? "selected" : ""}>${this._t("volume_" + v)}</option>`).join("")}
+        </select>
+        <button type="button" id="f-preview">▶ ${this._t("preview_label")}</button>
+      </div>
       ${
         mode === "fixed_times"
           ? `
@@ -1571,6 +2114,16 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
 
     container.querySelector("#f-clear-end").addEventListener("click", () => {
       container.querySelector("#f-end").value = "";
+    });
+
+    // listen to the chosen sound (the default one when "Default" is chosen)
+    container.querySelector("#f-preview").addEventListener("click", () => {
+      const chosenSound = container.querySelector("#f-sound").value;
+      const chosenVolume = container.querySelector("#f-volume").value;
+      playSound(
+        chosenSound === "default" ? attrs.default_sound : chosenSound,
+        chosenVolume === "default" ? attrs.default_volume : Number(chosenVolume)
+      );
     });
 
     container.querySelector("#f-save").addEventListener("click", () => this._onSave(mode));
@@ -1693,6 +2246,8 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
       data.end_at = endVal ? endVal.replace("T", " ") + ":00" : "";
     }
     data.window_minutes = parseInt(container.querySelector("#f-window").value, 10);
+    data.sound_id = container.querySelector("#f-sound").value;
+    data.volume_level = container.querySelector("#f-volume").value;
 
     try {
       await this._hass.callService(DOMAIN, "update_schedule", data, { entity_id: this._config.entity });

@@ -24,7 +24,7 @@ Harmonogram to **stałe godziny** (1–24 na dobę, np. 07:00 i 16:00) albo **co
 start, opcjonalny koniec i okno tolerancji (domyślnie 30 minut przed i po każdym terminie).
 Klawisz niesie dużą liczbę — ile razy zrobiono to dzisiaj — a jego kolor podąża za dniem:
 zielony po wykonaniu, przechodzący w czerwony w miarę zbliżania się terminu, czerwony, gdy
-jest należny, i migający na brązowo, gdy nie zrobiono w terminie. Termin, którego nikt nie
+jest należny, i migający na czarno, gdy nie zrobiono w terminie. Termin, którego nikt nie
 zamknął, trafia do logu jako pominięty.
 
 Naciśnięcie poza oknem, gdy termin jest jeszcze otwarty, pyta, co zaszło (było zrobione, ale
@@ -69,7 +69,8 @@ how_many_times_today:
 ## Konfiguracja
 
 Wszystko konfiguruje się w UI (ikona koła zębatego integracji): harmonogramy, dźwięk i
-opcjonalną usługę powiadomień push. Przewodnik krok po kroku ze zrzutami ekranu:
+głośność przypomnień (18 dźwięków, także osobno dla harmonogramu), rozmiar tekstu, wysoki
+kontrast i opcjonalną usługę powiadomień push. Przewodnik krok po kroku ze zrzutami ekranu:
 [docs/CONFIGURATION.pl.md](docs/CONFIGURATION.pl.md) (angielski:
 [docs/CONFIGURATION.md](docs/CONFIGURATION.md)).
 

@@ -67,15 +67,15 @@ Kolor wokół terminu T:
 | Moment | Wygląd | Znaczenie |
 | --- | --- | --- |
 | Po wykonaniu | zielony, biała liczba | Wszystko w porządku |
-| Od wykonania do T | płynne przejście z zielonego w czerwony | Zbliża się termin |
+| Od wykonania do T | zielony do 35 % drogi, potem w żółty (osiągany przy 55 %: „zbliża się pora”), potem w czerwony | Zbliża się termin |
 | T (do T + okno) | czerwony, biała liczba | Należne teraz; wychodzi alert terminu |
-| T + okno (30 min) | miga na brązowo | Spóźnienie; miga, dopóki termin nie zostanie zamknięty |
+| T + okno (30 min) | miga na czarno | Spóźnienie; miga (czarny i jasnoszary), dopóki termin nie zostanie zamknięty |
 | T + ¾ odstępu do następnego terminu | (miga dalej) | Uznany za pominięty: wpis POMINIĘTE w logu |
 | Wykonanie poza oknem w granicach planu | liczba miga | Ostrzeżenie; kolejne naciśnięcie je gasi i jest oceniane od nowa |
 | Więcej wykonań niż zaplanowano (np. 5 z 3) | czerwony, czarna liczba, bez migania | Za dużo; utrzymuje się do północy |
 
 Odstęp po ostatnim terminie doby liczy się do pierwszego terminu następnej doby; w trybie
-co X godzin odstęp to X. Brąz (nierozwiązany termin) ma pierwszeństwo przed pozostałymi
+co X godzin odstęp to X. Czerń (nierozwiązany termin) ma pierwszeństwo przed pozostałymi
 stanami.
 
 <p align="center">
@@ -83,7 +83,7 @@ stanami.
 </p>
 
 Stan sensora jest jedynym źródłem prawdy o wyglądzie. Priorytet, od najwyższego:
-`inactive`, `pending`, `blinking_brown`, `exceeded`, `red`, `transition`, `green`.
+`inactive`, `pending`, `blinking_black`, `exceeded`, `red`, `transition`, `green`.
 
 <p align="center">
   <img src="images/diagram-stage-states.pl.svg" alt="Który stan wygrywa" width="100%">
@@ -108,20 +108,46 @@ ten termin:
 
 Przy kilku otwartych terminach (07:00 pominięty i 16:00 już czerwony) jedno naciśnięcie
 zamyka jeden termin, od najstarszego; kolejne obsługuje następny. Gdy żaden termin nie
-jest otwarty, pytania nie ma: naciśnięcie zapisuje się jako POZA HARMONOGRAMEM, a liczba
-miga. Drugie naciśnięcie w oknie już zamkniętego terminu to także takie dodatkowe
+jest otwarty i naciśnięcie nie przypada tuż przed terminem (patrz niżej), pytania nie ma:
+naciśnięcie zapisuje się jako POZA HARMONOGRAMEM, a liczba miga. Drugie naciśnięcie w oknie już zamkniętego terminu to także takie dodatkowe
 wykonanie.
 
 <p align="center">
   <img src="images/diagram-window-answers.pl.svg" alt="Naciśnięcie w oknie lub poza nim" width="100%">
 </p>
 
+## Naciśnięcie trochę za wcześnie
+
+Gdy żaden termin nie jest otwarty, naciśnięcie *przed* nadchodzącym terminem i przed
+otwarciem jego okna jest **wczesne**. Jeśli wypada w ostatniej dziesiątej części odstępu od
+poprzedniego terminu (termin 16:00 po 07:00: od 15:06 do początku okna 15:30; w trybie co X
+godzin dziesiąta część X), pytanie brzmi: czy zadanie **wykonano przed czasem**?
+
+| Odpowiedź | Termin | Licznik | Historia |
+| --- | --- | --- | --- |
+| `done_early` — tak, przed czasem | nadchodzący termin zostaje zamknięty | +1 | zgodnie z harmonogramem, z godziną terminu |
+| `extra` — dodatkowe | pozostaje należny | +1 | POZA HARMONOGRAMEM |
+
+Naciśnięcie wcześniejsze niż ta dziesiąta część zapisuje się po prostu poza harmonogramem,
+bez pytania. Sensor pokazuje `early_by_seconds`, gdy naciśnięcie byłoby wczesne; naciśnięcie
+bez odpowiedzi kończy się błędem `early_answer_required`.
+
+## Dźwięki przypomnień, rozmiar tekstu i kontrast
+
+18 dźwięków syntetyzowanych w sześciu klasach (delikatne, średnie, mocne, bardzo mocne,
+melodie, okolicznościowe), każdy nagrany w czterech poziomach głośności; poziom 0 to cisza.
+Integracja ma dźwięk i głośność domyślne (ustawienia globalne), a każdy harmonogram może mieć
+własne. Karta gra dźwięk, gdy sensor robi się `red`, i ponownie przy `blinking_black`.
+Rozmiar tekstu (85 – 175 %) i wysoki kontrast (biały pogrubiony tekst na czarnym) to ustawienia
+globalne i dotyczą każdej karty. Karta ma okno **pomocy** (**?**) z wersją, A-/A+, przełącznikiem
+kontrastu, spisem treści, autorem i datą kompilacji.
+
 ## Pominięcia i logi
 
 Termin, którego nikt nie zamknął, jest uznawany za **pominięty** po ¾ odstępu do
 następnego terminu i powstaje wpis POMINIĘTE (osoba mogła zapomnieć albo zaniechać
 czynności — przy karmieniu zwierzęcia to może być niebezpieczne). Klawisz dalej miga na
-brązowo; zamknięcie terminu nie wymaga niczego specjalnego — zamyka go kolejne
+czarno; zamknięcie terminu nie wymaga niczego specjalnego — zamyka go kolejne
 naciśnięcie. Termin należy do doby, na którą przypada: otwarty termin z poprzedniej doby
 pozostaje otwarty (i zapisze POMINIĘTE) mimo zerowania licznika o północy.
 
@@ -152,7 +178,7 @@ odświeżaniem co 30 sekund uzbrajany jest timer na następną chwilę jakiejkol
 - opcjonalnie **push** przez aplikację Home Assistant Companion (`notify.mobile_app_*`), z
   opisem jako treścią; działa przy zamkniętej aplikacji.
 
-Nic się nie powtarza przy brązowym ani gdy termin trafia do logu jako pominięty. Nie
+Nic się nie powtarza przy czarnym ani gdy termin trafia do logu jako pominięty. Nie
 wysyła się alertu dla terminu, który przypadł, gdy Home Assistant był wyłączony.
 
 <p align="center">
@@ -178,7 +204,7 @@ wysyła się alertu dla terminu, który przypadł, gdy Home Assistant był wył�
   flaga ręcznego wyłączenia) jest zapisywany osobno od historii i odtwarzany przy starcie;
   dzisiejszy licznik wynika z historii, więc nie ma własnego zapisu.
 - Restart **nie** zeruje cyklu: termin, który przypadł, gdy Home Assistant był wyłączony,
-  po starcie nadal jest otwarty i pokazuje brąz. Pominięta dawka nie może wyglądać na „w
+  po starcie nadal jest otwarty i pokazuje czerń. Pominięta dawka nie może wyglądać na „w
   terminie” tylko dlatego, że Home Assistant był restartowany.
 - Zapis stanu usuniętego harmonogramu jest porzucany; uszkodzony zapis jednego
   harmonogramu jest pomijany i nie wpływa na pozostałe.

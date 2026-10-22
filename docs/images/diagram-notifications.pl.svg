@@ -23,5 +23,5 @@
   <rect x="570" y="360" width="390" height="74" rx="12" fill="#fbf0dc" stroke="#b26a00" stroke-width="1.8"/>
   <text x="765.0" y="384" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#b26a00" text-anchor="middle">Push (opcjonalnie)</text>
   <text x="765.0" y="401" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="middle">notify.mobile_app_* z opisem</text>
-  <text x="40" y="490" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="start">Payload zdarzenia: entity_id, name, description, scheduled_at. Nic się nie powtarza przy brązowym ani przy pominięciu.</text>
+  <text x="40" y="490" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#6b6859" text-anchor="start">Payload zdarzenia: entity_id, name, description, scheduled_at. Nic się nie powtarza przy czarnym ani przy pominięciu.</text>
 </svg>

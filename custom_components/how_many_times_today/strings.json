@@ -79,7 +79,9 @@
         "data": {
           "start_at": "Start (date and time)",
           "end_at": "End (date and time, optional)",
-          "window_minutes": "Tolerance window (minutes before and after)"
+          "window_minutes": "Tolerance window (minutes before and after)",
+          "sound_id": "Reminder sound (optional)",
+          "volume_level": "Reminder volume (optional)"
         }
       },
       "manage_schedules": {
@@ -91,7 +93,7 @@
       },
       "legend": {
         "title": "How to read the card",
-        "description": "Every schedule has one button. The **colour and the sentence under the name** tell you what to do:\n\n- **Green** — “You are up to date” / “All according to plan”. The last term was confirmed.\n- **Fading to red** — “The time is coming”. The next term is approaching.\n- **Red** — “NOW”. A term is due: press the button (inside the tolerance window it counts as on time).\n- **Blinking brown** — “WARNING - overdue!”. A term was not confirmed in time: press the button and answer the question — A: it was done but not recorded, B: it was not done and you are doing it now, C: it was done and this is an additional one.\n- **Red with a black number** — “Done too many times”. More executions today than planned.\n- **Grey** — “Switched off” or “Not started yet”. The schedule takes no presses. A switched-off schedule (or one past its end) is hidden on the dashboard and shows grey only while you edit it; switch it back on in the card editor.\n\nThe **big number** is how many times it was done today. If it **blinks** (“Blinking number: the last execution was recorded outside the schedule”), the last press was outside the schedule."
+        "description": "Every schedule has one button. The **colour and the sentence under the name** tell you what to do:\n\n- **Green** — “You are up to date” / “All according to plan”. The last term was confirmed.\n- **Fading to red** — “The time is coming”. The next term is approaching.\n- **Red** — “NOW”. A term is due: press the button (inside the tolerance window it counts as on time).\n- **Blinking black** — “WARNING - overdue!”. A term was not confirmed in time: press the button and answer the question — A: it was done but not recorded, B: it was not done and you are doing it now, C: it was done and this is an additional one.\n- **Red with a black number** — “Done too many times”. More executions today than planned.\n- **Grey** — “Switched off” or “Not started yet”. The schedule takes no presses. A switched-off schedule (or one past its end) is hidden on the dashboard and shows grey only while you edit it; switch it back on in the card editor.\n\nThe **big number** is how many times it was done today. If it **blinks** (“Blinking number: the last execution was recorded outside the schedule”), the last press was outside the schedule.\n\n**Pressed a little too early?** Just before the tolerance window of the coming term (in the last tenth of the gap since the previous term) the card asks whether it was done ahead of time (then it counts for the coming term) or is an extra one.\n\n**Sound, text size, contrast:** in *Global settings* choose the default reminder sound and its volume, the text size of the cards and high contrast. Each schedule can have its own sound and volume."
       },
       "reset_schedules": {
         "title": "Reset to \"all on time\"",
@@ -103,9 +105,13 @@
       "global_settings": {
         "title": "Global settings",
         "data": {
-          "global_sound": "Notification sound",
+          "global_sound": "Default reminder sound",
+          "global_volume": "Default volume",
+          "font_scale": "Text size of the cards",
+          "high_contrast": "High contrast (white bold text on black)",
           "notify_service": "Push notification service (optional, e.g. notify.mobile_app_phone)"
-        }
+        },
+        "description": "Each schedule can have its own sound and volume (set when you edit it). The volume is relative to the volume of your device."
       }
     },
     "error": {
@@ -135,7 +141,72 @@
       "options": {
         "already_done": "It was done at that time, it just was not recorded",
         "do_now": "It was not done then - I am doing it now",
-        "extra": "It was done then, and this is an additional one"
+        "extra": "It was done then, and this is an additional one",
+        "done_early": "It was done ahead of time (it counts for the coming term)"
+      }
+    },
+    "sound": {
+      "options": {
+        "delikatny_dzwonek": "Soft chime · gentle",
+        "pozytywka": "Music box · gentle",
+        "harfa": "Harp · gentle",
+        "dzwonek": "Bell · medium",
+        "gitara": "Guitar · medium",
+        "marimba": "Marimba · medium",
+        "sygnal": "Beeps · strong",
+        "fanfara": "Fanfare · strong",
+        "budzik": "Alarm clock · strong",
+        "sos": "SOS (Morse code) · strong",
+        "alarm": "Alarm · very strong",
+        "syrena": "Siren · very strong",
+        "wlaz_kotek": "Kitten on the fence (Polish song) · melody",
+        "kreskowka": "Cheerful cartoon tune · melody",
+        "pop_weasel": "Pop Goes the Weasel · melody",
+        "boze_narodzenie": "Christmas · seasonal",
+        "wielkanoc_kurczaczek": "Easter: chick · seasonal",
+        "wielkanoc_dzwony": "Easter: bells · seasonal"
+      }
+    },
+    "schedule_sound": {
+      "options": {
+        "default": "Default",
+        "delikatny_dzwonek": "Soft chime · gentle",
+        "pozytywka": "Music box · gentle",
+        "harfa": "Harp · gentle",
+        "dzwonek": "Bell · medium",
+        "gitara": "Guitar · medium",
+        "marimba": "Marimba · medium",
+        "sygnal": "Beeps · strong",
+        "fanfara": "Fanfare · strong",
+        "budzik": "Alarm clock · strong",
+        "sos": "SOS (Morse code) · strong",
+        "alarm": "Alarm · very strong",
+        "syrena": "Siren · very strong",
+        "wlaz_kotek": "Kitten on the fence (Polish song) · melody",
+        "kreskowka": "Cheerful cartoon tune · melody",
+        "pop_weasel": "Pop Goes the Weasel · melody",
+        "boze_narodzenie": "Christmas · seasonal",
+        "wielkanoc_kurczaczek": "Easter: chick · seasonal",
+        "wielkanoc_dzwony": "Easter: bells · seasonal"
+      }
+    },
+    "volume": {
+      "options": {
+        "0": "Sound off",
+        "1": "Quiet",
+        "2": "Medium",
+        "3": "Loud",
+        "4": "Very loud"
+      }
+    },
+    "schedule_volume": {
+      "options": {
+        "default": "Default",
+        "0": "Sound off",
+        "1": "Quiet",
+        "2": "Medium",
+        "3": "Loud",
+        "4": "Very loud"
       }
     }
   },
@@ -147,7 +218,7 @@
           "green": "Done",
           "transition": "Approaching",
           "red": "Due now",
-          "blinking_brown": "Overdue",
+          "blinking_black": "Overdue",
           "exceeded": "Too many today",
           "inactive": "Inactive"
         }
@@ -190,6 +261,15 @@
     },
     "nothing_to_update": {
       "message": "Give at least one field to change."
+    },
+    "early_answer_required": {
+      "message": "This press is a little too early before the coming term and needs an answer (done_early or extra)."
+    },
+    "invalid_sound": {
+      "message": "Unknown reminder sound."
+    },
+    "invalid_volume": {
+      "message": "The volume must be a whole number from 0 to 4."
     }
   },
   "services": {
@@ -199,7 +279,7 @@
       "fields": {
         "answer": {
           "name": "Answer",
-          "description": "Needed when pressing outside the tolerance window while a term is still open (the answer_required attribute is true). It concerns the oldest open term."
+          "description": "Needed when pressing outside the tolerance window while a term is still open, or a little too early before the coming term (the answer_required attribute is true). Values: already_done, do_now, extra, done_early."
         }
       }
     },
@@ -240,6 +320,14 @@
         },
         "window_minutes": {
           "name": "Tolerance window (minutes)"
+        },
+        "sound_id": {
+          "name": "Reminder sound",
+          "description": "One of the sound ids, or \"default\" to use the default of the integration."
+        },
+        "volume_level": {
+          "name": "Reminder volume",
+          "description": "0 (off) to 4 (very loud), or \"default\"."
         }
       }
     },

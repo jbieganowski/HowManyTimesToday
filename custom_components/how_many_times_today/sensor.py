@@ -1,5 +1,5 @@
 """One sensor per schedule: the state is the button's look (pending, green, transition,
-red, blinking_brown, exceeded, inactive) and the attributes carry everything the card
+red, blinking_black, exceeded, inactive) and the attributes carry everything the card
 shows. The entity services (press, clear history, switch on/off) live here too.
 """
 from __future__ import annotations
@@ -36,7 +36,13 @@ from .const import (
     SIGNAL_SCHEDULES_UPDATED,
 )
 from .coordinator import HowManyTimesTodayCoordinator, dt_now
-from .models import AnswerRequired, ScheduleNotActive, ScheduleUpdateError
+from .models import (
+    AnswerRequired,
+    EarlyAnswerRequired,
+    ScheduleNotActive,
+    ScheduleUpdateError,
+    global_sound_settings,
+)
 
 
 def _unique_id(schedule_id: str) -> str:
@@ -89,6 +95,8 @@ async def async_setup_entry(
             vol.Optional("start_at"): vol.Any(None, cv.string),
             vol.Optional("end_at"): vol.Any(None, cv.string),
             vol.Optional("window_minutes"): vol.Any(None, int, float, cv.string),
+            vol.Optional("sound_id"): vol.Any(None, cv.string),
+            vol.Optional("volume_level"): vol.Any(None, int, float, cv.string),
         },
         "async_update_schedule",
     )
@@ -142,6 +150,8 @@ class ScheduleSensor(CoordinatorEntity[HowManyTimesTodayCoordinator], SensorEnti
         if status.next_expected_at is not None:
             seconds_to_next = int((status.next_expected_at - dt_now()).total_seconds())
 
+        sound, volume = coordinator.sound_of(sid)
+        default_sound, default_volume = global_sound_settings(coordinator.entry.options)
         attrs = {
             "schedule_id": sid,
             "name": schedule.name,
@@ -163,7 +173,18 @@ class ScheduleSensor(CoordinatorEntity[HowManyTimesTodayCoordinator], SensorEnti
             "seconds_to_next_expected": seconds_to_next,
             "open_slots": status.open_slots,
             "history": coordinator.history.get(sid)[-HISTORY_ATTRIBUTE_LIMIT:],
-            "sound": coordinator.sound,
+            "sound": sound,
+            "volume": volume,
+            "default_sound": default_sound,
+            "default_volume": default_volume,
+            "own_sound": schedule.sound_id,
+            "own_volume": schedule.volume_level,
+            "early_by_seconds": status.early_by_seconds,
+            "font_scale": coordinator.font_scale,
+            "high_contrast": coordinator.high_contrast,
+            "version": coordinator.version,
+            "author": AUTHOR,
+            "build": coordinator.build,
         }
         if schedule.mode == MODE_FIXED_TIMES:
             attrs["times"] = [t.strftime("%H:%M") for t in schedule.fixed_times]
@@ -179,6 +200,10 @@ class ScheduleSensor(CoordinatorEntity[HowManyTimesTodayCoordinator], SensorEnti
         except AnswerRequired as err:
             raise ServiceValidationError(
                 translation_domain=DOMAIN, translation_key="answer_required"
+            ) from err
+        except EarlyAnswerRequired as err:
+            raise ServiceValidationError(
+                translation_domain=DOMAIN, translation_key="early_answer_required"
             ) from err
         except ScheduleNotActive as err:
             raise ServiceValidationError(

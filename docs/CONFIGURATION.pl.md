@@ -102,6 +102,7 @@ przypada o jeden interwał po poprzednim, także po północy. Planowana liczba 
 | **Start (data i godzina)** | Kiedy harmonogram się zaczyna; wcześniej klawisz pokazuje `pending` | moment otwarcia formularza |
 | **Koniec (data i godzina, opcjonalnie)** | Kiedy się kończy; potem harmonogram jest `inactive`. Musi być późniejszy niż start | brak |
 | **Okno tolerancji (minuty przed i po)** | Naciśnięcie tak blisko terminu liczy się jako zgodne z harmonogramem | 30 (1 – 240) |
+| **Dźwięk przypomnienia** i **Głośność przypomnienia** (opcjonalne) | Własny dźwięk i głośność tego harmonogramu; *Domyślny* używa globalnych (sekcja 6) | Domyślny |
 
 Jeśli utworzysz harmonogram kilka minut po jego starcie, pierwszy termin od razu
 pokazuje się jako należny; terminy starsze niż okno tolerancji nie są nadrabiane.
@@ -119,6 +120,12 @@ pokazuje się jako należny; terminy starsze niż okno tolerancji nie są nadrab
 - **Poza oknem, termin otwarty** — Home Assistant pyta, który z trzech przypadków
   zaszedł, o **najstarszy otwarty termin**. Pytanie pokazuje karta; automatyzacje
   przekazują odpowiedź w polu `answer`.
+- **Poza oknem, nic otwartego, trochę za wcześnie** — w ostatniej dziesiątej części odstępu
+  od poprzedniego terminu, tuż przed otwarciem okna terminu (dla terminu 16:00 po 07:00 to
+  15:06 – 15:30), karta pyta, czy zadanie wykonano **przed czasem**. `done_early` zamyka
+  nadchodzący termin zgodnie z harmonogramem (+1); `extra` to dodatkowe wykonanie poza
+  harmonogramem (+1), a termin pozostaje należny. Sensor pokazuje, jak wcześnie jest, w
+  `early_by_seconds`; naciśnięcie bez odpowiedzi kończy się błędem `early_answer_required`.
 - **Poza oknem, nic otwartego** — to dodatkowe wykonanie, zapisane jako **POZA
   HARMONOGRAMEM**; liczba na klawiszu miga.
 
@@ -127,6 +134,7 @@ pokazuje się jako należny; terminy starsze niż okno tolerancji nie są nadrab
 | `already_done` (A) | Zrobione w tym terminie, tylko nie zapisane | +1 | zarejestrowane z opóźnieniem |
 | `do_now` (B) | Nie zrobiono wtedy — robię teraz | +1 | poza harmonogramem |
 | `extra` (C) | Zrobione wtedy, a to jest dodatkowe wykonanie | +2 | zarejestrowane z opóźnieniem + poza harmonogramem |
+| `done_early` | (pytanie o zbyt wczesne naciśnięcie) Zrobione przed czasem | +1 | zgodnie z harmonogramem, zamyka nadchodzący termin |
 
 ![Pytanie A/B/C na karcie](images/screenshot-card-question.jpg)
 
@@ -180,8 +188,17 @@ Wybierz **Ustawienia globalne (dźwięk, powiadomienie push)**.
 
 | Pole | Znaczenie |
 | --- | --- |
-| **Dźwięk powiadomienia** | Jeden dźwięk dla całej wtyczki: `chime`, `bell`, `alert`, `gentle` lub `none` (domyślnie `chime`). Gra w przeglądarce pokazującej kartę, gdy harmonogram robi się `red`, i ponownie, gdy robi się `blinking_brown` |
+| **Domyślny dźwięk przypomnienia** | Jeden z 18 dźwięków w sześciu klasach: delikatne (`delikatny_dzwonek`, `pozytywka`, `harfa`), średnie (`dzwonek`, `gitara`, `marimba`), mocne (`sygnal`, `fanfara`, `budzik`, `sos` — alfabet Morse'a), bardzo mocne (`alarm`, `syrena`), melodie (`wlaz_kotek`, `kreskowka`, `pop_weasel`) i okolicznościowe (`boze_narodzenie`, `wielkanoc_kurczaczek`, `wielkanoc_dzwony`). Domyślnie `dzwonek`. Gra w przeglądarce pokazującej kartę, gdy harmonogram robi się `red`, i ponownie, gdy robi się `blinking_black`. Pliki serwuje integracja (`/how_many_times_today_files/sounds/<id>_<1-4>.ogg`) |
+| **Domyślna głośność** | Wyłącz dźwięk, cicho, średnio, głośno (domyślnie) lub bardzo głośno: cztery poziomy to cztery nagrania każdego dźwięku, więc głośność nie zależy od miksera przeglądarki. Względna wobec głośności urządzenia |
+| **Rozmiar tekstu na kartach** | 85 %, 100 % (domyślnie), 115 %, 130 %, 150 % lub 175 % — jak w aplikacji |
+| **Wysoki kontrast** | Biały pogrubiony tekst na czarnym na każdej karcie |
 | **Usługa powiadomień push** | Opcjonalna, np. `notify.mobile_app_telefon`. Lista podpowiada powiadamiacze aplikacji mobilnej; można wpisać dowolną usługę notify. Puste oznacza brak pusha |
+
+Każdy harmonogram może mieć **własny** dźwięk i głośność: w kroku *Start, koniec i
+tolerancja* harmonogramu (oraz w oknie edycji na karcie, z przyciskiem *Odtwórz* do
+odsłuchu) wybierz *Domyślny* albo dźwięk i głośność. Opcje zapisane przez wersję 1.x są
+czytane tak jak były: `chime` i `bell` stają się `dzwonek`, `alert` — `alarm`, `gentle` —
+`delikatny_dzwonek`, a `none` — dźwiękiem domyślnym ze wyłączonym dźwiękiem.
 
 ### Jak czytać kartę
 
@@ -189,6 +206,8 @@ Czwarta pozycja menu, **Jak czytać kartę?**, to strona pomocy. Prostymi słowa
 co znaczy każdy kolor i każde zdanie pod nazwą, czym jest duża liczba i co robić, gdy
 klawisz miga. Jej treść to dokładnie to, co pokazuje karta, w języku zalogowanego
 użytkownika. Zatwierdzenie wraca do menu; nic się nie zmienia.
+
+Karta ma też własną **pomoc**: przycisk **?** na karcie lub kafelku otwiera okno z wersją w pasku tytułu, przyciskami **A-** / **A+** do rozmiaru tekstu, przełącznikiem wysokiego kontrastu, spisem treści w ramce z grupami, sekcjami (do czego to służy, jak czytać klawisz, jak potwierdzać, jak dodać i zmienić harmonogram, przypomnienia, historia, twoje dane) oraz autorem i datą kompilacji na dole.
 
 ![Strona pomocy](images/config-legend.jpg)
 
@@ -203,14 +222,14 @@ Jego stan to wygląd klawisza:
 | --- | --- |
 | `pending` | Przed datą i godziną startu |
 | `green` | Świeżo potwierdzone (lub nic jeszcze nie przypadło) |
-| `transition` | Kolor przechodzi z zielonego w czerwony do następnego terminu |
+| `transition` | Kolor przechodzi z zielonego przez żółty w czerwony do następnego terminu (zielony do 35 % drogi, żółty przy 55 %) |
 | `red` | Termin przypadł i trwa jego okno |
-| `blinking_brown` | Termin przekroczył okno i wciąż jest otwarty; miga dalej |
+| `blinking_black` | Termin przekroczył okno i wciąż jest otwarty; miga dalej |
 | `exceeded` | Więcej wykonań dziś niż zaplanowano (czerwony klawisz, czarna liczba) |
 | `inactive` | Wyłączony ręcznie lub po końcu |
 
 Gdy pasuje kilka, wygrywa pierwszy w tej kolejności: `inactive`, `pending`,
-`blinking_brown`, `exceeded`, `red`, `transition`, `green`.
+`blinking_black`, `exceeded`, `red`, `transition`, `green`.
 
 ![Który stan wygrywa](images/diagram-stage-states.pl.svg)
 
@@ -222,7 +241,7 @@ Karta nie polega samym kolorem: pod nazwą pokazuje krótkie, proste zdanie o st
 | `green` | Jesteś na bieżąco |
 | `transition` | Wszystko zgodnie z planem (dopóki następny termin jest daleko), potem Zbliża się pora (od 55 % drogi) |
 | `red` | TERAZ |
-| `blinking_brown` | UWAGA – spóźnione! |
+| `blinking_black` | UWAGA – spóźnione! |
 | `exceeded` | Zrobione za dużo razy |
 | `inactive` | Wyłączone |
 
@@ -236,12 +255,16 @@ Atrybuty:
 | `active`, `manually_inactive` | Czy przyjmuje naciśnięcia; czy wyłączono go ręcznie |
 | `count_today`, `planned_count`, `count_exceeded` | Duża liczba, plan i czy przekroczony |
 | `number_blinking` | Liczba miga po wykonaniu poza oknem w granicach planu; kolejne naciśnięcie to gasi |
-| `answer_required` | `true`, gdy naciśnięcie wymaga teraz odpowiedzi A/B/C |
+| `answer_required` | `true`, gdy naciśnięcie wymaga teraz odpowiedzi A/B/C (pytanie o zbyt wczesne naciśnięcie używa `early_by_seconds`) |
 | `open_slots` | Nierozwiązane terminy, od najstarszego: `scheduled_at`, `overdue_minutes`, `missed` |
 | `color_progress` | Postęp przejścia 0,0 – 1,0; `null` poza `green` i `transition` |
 | `last_pressed_at`, `next_expected_at`, `seconds_to_next_expected` | Ostatnie naciśnięcie i następny termin |
 | `history` | Ostatnie 50 wpisów (niżej) |
-| `sound` | Dźwięk globalny |
+| `sound`, `volume` | Identyfikator dźwięku przypomnienia i poziom głośności (0 – 4) tego harmonogramu (własny, a jeśli brak — domyślny) |
+| `own_sound`, `own_volume`, `default_sound`, `default_volume` | Własny wybór harmonogramu (`null` = domyślny) i ustawienie domyślne integracji |
+| `early_by_seconds` | O ile za wcześnie byłoby naciśnięcie teraz (wtedy pojawia się pytanie), inaczej `null` |
+| `font_scale`, `high_contrast` | Rozmiar tekstu i kontrast z ustawień globalnych |
+| `version`, `author`, `build` | Wersja integracji, autor i data kompilacji, pokazywane w pomocy karty |
 
 Wpisy historii to typ zdarzenia plus dane — nigdy gotowy tekst — więc karta pokazuje je w
 języku oglądającego: `timestamp`, `kind` (`on_schedule`, `registered_late`, `outside`,
@@ -284,6 +307,8 @@ czasie”** (sekcja 5), który oznacza wszystko, co dziś już minęło, jako zr
 
 ![Okno edycji otwarte podwójnym dotknięciem](images/screenshot-tile-edit.jpg)
 
+Rozmiar tekstu i wysoki kontrast z ustawień globalnych dotyczą każdej karty i kafelka. Przycisk **?** obok ołówka otwiera pomoc.
+
 Historia:
 
 ![Historia otwarta z kafelka](images/screenshot-tile-history.jpg)
@@ -312,11 +337,11 @@ Wszystkie trzy to usługi encji: jako cel wskaż sensor harmonogramu.
 
 | Usługa | Pola | Działanie |
 | --- | --- | --- |
-| `how_many_times_today.press_schedule` | `answer` (opcjonalne) | Potwierdza harmonogram, jak naciśnięcie jego przycisku |
+| `how_many_times_today.press_schedule` | `answer` (opcjonalne: `already_done`, `do_now`, `extra`, `done_early`) | Potwierdza harmonogram, jak naciśnięcie jego przycisku |
 | `how_many_times_today.clear_history` | `weeks` (opcjonalne) | Czyści historię naciśnięć |
 | `how_many_times_today.set_schedule_active` | `active` (wymagane) | Włącza lub wyłącza harmonogram |
 | `how_many_times_today.reset_schedule` | — | Ustawia harmonogram w stan „wszystko, co dziś przypadało, zrobiono na czas” (licznik i dzisiejsza historia; wcześniejsze dni zostają) |
-| `how_many_times_today.update_schedule` | `name`, `description`, `fixed_times`, `interval_hours`, `start_at`, `end_at`, `window_minutes` (wszystkie opcjonalne, co najmniej jedno) | Zmienia nazwę, opis, godziny lub interwał, start, koniec albo okno tolerancji harmonogramu (używa jej edytor karty) |
+| `how_many_times_today.update_schedule` | `name`, `description`, `fixed_times`, `interval_hours`, `start_at`, `end_at`, `window_minutes`, `sound_id`, `volume_level` (wszystkie opcjonalne, co najmniej jedno) | Zmienia nazwę, opis, godziny lub interwał, start, koniec, okno tolerancji, dźwięk albo głośność przypomnienia harmonogramu (`default` wraca do ustawienia domyślnego; używa jej edytor karty) |
 
 ```yaml
 action: how_many_times_today.press_schedule
@@ -338,8 +363,8 @@ data:
 ```
 
 `press_schedule` bez `answer`, gdy jest potrzebna, kończy się błędem walidacji z kluczem
-tłumaczenia `answer_required` (`schedule_not_active` dla harmonogramu oczekującego lub
-nieaktywnego). `clear_history` bez `weeks` czyści wszystko; z `weeks` (tygodnie ISO, np.
+tłumaczenia `answer_required` (`early_answer_required` dla pytania o zbyt wczesne naciśnięcie,
+`schedule_not_active` dla harmonogramu oczekującego lub nieaktywnego). `clear_history` bez `weeks` czyści wszystko; z `weeks` (tygodnie ISO, np.
 `2026-W41`) tylko te tygodnie:
 
 ```yaml
@@ -366,7 +391,7 @@ W chwili, gdy termin przypada, sensor robi się `red`, raz, co do sekundy, i:
 - jeśli ustawiono **usługę powiadomień push**, idzie push z opisem przez aplikację Home
   Assistant Companion, co działa przy zamkniętej aplikacji.
 
-Nic się nie powtarza przy `blinking_brown` ani gdy termin trafia do logów jako pominięty.
+Nic się nie powtarza przy `blinking_black` ani gdy termin trafia do logów jako pominięty.
 
 ## 11. Przykłady automatyzacji
 
@@ -409,7 +434,7 @@ actions:
 | Karta pokazuje „Błąd konfiguracji” | JavaScript karty nie jest załadowany — zwykle to zbuforowana kopia. Przeładuj stronę; jeśli nie pomaga, wyrejestruj service worker i wyczyść pamięć podręczną przeglądarki (zobacz [TESTING.pl.md](TESTING.pl.md)) |
 | „Już skonfigurowano” przy dodawaniu integracji | Integracja jest pojedyncza — użyj ikony koła zębatego przy istniejącym wpisie |
 | „Nie zdefiniowano jeszcze żadnych harmonogramów” w menu edycji | Najpierw dodaj harmonogram |
-| Harmonogram jest `blinking_brown` zaraz po restarcie | Zamierzone: zapisany stan jest odtwarzany, więc termin pominięty w czasie przestoju pozostaje widoczny |
+| Harmonogram jest `blinking_black` zaraz po restarcie | Zamierzone: zapisany stan jest odtwarzany, więc termin pominięty w czasie przestoju pozostaje widoczny |
 | Klawisz jest szary i mówi, że jeszcze się nie zaczęło | Przed startem; do tego czasu naciśnięcia są odrzucane |
 | Karta harmonogramu zniknęła z pulpitu | Jest wyłączony lub po końcu (`inactive`); wejdź w edycję pulpitu, by zobaczyć ją na szaro, i zaznacz **Harmonogram aktywny** w jej edytorze albo włącz go w oknie Konfiguruj |
 | Godziny wydają się przesunięte o dwie godziny | Harmonogramy używają strefy czasowej skonfigurowanej w Home Assistant, nie przeglądarki |

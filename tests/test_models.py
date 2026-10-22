@@ -165,16 +165,16 @@ def test_press_inside_the_window_before_the_term_is_on_schedule_and_resolves_it_
     # the 07:00 term is already done: nothing turns red, the next one is 16:00
     assert sim.state(at(7)) != const.STATE_RED
     assert sim.status(at(7)).next_expected_at == at(16)
-    assert sim.state(at(8)) != const.STATE_BLINKING_BROWN
+    assert sim.state(at(8)) != const.STATE_BLINKING_BLACK
 
 
-def test_a_term_comes_due_red_inside_the_window_then_blinks_brown():
+def test_a_term_comes_due_red_inside_the_window_then_blinks_black():
     sim = Sim(fixed())
     events = sim.tick(at(7))
     assert [e.scheduled_at for e in events] == [at(7)]
     assert sim.status(at(7)).state == const.STATE_RED
     assert sim.status(at(7, 30)).state == const.STATE_RED  # the window is inclusive
-    assert sim.state(at(7, 31)) == const.STATE_BLINKING_BROWN
+    assert sim.state(at(7, 31)) == const.STATE_BLINKING_BLACK
 
 
 def test_unanswered_term_is_logged_missed_after_three_quarters_of_the_gap_and_keeps_blinking():
@@ -188,7 +188,7 @@ def test_unanswered_term_is_logged_missed_after_three_quarters_of_the_gap_and_ke
     assert missed[0]["scheduled_at"] == at(7).isoformat()
     assert missed[0]["timestamp"] == at(13, 45).isoformat()  # when it was declared
     assert missed[0]["count_delta"] == 0
-    assert sim.status(at(13, 46)).state == const.STATE_BLINKING_BROWN
+    assert sim.status(at(13, 46)).state == const.STATE_BLINKING_BLACK
     sim.tick(at(14))
     assert len([e for e in sim.hist if e["kind"] == "missed"]) == 1  # logged once
 
@@ -317,12 +317,12 @@ def test_exceeding_the_planned_count_is_red_with_no_blinking_until_midnight():
     assert st_next_day.count_today == 0 and st_next_day.state != const.STATE_EXCEEDED
 
 
-def test_brown_takes_priority_over_exceeded():
+def test_black_takes_priority_over_exceeded():
     sim = Sim(fixed(times=("07:00",)), created=at(0))
     sim.press(at(1))
     sim.press(at(2))  # 2 of 1: exceeded
     assert sim.state(at(3)) == const.STATE_EXCEEDED
-    assert sim.state(at(7, 31)) == const.STATE_BLINKING_BROWN
+    assert sim.state(at(7, 31)) == const.STATE_BLINKING_BLACK
 
 
 def test_the_counter_counts_todays_entries_by_their_delta():
@@ -341,7 +341,7 @@ def test_an_open_term_from_yesterday_stays_open_after_midnight():
     sim.tick(at(22))
     sim.tick(at(1, d=20))
     st = sim.status(at(1, d=20))
-    assert st.state == const.STATE_BLINKING_BROWN
+    assert st.state == const.STATE_BLINKING_BLACK
     assert [x["scheduled_at"] for x in st.open_slots] == [at(22).isoformat()]
     assert not [e for e in sim.hist if e["kind"] == "missed"]  # 3/4 of 24 h is 18 h
     sim.tick(at(17, d=20))
@@ -591,7 +591,7 @@ def test_update_of_an_interval_schedule_rejects_times_and_a_bad_interval():
 def test_reset_closes_every_term_due_today_and_writes_a_normal_entry_for_each():
     sim = Sim(fixed(("07:00", "13:00", "20:00")), created=at(6))
     sim.tick(at(14))  # 07:00 missed, 13:00 open, 20:00 still to come
-    assert models.compute_status(sim.s, sim.rt, [], at(14)).state == const.STATE_BLINKING_BROWN
+    assert models.compute_status(sim.s, sim.rt, [], at(14)).state == const.STATE_BLINKING_BLACK
     entries = models.reset_to_on_schedule(sim.s, sim.rt, at(14))
     assert [(e["timestamp"], e["kind"], e["count_delta"], e["outside_schedule"]) for e in entries] == [
         (at(7).isoformat(), const.KIND_ON_SCHEDULE, 1, False),
@@ -626,3 +626,104 @@ def test_reset_of_an_interval_schedule_counts_the_terms_of_today_only():
     sim = Sim(interval(8, start="2026-10-18T22:00:00"), created=at(0))  # 22:00, 06:00, 14:00, 22:00 ...
     entries = models.reset_to_on_schedule(sim.s, sim.rt, at(15))
     assert [e["timestamp"] for e in entries] == [at(6).isoformat(), at(14).isoformat()]
+
+
+# --- the early press (2.0.0): the last tenth of the gap before the tolerance window --------
+
+
+def test_a_press_a_little_too_early_asks_whether_it_was_done_ahead_of_time():
+    # the gap before 16:00 is 9 h: the zone is 15:06 - 15:30 (window 30 min, a tenth = 54 min)
+    sim = Sim(fixed(), created=at(14, 0))
+    with pytest.raises(models.EarlyAnswerRequired) as asked:
+        sim.press(at(15, 15))
+    assert asked.value.term == at(16)
+    assert asked.value.early_by == timedelta(minutes=45)
+    assert sim.status(at(15, 15)).early_by_seconds == 45 * 60
+
+
+def test_done_ahead_of_time_closes_the_coming_term_on_schedule():
+    sim = Sim(fixed(), created=at(14, 0))
+    entries = sim.press(at(15, 15), const.ANSWER_DONE_EARLY)
+    assert [(e["kind"], e["count_delta"]) for e in entries] == [(const.KIND_ON_SCHEDULE, 1)]
+    sim.tick(at(16, 5))
+    assert sim.status(at(16, 5)).state != const.STATE_BLINKING_BLACK  # the 16:00 term is not open any more
+
+
+def test_an_extra_at_the_early_question_is_outside_the_schedule_and_the_term_stays_due():
+    sim = Sim(fixed(), created=at(14, 0))
+    entries = sim.press(at(15, 15), const.ANSWER_EXTRA)
+    assert [e["kind"] for e in entries] == [const.KIND_OUTSIDE]
+    sim.tick(at(16, 1))
+    assert sim.state(at(16, 1)) == const.STATE_RED
+
+
+def test_a_press_more_than_a_tenth_before_the_term_is_just_outside_the_schedule():
+    sim = Sim(fixed(), created=at(14, 0))
+    entries = sim.press(at(15, 0))
+    assert [e["kind"] for e in entries] == [const.KIND_OUTSIDE]
+
+
+def test_the_early_zone_of_an_interval_schedule_is_a_tenth_of_the_interval():
+    sim = Sim(interval(8, start="2026-10-19T00:00:00"), created=at(10, 0))
+    sim.tick(at(15, 20))  # terms 00:00, 08:00, 16:00; the zone before 16:00 is 15:12 - 15:30
+    assert sim.status(at(15, 20)).early_by_seconds == 40 * 60
+    assert sim.status(at(14, 0)).early_by_seconds is None
+
+
+def test_nothing_is_asked_early_while_a_term_is_open():
+    sim = Sim(fixed(), created=at(6, 59))
+    sim.tick(at(8, 0))  # 07:00 is open and past its window
+    assert sim.status(at(15, 15)).early_by_seconds is None
+
+
+# --- the reminder sounds (2.0.0) ----------------------------------------------------------
+
+
+def test_the_default_sound_is_the_bell_at_volume_three():
+    assert models.global_sound_settings({}) == ("dzwonek", 3)
+
+
+def test_the_sound_names_of_version_1_are_still_read():
+    assert models.global_sound_settings({"global_sound": "none"}) == ("dzwonek", 0)
+    assert models.global_sound_settings({"global_sound": "alert"}) == ("alarm", 3)
+    assert models.global_sound_settings({"global_sound": "gentle", "global_volume": 1}) == ("delikatny_dzwonek", 1)
+    assert models.global_sound_settings({"global_sound": "unknown"}) == ("dzwonek", 3)
+
+
+def test_a_schedule_rings_with_its_own_sound_else_with_the_default():
+    plain = fixed()
+    own = models.build_schedule(
+        {"id": "o", "name": "x", "mode": const.MODE_FIXED_TIMES, "fixed_times": ["08:00"],
+         "start_at": "2026-10-19T00:00:00", "sound_id": "harfa", "volume_level": 0}, TZ)
+    assert models.sound_for(plain, "alarm", 4) == ("alarm", 4)
+    assert models.sound_for(own, "alarm", 4) == ("harfa", 0)
+
+
+def test_a_stored_unknown_sound_or_volume_falls_back_to_the_default():
+    s = models.build_schedule(
+        {"id": "o", "name": "x", "mode": const.MODE_FIXED_TIMES, "fixed_times": ["08:00"],
+         "start_at": "2026-10-19T00:00:00", "sound_id": "nope", "volume_level": 9}, TZ)
+    assert (s.sound_id, s.volume_level) == (None, None)
+
+
+def test_update_schedule_validates_and_clears_the_sound_and_volume():
+    s = fixed()
+    cfg = {"id": "s", "name": "Lek", "description": "", "mode": const.MODE_FIXED_TIMES,
+           "fixed_times": ["07:00", "16:00"], "start_at": "2026-10-19T00:00:00", "end_at": None, "window_minutes": 30}
+    new = models.apply_schedule_update(cfg, {"sound_id": "marimba", "volume_level": "2"}, TZ)
+    assert (new["sound_id"], new["volume_level"]) == ("marimba", 2)
+    cleared = models.apply_schedule_update(new, {"sound_id": "default", "volume_level": "default"}, TZ)
+    assert (cleared["sound_id"], cleared["volume_level"]) == (None, None)
+    for bad, key in (({"sound_id": "nope"}, "invalid_sound"), ({"volume_level": 5}, "invalid_volume"), ({"volume_level": "x"}, "invalid_volume")):
+        with pytest.raises(models.ScheduleUpdateError) as error:
+            models.apply_schedule_update(cfg, bad, TZ)
+        assert error.value.key == key
+    assert s  # the plain schedule stays valid
+
+
+def test_a_schedule_saved_by_version_1_loads_without_sound_fields():
+    """Options written by 1.x have no sound/volume on a schedule: they read as "the default"."""
+    old = {"id": "s", "name": "Lek", "description": "", "mode": "fixed_times", "fixed_times": ["07:00"],
+           "start_at": "2026-10-19T00:00:00", "end_at": None, "window_minutes": 30}
+    s = models.build_schedule(old, TZ)
+    assert (s.sound_id, s.volume_level) == (None, None)

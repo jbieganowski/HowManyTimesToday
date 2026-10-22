@@ -37,5 +37,5 @@
   <text x="574" y="515" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">history: kind, outside_schedule</text>
   <text x="574" y="140" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">The A/B/C question appears when answer_required is true;</text>
   <text x="574" y="158" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">open_slots lists the unresolved terms.</text>
-  <text x="574" y="176" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">The sound (attribute sound) plays on entering red and brown.</text>
+  <text x="574" y="176" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" fill="#6b6859" text-anchor="start">The sound (attribute sound) plays on entering red and black.</text>
 </svg>

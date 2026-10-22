@@ -2,6 +2,48 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [2.0.0] - 2026-10-22
+
+The integration now has what the latest Android app has. A major version: the state
+`blinking_brown` is renamed `blinking_black` (automations and templates that test for it
+must be updated); everything stored by 1.x is read as it was.
+
+### Integration
+
+- The button that blinks when a term is overdue now blinks **black** (and light grey)
+  instead of brown; the state of the sensor is `blinking_black`.
+- **Early press**: a press shortly before the coming term (the last tenth of the gap since
+  the previous term, before its tolerance window) asks whether the task was done ahead of
+  time (`done_early`: closes the coming term on schedule) or is an extra one (`extra`). The
+  sensor shows `early_by_seconds`; a press without the answer fails with
+  `early_answer_required`.
+- **Reminder sounds**: 18 sounds in six classes (gentle, medium, strong, very strong,
+  melody, seasonal), each at four volume levels, served by the integration and played by the
+  card. A default sound and volume in the global settings, and an own sound and volume per
+  schedule (options flow, the card's edit dialog with a *Play* button, the `update_schedule`
+  service fields `sound_id` and `volume_level`). `tools/make_sounds.py` regenerates them.
+- **Text size** (85 – 175 %) and **high contrast** in the global settings, applied to every
+  card and tile.
+- **Colours as in the app**: green, then yellow (the sentence "the time is coming" appears
+  at yellow), then red.
+- **Help** on every card and tile (the **?** button): the version in the title bar, A- / A+,
+  a contrast switch, a table of contents with groups, the sections, the author and the
+  build date. The sensor has the new attributes `sound`, `volume`, `own_sound`, `own_volume`,
+  `default_sound`, `default_volume`, `early_by_seconds`, `font_scale`, `high_contrast`,
+  `version`, `author`, `build`.
+- New logo (the hourglass of the app).
+
+### Compatibility
+
+- Options and schedules written by 1.x load unchanged: the old sound names are mapped
+  (`chime`, `bell` to `dzwonek`, `alert` to `alarm`, `gentle` to `delikatny_dzwonek`, `none`
+  to silence), schedules without a sound use the default.
+
+### Documentation
+
+- Configuration guide, specification, testing notes and diagrams (EN + PL) describe the
+  early press, the sounds, the black blinking and the colour fade; 168 tests.
+
 ## [1.3.6] - 2026-10-20
 
 ### Integration

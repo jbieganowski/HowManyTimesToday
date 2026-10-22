@@ -14,11 +14,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from svglib import (  # noqa: E402
-    AMBER, BLUE, BORDER, BROWN, FAINT, GREEN, INK, LINE, MUTED, PURPLE, RED, SAGE, TINT, WARNINGS, Svg,
+    AMBER, BLUE, BLACK, BORDER, FAINT, GREEN, INK, LINE, MUTED, PURPLE, RED, SAGE, TINT, WARNINGS, Svg,
 )
 
 OUT = Path(__file__).resolve().parents[1] / "docs" / "images"
-TESTS = {"models": 76, "coordinator": 28, "validation": 43, "card": 3}
+TESTS = {"models": 88, "coordinator": 28, "validation": 46, "card": 6}
 TESTS_TOTAL = sum(TESTS.values())
 
 
@@ -42,9 +42,9 @@ def diagrams(lang: str):
                   f'<stop offset="1" stop-color="#b8631f"/></linearGradient></defs>')
             fill = f"url(#{gid})"
         else:
-            fill = {"ok": GREEN, "red": RED, "brown": BROWN, "grey": "#9a978c", "exceeded": RED}[kind]
-        if kind == "brown":
-            s.circle(cx, cy, r + 8, "none", BROWN, 3, "7 6")
+            fill = {"ok": GREEN, "red": RED, "black": BLACK, "grey": "#9a978c", "exceeded": RED}[kind]
+        if kind == "black":
+            s.circle(cx, cy, r + 8, "none", BLACK, 3, "7 6")
         s.circle(cx, cy, r, fill)
         s.text(cx, cy + r * 0.38, str(number), int(r * 1.1), 700, number_color, "middle")
 
@@ -105,9 +105,9 @@ def diagrams(lang: str):
             L("the sensor state is the stage name", "stanem sensora jest nazwa etapu"))
     x0, x1, x2, x3, x4 = 70, 440, 620, 900, 930
     s.add(f'<defs><linearGradient id="gr{lang}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="{GREEN}"/>'
-          f'<stop offset="0.5" stop-color="#9a7a1f"/><stop offset="1" stop-color="{RED}"/></linearGradient>'
+          f'<stop offset="0.35" stop-color="{GREEN}"/><stop offset="0.55" stop-color="#ffc107"/><stop offset="1" stop-color="{RED}"/></linearGradient>'
           f'<pattern id="st{lang}" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
-          f'<rect width="14" height="14" fill="{BROWN}"/><rect width="7" height="14" fill="#8d6e63"/></pattern></defs>')
+          f'<rect width="14" height="14" fill="{BLACK}"/><rect width="7" height="14" fill="#e8e8e8"/></pattern></defs>')
     s.rect(x0, 270, 36, 34, GREEN, None, rx=0)
     s.rect(x0 + 36, 270, x1 - x0 - 36, 34, f"url(#gr{lang})", None, rx=0)
     s.rect(x1, 270, x2 - x1, 34, RED, None, rx=0)
@@ -115,18 +115,18 @@ def diagrams(lang: str):
     big_button(s, x0 + 40, 190, 34, "ok", 1)
     big_button(s, (x0 + 36 + x1) // 2, 190, 34, "mid", 1)
     big_button(s, (x1 + x2) // 2, 190, 34, "red", 1)
-    big_button(s, (x2 + x4) // 2 - 20, 190, 34, "brown", 1)
+    big_button(s, (x2 + x4) // 2 - 20, 190, 34, "black", 1)
     s.pill(x0 + 18, 334, "green", GREEN)
     s.pill((x0 + 36 + x1) // 2, 334, "transition", AMBER)
     s.pill((x1 + x2) // 2, 334, "red", RED)
-    s.pill((x2 + x4) // 2, 334, "blinking_brown", BROWN)
-    s.text((x0 + 36 + x1) // 2, 366, L("fades from green to red", "przechodzi z zielonego w czerwony"), 12, 400, MUTED, "middle", 330)
+    s.pill((x2 + x4) // 2, 334, "blinking_black", BLACK)
+    s.text((x0 + 36 + x1) // 2, 366, L("green, then yellow, then red", "zielony, potem żółty, potem czerwony"), 12, 400, MUTED, "middle", 330)
     s.text((x1 + x2) // 2, 366, L("due, inside the window", "termin, w oknie"), 12, 400, MUTED, "middle", 170)
     s.text((x2 + x4) // 2, 366, L("unresolved, blinks", "nierozwiązany, miga"), 12, 400, MUTED, "middle", 200)
     ticks = [
         (x0, L("press: green, cycle restarts", "naciśnięcie: zielony, cykl od nowa"), "start", x0, 410),
         (x1, L("T: red, due alert", "T: czerwony, alert terminu"), "middle", x1, 440),
-        (x2, L("T + window (30 min): blinks brown", "T + okno (30 min): miga na brązowo"), "middle", x2, 410),
+        (x2, L("T + window (30 min): blinks black", "T + okno (30 min): miga na czarno"), "middle", x2, 410),
         (x3, L("T + ¾ of the gap: logged as MISSED", "T + ¾ odstępu: wpis POMINIĘTE"), "middle", x3, 470),
     ]
     for x, lab, anc, ax, ty in ticks:
@@ -141,10 +141,10 @@ def diagrams(lang: str):
     ladder = [
         ("inactive", "grey", MUTED, L("switched off by hand, or past the end (card hidden)", "wyłączony ręcznie lub po końcu (karta ukryta)")),
         ("pending", "grey", BLUE, L("before the start date and time", "przed datą i godziną startu")),
-        ("blinking_brown", "brown", BROWN, L("a term outlived its window and is still open", "termin przekroczył okno i wciąż jest otwarty")),
+        ("blinking_black", "black", BLACK, L("a term outlived its window and is still open", "termin przekroczył okno i wciąż jest otwarty")),
         ("exceeded", "exceeded", RED, L("more executions today than planned (red, black number)", "więcej wykonań dziś niż zaplanowano (czerwony, czarna liczba)")),
         ("red", "red", RED, L("a term is due and inside its window", "termin przypadł i trwa jego okno")),
-        ("transition", "mid", AMBER, L("fading from green to red towards the next term", "przejście z zielonego w czerwony do następnego terminu")),
+        ("transition", "mid", AMBER, L("fading green, yellow, red towards the next term", "przejście zielony, żółty, czerwony do następnego terminu")),
         ("green", "ok", GREEN, L("just confirmed (or nothing due yet)", "świeżo potwierdzone (lub nic jeszcze nie przypadło)")),
     ]
     for i, (name, kind, col, desc) in enumerate(ladder):
@@ -230,8 +230,8 @@ def diagrams(lang: str):
     for y, col, head, line in outs:
         s.arrow(490, 235, 570, y + 36, MUTED)
         s.box(570, y, 390, 74, head, [line], col, 15, 12)
-    s.text(40, 490, L("The event payload: entity_id, name, description, scheduled_at. Nothing repeats at brown or when a term is missed.",
-                      "Payload zdarzenia: entity_id, name, description, scheduled_at. Nic się nie powtarza przy brązowym ani przy pominięciu."), 13, 400, MUTED, check_w=920)
+    s.text(40, 490, L("The event payload: entity_id, name, description, scheduled_at. Nothing repeats at black or when a term is missed.",
+                      "Payload zdarzenia: entity_id, name, description, scheduled_at. Nic się nie powtarza przy czarnym ani przy pominięciu."), 13, 400, MUTED, check_w=920)
 
     # 8 ---------------------------------------------------------------- lifecycle
     s = new("schedule-lifecycle", 1000, 430, L("A schedule's life", "Życie harmonogramu"),
@@ -272,9 +272,9 @@ def diagrams(lang: str):
     s.text(hx(22), 158, L("a missed dose looks on time", "pominięta dawka wygląda na w terminie"), 12, 400, RED, "end", 260)
     s.text(40, 290, L("With stored state (how it works)", "Z zapisanym stanem (jak działa)"), 15, 700, GREEN, check_w=330)
     s.rect(hx(8), 304, hx(20) - hx(8), 30, f"url(#rp{lang})", None, rx=4)
-    s.rect(hx(20), 304, hx(22) - hx(20), 30, BROWN, None, rx=4)
+    s.rect(hx(20), 304, hx(22) - hx(20), 30, BLACK, None, rx=4)
     s.text(hx(14), 354, L("one continuous cycle, the restart changes nothing", "jeden ciągły cykl, restart niczego nie zmienia"), 13, 600, GREEN, "middle", 520)
-    s.text(hx(22), 292, L("20:30 shows 'blinking_brown'", "o 20:30 'blinking_brown'"), 12, 700, BROWN, "end")
+    s.text(hx(22), 292, L("20:30 shows 'blinking_black'", "o 20:30 'blinking_black'"), 12, 700, BLACK, "end")
     for y0, y1 in ((165, 210), (297, 342)):
         s.line(hx(12), y0, hx(12), y1, INK, 2, "3 3")
     s.text(hx(12), 398, L("restart 12:00", "restart 12:00"), 12, 700, INK, "middle")
@@ -346,7 +346,7 @@ def diagrams(lang: str):
         s.text(574, ty + 15, attr, 12, 400, MUTED, check_w=390)
     s.text(574, 140, L("The A/B/C question appears when answer_required is true;", "Pytanie A/B/C pojawia się, gdy answer_required = true;"), 12, 400, MUTED, check_w=400)
     s.text(574, 158, L("open_slots lists the unresolved terms.", "open_slots wymienia nierozwiązane terminy."), 12, 400, MUTED, check_w=400)
-    s.text(574, 176, L("The sound (attribute sound) plays on entering red and brown.", "Dźwięk (atrybut sound) gra przy wejściu w red i brąz."), 12, 400, MUTED, check_w=400)
+    s.text(574, 176, L("The sound (attribute sound) plays on entering red and black.", "Dźwięk (atrybut sound) gra przy wejściu w red i czerń."), 12, 400, MUTED, check_w=400)
 
     # 13 --------------------------------------------------------------- languages
     s = new("languages", 1000, 500, L("Languages", "Języki"), L("seven languages; anything else falls back to English", "siedem języków; reszta wraca do angielskiego"))

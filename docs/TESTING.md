@@ -108,7 +108,7 @@ use the real UI at http://localhost:8123 once logged in.
 3. Create a schedule with a 1-minute tolerance window and a term two minutes ahead →
    at T the sensor turns `red` and `how_many_times_today_due` is fired with
    `entity_id`, `name`, `description`, `scheduled_at`; one minute later it is
-   `blinking_brown` with the term in `open_slots` and `answer_required: true`.
+   `blinking_black` with the term in `open_slots` and `answer_required: true`.
 4. `press_schedule` without an `answer` at that moment → a validation error with
    `translation_key: answer_required`; with `answer: do_now` → the term closes, the count
    rises and `number_blinking` is true; another press → `exceeded`.

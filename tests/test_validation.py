@@ -182,7 +182,7 @@ def _walk(node, dotted):
 def test_every_state_error_and_service_the_code_raises_or_exposes_is_translated():
     strings = _load(INTEGRATION / "strings.json")
     assert set(strings["entity"]["sensor"]["schedule"]["state"]) == set(const.SCHEDULE_STATES)
-    assert {"answer_required", "schedule_not_active", *models.UPDATE_ERROR_KEYS} == set(strings["exceptions"])
+    assert {"answer_required", "early_answer_required", "schedule_not_active", *models.UPDATE_ERROR_KEYS} == set(strings["exceptions"])
     assert {
         const.SERVICE_PRESS_SCHEDULE,
         const.SERVICE_CLEAR_HISTORY,
@@ -200,7 +200,7 @@ def test_the_legend_quotes_the_cards_own_state_sentences_in_every_language():
     card's own strings), so the help never drifts from the button."""
     js = (INTEGRATION / "www" / "how-many-times-today-card.js").read_text(encoding="utf-8")
     order = ["en", "pl", "de", "ru", "uk", "zh-Hans"]  # the order of the language blocks in the card
-    for key in ("status_green", "status_on_plan", "status_transition", "status_red", "status_blinking_brown", "status_exceeded", "status_number_blinking"):
+    for key in ("status_green", "status_on_plan", "status_transition", "status_red", "status_blinking_black", "status_exceeded", "status_number_blinking"):
         sentences = re.findall(rf'{key}: "(.*?)"', js)
         assert len(sentences) == len(order), f"{key}: expected one sentence per language, got {len(sentences)}"
         for lang, sentence in zip(order, sentences):
@@ -263,3 +263,26 @@ def test_english_texts_say_what_their_keys_promise():
         for part in path:
             node = node[part]
         assert word in node.lower(), f"{'.'.join(path)} = {node!r} does not mention {word!r}"
+
+
+def test_every_reminder_sound_has_its_four_volume_files_and_every_language_names_it():
+    for sound_id in const.SOUND_IDS:
+        for level in range(1, 5):
+            assert (INTEGRATION / "www" / "sounds" / f"{sound_id}_{level}.ogg").is_file(), f"{sound_id}_{level}.ogg"
+    for path in [INTEGRATION / "strings.json", *(INTEGRATION / "translations").glob("*.json")]:
+        selectors = _load(path)["selector"]
+        assert set(selectors["sound"]["options"]) == set(const.SOUND_IDS), path.name
+        assert set(selectors["schedule_sound"]["options"]) == {"default", *const.SOUND_IDS}, path.name
+        assert set(selectors["volume"]["options"]) == {"0", "1", "2", "3", "4"}, path.name
+
+
+def test_the_sound_ids_of_services_yaml_are_the_integrations_sounds():
+    text = (INTEGRATION / "services.yaml").read_text(encoding="utf-8")
+    block = text[text.index("    sound_id:"):text.index("    volume_level:")]
+    assert re.findall(r"- (\w+)", block) == ["default", *const.SOUND_IDS]
+
+
+def test_the_sound_files_are_not_a_source_of_garbage():
+    """The synthesised sounds are small: the whole folder stays under 3 MB."""
+    total = sum(p.stat().st_size for p in (INTEGRATION / "www" / "sounds").glob("*.ogg"))
+    assert 0 < total < 3 * 1024 * 1024

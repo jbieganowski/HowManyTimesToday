@@ -103,6 +103,7 @@ is `24 ÷ interval`, rounded up (12 h → 2, 8 h → 3, 5 h → 5).
 | **Start (date and time)** | When the schedule begins; before it the button shows `pending` | the moment the form was opened |
 | **End (date and time, optional)** | When it stops; afterwards the schedule is `inactive`. Must be later than the start | none |
 | **Tolerance window (minutes before and after)** | A press this close to a term counts as on schedule | 30 (1 – 240) |
+| **Reminder sound** and **Reminder volume** (optional) | This schedule's own sound and volume; *Default* uses the global ones (section 6) | Default |
 
 If you create a schedule a few minutes after its start, the first term is shown as due
 right away; terms older than the tolerance window are not backfilled.
@@ -120,6 +121,12 @@ A **term** is a moment a schedule is due. Each term has a tolerance window (defa
 - **Outside the window, a term is open** — Home Assistant asks which of three things
   happened, about the **oldest open term**. The card shows the question; automations
   pass the answer in the `answer` field.
+- **Outside the window, nothing open, a little too early** — in the last tenth of the gap
+  since the previous term, just before the term's window opens (for a term at 16:00 after
+  one at 07:00 that is 15:06 – 15:30), the card asks whether the task was **done ahead of
+  time**. `done_early` closes the coming term on schedule (+1); `extra` is an additional
+  execution outside the schedule (+1) and the term stays due. The sensor shows how early it
+  is in `early_by_seconds`; a press without an answer fails with `early_answer_required`.
 - **Outside the window, nothing open** — it is an extra execution, logged as
   **OUTSIDE THE SCHEDULE**; the number on the button blinks.
 
@@ -128,6 +135,7 @@ A **term** is a moment a schedule is due. Each term has a tolerance window (defa
 | `already_done` (A) | It was done at that time, it just was not recorded | +1 | registered late |
 | `do_now` (B) | It was not done then — doing it now | +1 | outside the schedule |
 | `extra` (C) | It was done then, and this is an additional one | +2 | registered late + outside the schedule |
+| `done_early` | (the early question) It was done ahead of time | +1 | on schedule, closes the coming term |
 
 ![The A/B/C question on the card](images/screenshot-card-question.jpg)
 
@@ -181,8 +189,17 @@ Choose **Global settings (sound, push notification)**.
 
 | Field | Meaning |
 | --- | --- |
-| **Notification sound** | One sound for the whole plugin: `chime`, `bell`, `alert`, `gentle` or `none` (default `chime`). It plays in the browser showing the card when a schedule turns `red`, and again when it turns `blinking_brown` |
+| **Default reminder sound** | One of 18 sounds in six classes: gentle (`delikatny_dzwonek` soft chime, `pozytywka` music box, `harfa` harp), medium (`dzwonek` bell, `gitara` guitar, `marimba`), strong (`sygnal` beeps, `fanfara` fanfare, `budzik` alarm clock, `sos` Morse SOS), very strong (`alarm`, `syrena` siren), melody (`wlaz_kotek`, `kreskowka`, `pop_weasel`) and seasonal (`boze_narodzenie`, `wielkanoc_kurczaczek`, `wielkanoc_dzwony`). Default `dzwonek`. It plays in the browser showing the card when a schedule turns `red`, and again when it turns `blinking_black`. The files are served by the integration (`/how_many_times_today_files/sounds/<id>_<1-4>.ogg`) |
+| **Default volume** | Sound off, quiet, medium, loud (default) or very loud: the four volume levels are four recordings of every sound, so the volume does not depend on the browser's mixer. Relative to the volume of the device |
+| **Text size of the cards** | 85 %, 100 % (default), 115 %, 130 %, 150 % or 175 % — like the app |
+| **High contrast** | White bold text on black on every card |
 | **Push notification service** | Optional, e.g. `notify.mobile_app_phone`. The dropdown lists the mobile-app notifiers; any notify service can be typed. Empty means no push |
+
+Each schedule can have its **own** sound and volume: in the step *Start, end and tolerance*
+of the schedule (and in the card's edit dialog, with a *Play* button to listen) choose
+*Default* or a sound and a volume. Options written by version 1.x are read as they were:
+`chime` and `bell` become `dzwonek`, `alert` becomes `alarm`, `gentle` becomes
+`delikatny_dzwonek` and `none` becomes the default sound with the sound off.
 
 ### How to read the card
 
@@ -190,6 +207,8 @@ The fourth menu item, **How to read the card?**, is a help page. It explains in 
 words what every colour and every sentence under the name means, what the big number is,
 and what to do when the button blinks. Its wording is exactly what the card shows, in the
 language of the logged-in user. Confirming it returns to the menu; nothing is changed.
+
+The card has its own **help**: the **?** button on a card or a tile opens a window with the version in its title bar, **A-** / **A+** for the text size, a high-contrast switch, a table of contents in a frame with groups, the sections (what it is for, how to read the button, how to confirm, how to add and change a schedule, reminders, history, your data), and the author and the build date at the bottom.
 
 ![The help page](images/config-legend.jpg)
 
@@ -204,14 +223,14 @@ One **sensor per schedule**, named after the schedule (for example
 | --- | --- |
 | `pending` | Before the start date and time |
 | `green` | Just confirmed (or nothing due yet) |
-| `transition` | The colour fades from green to red towards the next term |
+| `transition` | The colour fades from green through yellow to red towards the next term (green up to 35 % of the way, yellow at 55 %) |
 | `red` | A term is due and inside its window |
-| `blinking_brown` | A term outlived its window and is still open; it keeps blinking |
+| `blinking_black` | A term outlived its window and is still open; it keeps blinking |
 | `exceeded` | More executions today than planned (red button, black number) |
 | `inactive` | Switched off by hand, or past the end |
 
 When several apply, the first match in this order wins: `inactive`, `pending`,
-`blinking_brown`, `exceeded`, `red`, `transition`, `green`.
+`blinking_black`, `exceeded`, `red`, `transition`, `green`.
 
 ![Which state wins](images/diagram-stage-states.svg)
 
@@ -224,7 +243,7 @@ for the state.
 | `green` | You are up to date |
 | `transition` | All according to plan (while the next term is still far away), then The time is coming (from 55 % of the way) |
 | `red` | NOW |
-| `blinking_brown` | WARNING - overdue! |
+| `blinking_black` | WARNING - overdue! |
 | `exceeded` | Done too many times |
 | `inactive` | Switched off |
 
@@ -238,12 +257,16 @@ Attributes:
 | `active`, `manually_inactive` | Whether it takes presses; whether it was switched off by hand |
 | `count_today`, `planned_count`, `count_exceeded` | The big number, the plan, and whether it is exceeded |
 | `number_blinking` | The number blinks after an out-of-window execution within the plan; the next press stops it |
-| `answer_required` | `true` when a press needs the A/B/C answer right now |
+| `answer_required` | `true` when a press needs the A/B/C answer right now (the early question uses `early_by_seconds`) |
 | `open_slots` | Unresolved terms, oldest first: `scheduled_at`, `overdue_minutes`, `missed` |
 | `color_progress` | 0.0 – 1.0 progress of the fade; `null` outside `green` and `transition` |
 | `last_pressed_at`, `next_expected_at`, `seconds_to_next_expected` | The last press and the next term |
 | `history` | The newest 50 entries (see below) |
-| `sound` | The global sound |
+| `sound`, `volume` | The reminder sound id and the volume level (0 – 4) of this schedule (its own, else the default) |
+| `own_sound`, `own_volume`, `default_sound`, `default_volume` | The schedule's own choice (`null` = default) and the default of the integration |
+| `early_by_seconds` | How early a press now would be (the early question follows), else `null` |
+| `font_scale`, `high_contrast` | The text size and contrast of the global settings |
+| `version`, `author`, `build` | The integration's version, author and the build date, shown in the card's help |
 
 History entries are an event type plus data — never ready-made text — so the card shows
 them in the viewer's language: `timestamp`, `kind` (`on_schedule`, `registered_late`,
@@ -286,6 +309,8 @@ everything that has already passed today as done on time:
 
 ![The edit dialog opened with a double tap](images/screenshot-tile-edit.jpg)
 
+The text size and the high contrast of the global settings apply to every card and tile. The **?** button next to the pencil opens the help.
+
 The history:
 
 ![The history opened from a tile](images/screenshot-tile-history.jpg)
@@ -314,11 +339,11 @@ All five are entity services: pick the schedule's sensor as the target.
 
 | Service | Fields | Effect |
 | --- | --- | --- |
-| `how_many_times_today.press_schedule` | `answer` (optional) | Confirms the schedule, like pressing its button |
+| `how_many_times_today.press_schedule` | `answer` (optional: `already_done`, `do_now`, `extra`, `done_early`) | Confirms the schedule, like pressing its button |
 | `how_many_times_today.clear_history` | `weeks` (optional) | Clears the press history |
 | `how_many_times_today.set_schedule_active` | `active` (required) | Switches the schedule on or off |
 | `how_many_times_today.reset_schedule` | — | Sets the schedule to "everything due so far today was done on time" (counter and today's history; earlier days stay) |
-| `how_many_times_today.update_schedule` | `name`, `description`, `fixed_times`, `interval_hours`, `start_at`, `end_at`, `window_minutes` (all optional, at least one) | Changes the schedule's name, description, times or interval, start, end or tolerance window (the card editor uses it) |
+| `how_many_times_today.update_schedule` | `name`, `description`, `fixed_times`, `interval_hours`, `start_at`, `end_at`, `window_minutes`, `sound_id`, `volume_level` (all optional, at least one) | Changes the schedule's name, description, times or interval, start, end, tolerance window, reminder sound or volume (`default` returns to the default; the card editor uses it) |
 
 ```yaml
 action: how_many_times_today.press_schedule
@@ -340,8 +365,8 @@ data:
 ```
 
 `press_schedule` without an `answer` when one is needed fails with a validation error
-whose translation key is `answer_required` (`schedule_not_active` for a pending or
-inactive schedule). `clear_history` without `weeks` clears everything; with `weeks`
+whose translation key is `answer_required` (`early_answer_required` for the early question,
+`schedule_not_active` for a pending or inactive schedule). `clear_history` without `weeks` clears everything; with `weeks`
 (ISO weeks such as `2026-W41`) only those weeks:
 
 ```yaml
@@ -368,7 +393,7 @@ At the moment a term comes due the sensor turns `red`, once, on the exact second
 - if a **push notification service** is set, a push with the description goes through the
   Home Assistant Companion app, which works with the app closed.
 
-Nothing repeats at `blinking_brown` or when a term is logged as missed.
+Nothing repeats at `blinking_black` or when a term is logged as missed.
 
 ## 11. Automation examples
 
@@ -411,7 +436,7 @@ actions:
 | The card shows "Configuration error" | The card's JavaScript is not loaded — typically a cached copy. Reload the page; if it persists, unregister the service worker and clear the browser cache (see [TESTING.md](TESTING.md)) |
 | "Already configured" when adding the integration | It is a singleton — use the gear icon on the existing entry |
 | "No schedules defined yet" in the edit menu | Add a schedule first |
-| A schedule is `blinking_brown` right after a restart | Intended: the stored state is restored, so a term missed during the downtime stays visible |
+| A schedule is `blinking_black` right after a restart | Intended: the stored state is restored, so a term missed during the downtime stays visible |
 | The button is grey and says it has not started | Before the start; presses are refused until then |
 | A schedule's card has disappeared from the dashboard | It is switched off or past its end (`inactive`); edit the dashboard to see it grey, then tick **Schedule active** in its editor or switch it on in the Configure dialog |
 | Times look two hours off | Schedules use the time zone configured in Home Assistant, not the browser's |

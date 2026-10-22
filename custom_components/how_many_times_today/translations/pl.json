@@ -79,7 +79,9 @@
         "data": {
           "start_at": "Start (data i godzina)",
           "end_at": "Koniec (data i godzina, opcjonalnie)",
-          "window_minutes": "Okno tolerancji (minuty przed i po)"
+          "window_minutes": "Okno tolerancji (minuty przed i po)",
+          "sound_id": "Dźwięk przypomnienia (opcjonalnie)",
+          "volume_level": "Głośność przypomnienia (opcjonalnie)"
         }
       },
       "manage_schedules": {
@@ -91,7 +93,7 @@
       },
       "legend": {
         "title": "Jak czytać kartę",
-        "description": "Każdy harmonogram ma jeden klawisz. **Kolor i zdanie pod nazwą** mówią, co robić:\n\n- **Zielony** — „Jesteś na bieżąco” / „Wszystko zgodnie z planem”. Ostatni termin został potwierdzony.\n- **Przechodzący w czerwony** — „Zbliża się pora”. Zbliża się następny termin.\n- **Czerwony** — „TERAZ”. Termin przypadł: naciśnij klawisz (w oknie tolerancji liczy się jako na czas).\n- **Migający brąz** — „UWAGA – spóźnione!”. Termin nie został potwierdzony na czas: naciśnij klawisz i odpowiedz na pytanie — A: było zrobione, tylko nie zapisane, B: nie zrobiono i robisz to teraz, C: zrobiono i to jest dodatkowe wykonanie.\n- **Czerwony z czarną liczbą** — „Zrobione za dużo razy”. Dziś więcej wykonań niż zaplanowano.\n- **Szary** — „Wyłączone” lub „Jeszcze się nie zaczęło”. Harmonogram nie przyjmuje naciśnięć. Harmonogram wyłączony (lub po terminie końca) jest ukryty na pulpicie i szary jest tylko podczas edycji pulpitu; włączysz go ponownie w edytorze karty.\n\n**Duża liczba** to ile razy zrobiono to dzisiaj. Jeśli **miga** („Migająca liczba: ostatnie wykonanie zapisano poza planem”), ostatnie naciśnięcie było poza harmonogramem."
+        "description": "Każdy harmonogram ma jeden klawisz. **Kolor i zdanie pod nazwą** mówią, co robić:\n\n- **Zielony** — „Jesteś na bieżąco” / „Wszystko zgodnie z planem”. Ostatni termin został potwierdzony.\n- **Przechodzący w czerwony** — „Zbliża się pora”. Zbliża się następny termin.\n- **Czerwony** — „TERAZ”. Termin przypadł: naciśnij klawisz (w oknie tolerancji liczy się jako na czas).\n- **Migający czarny** — „UWAGA – spóźnione!”. Termin nie został potwierdzony na czas: naciśnij klawisz i odpowiedz na pytanie — A: było zrobione, tylko nie zapisane, B: nie zrobiono i robisz to teraz, C: zrobiono i to jest dodatkowe wykonanie.\n- **Czerwony z czarną liczbą** — „Zrobione za dużo razy”. Dziś więcej wykonań niż zaplanowano.\n- **Szary** — „Wyłączone” lub „Jeszcze się nie zaczęło”. Harmonogram nie przyjmuje naciśnięć. Harmonogram wyłączony (lub po terminie końca) jest ukryty na pulpicie i szary jest tylko podczas edycji pulpitu; włączysz go ponownie w edytorze karty.\n\n**Duża liczba** to ile razy zrobiono to dzisiaj. Jeśli **miga** („Migająca liczba: ostatnie wykonanie zapisano poza planem”), ostatnie naciśnięcie było poza harmonogramem.\n\n**Naciśnięcie trochę za wcześnie?** Tuż przed oknem tolerancji nadchodzącego terminu (w ostatniej dziesiątej części odstępu od poprzedniego terminu) karta pyta, czy zadanie wykonano przed czasem (wtedy liczy się na nadchodzący termin), czy to zdarzenie dodatkowe.\n\n**Dźwięk, rozmiar tekstu, kontrast:** w *Ustawieniach globalnych* wybierasz domyślny dźwięk przypomnienia i jego głośność, rozmiar tekstu na kartach i wysoki kontrast. Każdy harmonogram może mieć własny dźwięk i głośność."
       },
       "reset_schedules": {
         "title": "Reset do „wszystko na czas”",
@@ -103,9 +105,13 @@
       "global_settings": {
         "title": "Ustawienia globalne",
         "data": {
-          "global_sound": "Dźwięk powiadomienia",
+          "global_sound": "Domyślny dźwięk przypomnienia",
+          "global_volume": "Domyślna głośność",
+          "font_scale": "Rozmiar tekstu na kartach",
+          "high_contrast": "Wysoki kontrast (biały pogrubiony tekst na czarnym)",
           "notify_service": "Usługa powiadomień push (opcjonalnie, np. notify.mobile_app_telefon)"
-        }
+        },
+        "description": "Każdy harmonogram może mieć własny dźwięk i głośność (ustawiasz je przy edycji). Głośność jest względna wobec głośności urządzenia."
       }
     },
     "error": {
@@ -135,7 +141,72 @@
       "options": {
         "already_done": "Było zrobione w tym terminie, tylko nie zapisano",
         "do_now": "Nie zrobiono wtedy - robię to teraz",
-        "extra": "Zrobiono wtedy, a to jest dodatkowe wykonanie"
+        "extra": "Zrobiono wtedy, a to jest dodatkowe wykonanie",
+        "done_early": "Zrobione przed czasem (liczy się na nadchodzący termin)"
+      }
+    },
+    "sound": {
+      "options": {
+        "delikatny_dzwonek": "Delikatny dzwonek · delikatny",
+        "pozytywka": "Pozytywka · delikatny",
+        "harfa": "Harfa · delikatny",
+        "dzwonek": "Dzwonek · średni",
+        "gitara": "Gitara · średni",
+        "marimba": "Marimba · średni",
+        "sygnal": "Sygnał · mocny",
+        "fanfara": "Fanfara · mocny",
+        "budzik": "Budzik · mocny",
+        "sos": "SOS (alfabet Morse'a) · mocny",
+        "alarm": "Alarm · bardzo mocny",
+        "syrena": "Syrena · bardzo mocny",
+        "wlaz_kotek": "Wlazł kotek na płotek · melodia",
+        "kreskowka": "Wesoła kreskówka · melodia",
+        "pop_weasel": "Pop Goes the Weasel (Łasica) · melodia",
+        "boze_narodzenie": "Boże Narodzenie · okolicznościowy",
+        "wielkanoc_kurczaczek": "Wielkanoc: kurczaczek · okolicznościowy",
+        "wielkanoc_dzwony": "Wielkanoc: dzwony · okolicznościowy"
+      }
+    },
+    "schedule_sound": {
+      "options": {
+        "default": "Domyślny",
+        "delikatny_dzwonek": "Delikatny dzwonek · delikatny",
+        "pozytywka": "Pozytywka · delikatny",
+        "harfa": "Harfa · delikatny",
+        "dzwonek": "Dzwonek · średni",
+        "gitara": "Gitara · średni",
+        "marimba": "Marimba · średni",
+        "sygnal": "Sygnał · mocny",
+        "fanfara": "Fanfara · mocny",
+        "budzik": "Budzik · mocny",
+        "sos": "SOS (alfabet Morse'a) · mocny",
+        "alarm": "Alarm · bardzo mocny",
+        "syrena": "Syrena · bardzo mocny",
+        "wlaz_kotek": "Wlazł kotek na płotek · melodia",
+        "kreskowka": "Wesoła kreskówka · melodia",
+        "pop_weasel": "Pop Goes the Weasel (Łasica) · melodia",
+        "boze_narodzenie": "Boże Narodzenie · okolicznościowy",
+        "wielkanoc_kurczaczek": "Wielkanoc: kurczaczek · okolicznościowy",
+        "wielkanoc_dzwony": "Wielkanoc: dzwony · okolicznościowy"
+      }
+    },
+    "volume": {
+      "options": {
+        "0": "Wyłącz dźwięk",
+        "1": "Cicho",
+        "2": "Średnio",
+        "3": "Głośno",
+        "4": "Bardzo głośno"
+      }
+    },
+    "schedule_volume": {
+      "options": {
+        "default": "Domyślny",
+        "0": "Wyłącz dźwięk",
+        "1": "Cicho",
+        "2": "Średnio",
+        "3": "Głośno",
+        "4": "Bardzo głośno"
       }
     }
   },
@@ -147,7 +218,7 @@
           "green": "Zrobione",
           "transition": "Zbliża się termin",
           "red": "Czas teraz",
-          "blinking_brown": "Po terminie",
+          "blinking_black": "Po terminie",
           "exceeded": "Za dużo dzisiaj",
           "inactive": "Nieaktywny"
         }
@@ -190,6 +261,15 @@
     },
     "nothing_to_update": {
       "message": "Podaj co najmniej jedno pole do zmiany."
+    },
+    "early_answer_required": {
+      "message": "Ten klawisz został naciśnięty trochę za wcześnie przed nadchodzącym terminem i wymaga odpowiedzi (done_early lub extra)."
+    },
+    "invalid_sound": {
+      "message": "Nieznany dźwięk przypomnienia."
+    },
+    "invalid_volume": {
+      "message": "Głośność musi być liczbą całkowitą od 0 do 4."
     }
   },
   "services": {
@@ -199,7 +279,7 @@
       "fields": {
         "answer": {
           "name": "Odpowiedź",
-          "description": "Wymagana przy naciśnięciu poza oknem tolerancji, gdy termin jest jeszcze otwarty (atrybut answer_required jest prawdą). Dotyczy najstarszego otwartego terminu."
+          "description": "Potrzebna przy naciśnięciu poza oknem tolerancji, gdy termin jest jeszcze otwarty, albo trochę za wcześnie przed nadchodzącym terminem (atrybut answer_required ma wartość true). Wartości: already_done, do_now, extra, done_early."
         }
       }
     },
@@ -240,6 +320,14 @@
         },
         "window_minutes": {
           "name": "Okno tolerancji (minuty)"
+        },
+        "sound_id": {
+          "name": "Dźwięk przypomnienia",
+          "description": "Jeden z identyfikatorów dźwięków albo \"default\" (domyślny dźwięk integracji)."
+        },
+        "volume_level": {
+          "name": "Głośność przypomnienia",
+          "description": "Od 0 (wyłączony) do 4 (bardzo głośno) albo \"default\"."
         }
       }
     },

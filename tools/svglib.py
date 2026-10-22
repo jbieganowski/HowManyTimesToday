@@ -20,7 +20,7 @@ BG1 = "#fbfaf8"
 BG2 = "#f1efe9"
 GREEN = "#2e7d32"
 RED = "#c62828"
-BROWN = "#5d4037"
+BLACK = "#1f1f1f"
 BLUE = "#4a90c4"
 PURPLE = "#5c3d82"
 SAGE = "#7a9e7e"
@@ -30,7 +30,7 @@ AMBER = "#b26a00"
 TINT = {
     GREEN: "#e6f2e7",
     RED: "#fbe9e9",
-    BROWN: "#efe6e2",
+    BLACK: "#e8e8e8",
     BLUE: "#e6f0f8",
     PURPLE: "#eee8f5",
     SAGE: "#e8f0e9",
@@ -138,7 +138,7 @@ class Svg:
             )
             fill = f"url(#{gid})"
         else:
-            fill = {"ok": GREEN, "overdue": BROWN, "blink": RED}[kind]
+            fill = {"ok": GREEN, "overdue": BLACK, "blink": RED}[kind]
         if kind == "blink":
             self.circle(cx, cy, r + 9, "none", RED, 3, "7 6")
         self.circle(cx, cy, r, fill)

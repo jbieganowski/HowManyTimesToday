@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 456 456" width="456" height="456"><defs><linearGradient id="bgA" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2E7D32"/><stop offset="0.55" stop-color="#C62828"/><stop offset="1" stop-color="#5D4037"/></linearGradient></defs><circle cx="228" cy="228" r="214" fill="url(#bgA)"/><g opacity="0.30" transform="translate(74 300) rotate(-14) scale(0.27) translate(-228 -228)">
+  <defs><clipPath id="gs1"><path d="M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z"/></clipPath></defs>
+  <path d="M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z" fill="rgba(255,255,255,0.10)"/>
+  <g clip-path="url(#gs1)">
+    <rect x="140" y="170" width="170" height="58" fill="#FFFFFF"/>
+    <path d="M150,340 C186,296 212,282 228,278 C244,282 270,296 306,340 Z" fill="#FFFFFF"/>
+  </g>
+  <line x1="228" y1="226" x2="228" y2="282" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z" fill="none" stroke="#FFFFFF" stroke-width="11" stroke-linejoin="round"/>
+  <rect x="126" y="98" width="204" height="24" rx="10" fill="#FFFFFF"/>
+  <rect x="126" y="334" width="204" height="24" rx="10" fill="#FFFFFF"/></g><g opacity="0.30" transform="translate(382 156) rotate(14) scale(0.27) translate(-228 -228)">
+  <defs><clipPath id="gs2"><path d="M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z"/></clipPath></defs>
+  <path d="M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z" fill="rgba(255,255,255,0.10)"/>
+  <g clip-path="url(#gs2)">
+    <rect x="140" y="170" width="170" height="58" fill="#FFFFFF"/>
+    <path d="M150,340 C186,296 212,282 228,278 C244,282 270,296 306,340 Z" fill="#FFFFFF"/>
+  </g>
+  <line x1="228" y1="226" x2="228" y2="282" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z" fill="none" stroke="#FFFFFF" stroke-width="11" stroke-linejoin="round"/>
+  <rect x="126" y="98" width="204" height="24" rx="10" fill="#FFFFFF"/>
+  <rect x="126" y="334" width="204" height="24" rx="10" fill="#FFFFFF"/></g>
+  <defs><clipPath id="ga"><path d="M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z"/></clipPath></defs>
+  <path d="M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z" fill="rgba(255,255,255,0.12)"/>
+  <g clip-path="url(#ga)">
+    <rect x="140" y="170" width="170" height="58" fill="#FFFFFF"/>
+    <path d="M150,340 C186,296 212,282 228,278 C244,282 270,296 306,340 Z" fill="#FFFFFF"/>
+  </g>
+  <line x1="228" y1="226" x2="228" y2="282" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z" fill="none" stroke="#FFFFFF" stroke-width="11" stroke-linejoin="round"/>
+  <rect x="126" y="98" width="204" height="24" rx="10" fill="#FFFFFF"/>
+  <rect x="126" y="334" width="204" height="24" rx="10" fill="#FFFFFF"/></svg>

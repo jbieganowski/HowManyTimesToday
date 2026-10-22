@@ -18,7 +18,10 @@ from typing import Iterator
 from .const import (
     ANSWER_ALREADY_DONE,
     ANSWER_DO_NOW,
+    ANSWER_DONE_EARLY,
     ANSWER_EXTRA,
+    CONF_GLOBAL_SOUND,
+    CONF_GLOBAL_VOLUME,
     CONF_SCHEDULE_DESCRIPTION,
     CONF_SCHEDULE_END_AT,
     CONF_SCHEDULE_FIXED_TIMES,
@@ -26,19 +29,28 @@ from .const import (
     CONF_SCHEDULE_INTERVAL_HOURS,
     CONF_SCHEDULE_MODE,
     CONF_SCHEDULE_NAME,
+    CONF_SCHEDULE_SOUND,
     CONF_SCHEDULE_START_AT,
+    CONF_SCHEDULE_VOLUME,
     CONF_SCHEDULE_WINDOW_MINUTES,
+    DEFAULT_SOUND,
+    DEFAULT_VOLUME,
     DEFAULT_WINDOW_MINUTES,
     DUE_NOTIFY_GRACE_SECONDS,
+    EARLY_ZONE_FRACTION,
     KIND_EXTRA,
     KIND_MISSED,
     KIND_ON_SCHEDULE,
     KIND_OUTSIDE,
     KIND_REGISTERED_LATE,
+    LEGACY_SOUNDS,
+    MAX_VOLUME,
+    MIN_VOLUME,
     MISSED_GAP_FRACTION,
     MODE_FIXED_TIMES,
     MODE_INTERVAL,
-    STATE_BLINKING_BROWN,
+    SOUNDS,
+    STATE_BLINKING_BLACK,
     STATE_EXCEEDED,
     STATE_GREEN,
     STATE_INACTIVE,
@@ -59,6 +71,16 @@ _GREEN_PROGRESS = 0.02
 
 class AnswerRequired(Exception):
     """A press needs the A/B/C answer: it is outside the window of an open term."""
+
+
+class EarlyAnswerRequired(Exception):
+    """A press came a little too early before the coming term (the last tenth of the gap,
+    before the tolerance window): it needs the answer "done ahead of time" or "extra"."""
+
+    def __init__(self, term: datetime, early_by: timedelta) -> None:
+        super().__init__("early press")
+        self.term = term
+        self.early_by = early_by
 
 
 class ScheduleNotActive(Exception):
@@ -132,6 +154,9 @@ class Schedule:
     start_at: datetime
     end_at: datetime | None
     window_minutes: int
+    # this schedule's own reminder sound and volume; None = the default of the integration
+    sound_id: str | None = None
+    volume_level: int | None = None
 
     @property
     def window(self) -> timedelta:
@@ -171,6 +196,8 @@ def build_schedule(cfg: dict, tz: tzinfo) -> Schedule:
         start_at=parse_local_datetime(cfg[CONF_SCHEDULE_START_AT], tz),
         end_at=parse_local_datetime(end, tz) if end else None,
         window_minutes=int(cfg.get(CONF_SCHEDULE_WINDOW_MINUTES, DEFAULT_WINDOW_MINUTES)),
+        sound_id=cfg.get(CONF_SCHEDULE_SOUND) if cfg.get(CONF_SCHEDULE_SOUND) in SOUNDS else None,
+        volume_level=_clean_volume(cfg.get(CONF_SCHEDULE_VOLUME)),
     )
 
 
@@ -184,6 +211,8 @@ UPDATABLE_FIELDS = (
     CONF_SCHEDULE_START_AT,
     CONF_SCHEDULE_END_AT,
     CONF_SCHEDULE_WINDOW_MINUTES,
+    CONF_SCHEDULE_SOUND,
+    CONF_SCHEDULE_VOLUME,
 )
 # the translation keys a rejected change can carry (each has an `exceptions` text)
 UPDATE_ERROR_KEYS = (
@@ -197,6 +226,8 @@ UPDATE_ERROR_KEYS = (
     "end_before_start",
     "invalid_window",
     "wrong_mode",
+    "invalid_sound",
+    "invalid_volume",
 )
 MIN_INTERVAL_HOURS = 0.5
 MAX_INTERVAL_HOURS = 48.0
@@ -291,10 +322,67 @@ def apply_schedule_update(cfg: dict, changes: dict, tz: tzinfo) -> dict:
             raise ScheduleUpdateError("invalid_window")
         new[CONF_SCHEDULE_WINDOW_MINUTES] = window
 
+    if CONF_SCHEDULE_SOUND in given:
+        raw_sound = given[CONF_SCHEDULE_SOUND]
+        if str(raw_sound).strip() in ("", "default"):
+            new[CONF_SCHEDULE_SOUND] = None  # back to the default sound
+        elif str(raw_sound) in SOUNDS:
+            new[CONF_SCHEDULE_SOUND] = str(raw_sound)
+        else:
+            raise ScheduleUpdateError("invalid_sound")
+
+    if CONF_SCHEDULE_VOLUME in given:
+        raw_volume = given[CONF_SCHEDULE_VOLUME]
+        if str(raw_volume).strip() in ("", "default"):
+            new[CONF_SCHEDULE_VOLUME] = None  # back to the default volume
+        else:
+            try:
+                level = int(float(raw_volume))
+            except (TypeError, ValueError) as err:
+                raise ScheduleUpdateError("invalid_volume") from err
+            if not (MIN_VOLUME <= level <= MAX_VOLUME):
+                raise ScheduleUpdateError("invalid_volume")
+            new[CONF_SCHEDULE_VOLUME] = level
+
     end = new.get(CONF_SCHEDULE_END_AT)
     if end and parse_local_datetime(end, tz) <= parse_local_datetime(new[CONF_SCHEDULE_START_AT], tz):
         raise ScheduleUpdateError("end_before_start")
     return new
+
+
+def _clean_volume(value) -> int | None:
+    """A stored volume level (0-4) or None for "the default"."""
+    if value is None or value == "":
+        return None
+    try:
+        level = int(float(value))
+    except (TypeError, ValueError):
+        return None
+    return level if MIN_VOLUME <= level <= MAX_VOLUME else None
+
+
+def global_sound_settings(options: dict) -> tuple[str, int]:
+    """The default reminder sound and volume of the integration. Also reads what 1.x stored
+    (a single name such as "chime" or "none" for the whole integration)."""
+    raw = options.get(CONF_GLOBAL_SOUND)
+    volume = _clean_volume(options.get(CONF_GLOBAL_VOLUME))
+    if raw in LEGACY_SOUNDS:
+        sound, legacy_volume = LEGACY_SOUNDS[raw]
+        if volume is None:
+            volume = legacy_volume
+    elif raw in SOUNDS:
+        sound = raw
+    else:
+        sound = DEFAULT_SOUND
+    return sound, DEFAULT_VOLUME if volume is None else volume
+
+
+def sound_for(s: Schedule, default_sound: str, default_volume: int) -> tuple[str, int]:
+    """The sound and volume this schedule rings with: its own, else the default."""
+    return (
+        s.sound_id or default_sound,
+        s.volume_level if s.volume_level is not None else default_volume,
+    )
 
 
 # --- terms --------------------------------------------------------------------------
@@ -336,6 +424,17 @@ def _pattern_next(s: Schedule, term: datetime) -> datetime:
         if candidate > term:
             return candidate
     return datetime.combine(term.date() + timedelta(days=1), s.fixed_times[0], tzinfo=term.tzinfo)
+
+
+def _pattern_prev(s: Schedule, term: datetime) -> datetime:
+    """The term of the periodic pattern before `term` (to measure the gap before it)."""
+    if s.mode == MODE_INTERVAL:
+        return _add(term, -timedelta(hours=s.interval_hours))
+    for t in reversed(s.fixed_times):
+        candidate = datetime.combine(term.date(), t, tzinfo=term.tzinfo)
+        if candidate < term:
+            return candidate
+    return datetime.combine(term.date() - timedelta(days=1), s.fixed_times[-1], tzinfo=term.tzinfo)
 
 
 def gap_after(s: Schedule, term: datetime) -> timedelta:
@@ -538,6 +637,25 @@ def answer_required(s: Schedule, rt: ScheduleRuntime, now: datetime) -> bool:
     return bool(opens) and not _within(now, opens[0], s.window)
 
 
+def early_press(s: Schedule, rt: ScheduleRuntime, now: datetime) -> tuple[datetime, timedelta] | None:
+    """A press now is "too early" when nothing is open (late or due), the coming term is no
+    more than a tenth of the gap since the previous term away, and its tolerance window has
+    not begun (inside the window a press counts as on time). Returns the term and by how
+    much it is early, else None."""
+    if activity(s, rt, now) != "active" or _open_terms(rt):
+        return None
+    upcoming = next(occurrences_after(s, now), None)
+    if upcoming is None or upcoming.isoformat() in rt.occurrences:
+        return None
+    early_by = _diff(upcoming, now)
+    if early_by <= s.window:
+        return None
+    gap = _diff(upcoming, _pattern_prev(s, upcoming))
+    if early_by > gap * EARLY_ZONE_FRACTION:
+        return None
+    return upcoming, early_by
+
+
 def press(
     s: Schedule,
     rt: ScheduleRuntime,
@@ -552,6 +670,9 @@ def press(
     - outside its window: the answer decides - A (already done: closed, +1), B (do it
       now: closed late, +1, outside the schedule), C (done then and again now: closed,
       +2, one entry of each); without an answer AnswerRequired is raised;
+    - no open term, a little too early before the coming term (see early_press): the
+      answer decides - done ahead of time (the coming term is closed, +1) or an extra
+      execution (+1, outside the schedule); without an answer EarlyAnswerRequired;
     - no open term: an upcoming term whose window has opened is closed in advance,
       otherwise the press is an extra, outside the schedule.
     Blinking of the number starts after an outside press that stays within the planned
@@ -584,6 +705,18 @@ def press(
             else:
                 raise ValueError(f"Unknown answer: {answer!r}")
         rt.occurrences[term.isoformat()] = {"status": RESOLVED, "missed": rt.occurrences[term.isoformat()]["missed"]}
+    elif (early := early_press(s, rt, now)) is not None:
+        coming, early_by = early
+        if answer is None:
+            raise EarlyAnswerRequired(coming, early_by)
+        if answer == ANSWER_DONE_EARLY:
+            rt.occurrences[coming.isoformat()] = {"status": RESOLVED, "missed": False}
+            entries.append(make_entry(now, KIND_ON_SCHEDULE, coming, False, 1))
+        elif answer == ANSWER_EXTRA:
+            entries.append(make_entry(now, KIND_OUTSIDE, None, True, 1))
+            outside = True
+        else:
+            raise ValueError(f"Unknown answer: {answer!r}")
     else:
         upcoming = next(occurrences_after(s, now), None)
         if (
@@ -652,6 +785,8 @@ class Status:
     number_blinking: bool
     answer_required: bool
     open_slots: list[dict] = field(default_factory=list)
+    # a press now would be too early by this many seconds (see early_press), else None
+    early_by_seconds: int | None = None
 
 
 def _next_unresolved(s: Schedule, rt: ScheduleRuntime, after: datetime) -> datetime | None:
@@ -664,7 +799,7 @@ def _next_unresolved(s: Schedule, rt: ScheduleRuntime, after: datetime) -> datet
 
 def compute_status(s: Schedule, rt: ScheduleRuntime, history: list[dict], now: datetime) -> Status:
     """Work out the sensor state and attributes. State priority, highest first:
-    inactive > pending > blinking_brown > exceeded > red > transition > green."""
+    inactive > pending > blinking_black > exceeded > red > transition > green."""
     planned = s.planned_count
     count = count_today(history, now)
     exceeded = count > planned
@@ -692,7 +827,7 @@ def compute_status(s: Schedule, rt: ScheduleRuntime, history: list[dict], now: d
 
     progress: float | None = None
     if any(_diff(now, t) > window for t in opens):
-        state = STATE_BLINKING_BROWN
+        state = STATE_BLINKING_BLACK
     elif exceeded:
         state = STATE_EXCEEDED
     elif opens:
@@ -717,4 +852,5 @@ def compute_status(s: Schedule, rt: ScheduleRuntime, history: list[dict], now: d
         number_blinking=rt.number_blinking and not exceeded,
         answer_required=needs_answer,
         open_slots=open_slots,
+        early_by_seconds=int(early[1].total_seconds()) if (early := early_press(s, rt, now)) else None,
     )

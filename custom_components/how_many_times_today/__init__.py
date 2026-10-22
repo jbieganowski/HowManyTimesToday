@@ -23,6 +23,9 @@ from .const import (
     LEGACY_CONF_TASKS,
     LEGACY_STORAGE_HISTORY_PREFIX,
     LEGACY_STORAGE_STATE_PREFIX,
+    MAX_VOLUME,
+    MIN_VOLUME,
+    SOUND_IDS,
     STORAGE_KEY_HISTORY_PREFIX,
     STORAGE_KEY_STATE_PREFIX,
     STORAGE_VERSION,
@@ -36,6 +39,8 @@ PLATFORMS = ["sensor"]
 _LOGGER = logging.getLogger(__name__)
 
 CARD_URL_PATH = f"/{DOMAIN}_files/how-many-times-today-card.js"
+# the reminder sounds: /how_many_times_today_files/sounds/<sound id>_<1-4>.ogg
+SOUNDS_URL_PATH = f"/{DOMAIN}_files/sounds/{{name}}.ogg"
 
 
 async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -101,6 +106,9 @@ async def async_remove_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator = HowManyTimesTodayCoordinator(hass, entry)
     coordinator.version = str((await async_get_integration(hass, DOMAIN)).version)
+    card_file = Path(__file__).parent / "www" / "how-many-times-today-card.js"
+    modified = (await hass.async_add_executor_job(card_file.stat)).st_mtime
+    coordinator.build = dt_util.utc_from_timestamp(modified).strftime("%Y-%m-%d %H:%M")
     await coordinator.async_setup()
 
     hass.data.setdefault(DOMAIN, {})[entry.entry_id] = coordinator
@@ -152,6 +160,28 @@ class _CardView(HomeAssistantView):
         )
 
 
+class _SoundView(HomeAssistantView):
+    """Serves the reminder sounds (the ogg files of www/sounds/) to the card.
+
+    Only the known ids with a volume level 1-4 are served, nothing else is read from disk.
+    """
+
+    url = SOUNDS_URL_PATH
+    name = f"{DOMAIN}:sound"
+    requires_auth = False  # played by an <audio> element, which cannot send credentials
+
+    def __init__(self, hass: HomeAssistant, folder: Path) -> None:
+        self._hass = hass
+        self._folder = folder
+
+    async def get(self, request: web.Request, name: str) -> web.Response:
+        sound_id, _, level = name.rpartition("_")
+        if sound_id not in SOUND_IDS or not level.isdigit() or not (MIN_VOLUME < int(level) <= MAX_VOLUME):
+            raise web.HTTPNotFound()
+        data = await self._hass.async_add_executor_job((self._folder / f"{name}.ogg").read_bytes)
+        return web.Response(body=data, content_type="audio/ogg", headers={"Cache-Control": "public, max-age=86400"})
+
+
 async def _async_register_frontend_card(hass: HomeAssistant, card_url: str = CARD_URL_PATH) -> None:
     """Serve the bundled Lovelace card and auto-inject it, so users never have to
     add a Resource manually in Settings -> Dashboards (one-click install only).
@@ -168,6 +198,7 @@ async def _async_register_frontend_card(hass: HomeAssistant, card_url: str = CAR
 
     try:
         hass.http.register_view(_CardView(hass, card_path))
+        hass.http.register_view(_SoundView(hass, card_path.parent / "sounds"))
     except Exception:  # noqa: BLE001
         _LOGGER.warning(
             "Could not register the How Many Times Today card; "

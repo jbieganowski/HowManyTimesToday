@@ -109,7 +109,7 @@ zwykli użytkownicy dostają tylko zmiany stanu, dlatego karta reaguje na przej�
 2. Dodaj harmonogram co X godzin → bez listy godzin; pierwszy termin to dokładnie start.
 3. Utwórz harmonogram z oknem tolerancji 1 minuta i terminem za dwie minuty → w T sensor
    robi się `red` i odpalane jest `how_many_times_today_due` z `entity_id`, `name`,
-   `description`, `scheduled_at`; minutę później jest `blinking_brown`, termin w
+   `description`, `scheduled_at`; minutę później jest `blinking_black`, termin w
    `open_slots` i `answer_required: true`.
 4. `press_schedule` bez `answer` w tym momencie → błąd walidacji z
    `translation_key: answer_required`; z `answer: do_now` → termin się zamyka, licznik

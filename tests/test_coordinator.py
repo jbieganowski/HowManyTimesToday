@@ -85,7 +85,7 @@ def test_an_open_term_stays_open_and_blinking_after_a_restart():
         CLOCK["now"] = at(9, 0)  # HA was down for a while
         restarted = await start(entry)
         st = restarted.status("s1")
-        assert st.state == const.STATE_BLINKING_BROWN
+        assert st.state == const.STATE_BLINKING_BLACK
         assert [x["scheduled_at"] for x in st.open_slots] == [at(7).isoformat()]
 
     run(go())
@@ -370,10 +370,18 @@ def test_an_invalid_schedule_in_the_options_is_ignored_not_fatal():
 
 def test_the_global_sound_and_notify_service_come_from_the_options():
     async def go():
-        coord = await start(make_entry([], global_sound="bell", notify_service="notify.mobile_app_x"))
-        assert coord.sound == "bell" and coord.notify_service == "notify.mobile_app_x"
-        default = await start(make_entry([]))
-        assert default.sound == "chime" and default.notify_service is None
+        coord = await start(make_entry([cfg_fixed("a")], global_sound="alarm", global_volume=2, notify_service="notify.mobile_app_x"))
+        assert coord.sound_of("a") == ("alarm", 2) and coord.notify_service == "notify.mobile_app_x"
+        default = await start(make_entry([cfg_fixed("a")]))
+        assert default.sound_of("a") == ("dzwonek", 3) and default.notify_service is None
+        # 1.x stored one global name: it still reads (bell -> the bell sound, none -> silence)
+        old = await start(make_entry([cfg_fixed("a")], global_sound="none"))
+        assert old.sound_of("a") == ("dzwonek", 0)
+        # a schedule's own sound and volume win over the default
+        own = cfg_fixed("b")
+        own["sound_id"], own["volume_level"] = "harfa", 1
+        mixed = await start(make_entry([own], global_sound="alarm", global_volume=4))
+        assert mixed.sound_of("b") == ("harfa", 1)
 
     run(go())
 
@@ -433,10 +441,10 @@ def test_reset_replaces_todays_history_keeps_earlier_days_and_lights_the_button_
         CLOCK["now"] = at(14)
         await coord.async_refresh()
         await coord.history.async_append("a", [models.make_entry(at(9, d=18), const.KIND_ON_SCHEDULE, at(9, d=18), False, 1)])
-        assert coord.status("a").state == const.STATE_BLINKING_BROWN
+        assert coord.status("a").state == const.STATE_BLINKING_BLACK
         assert await coord.async_reset_to_on_schedule(None) == ["a"]  # the one switched off is skipped
         status = coord.status("a")
-        assert status.count_today == 2 and status.open_slots == [] and status.state != const.STATE_BLINKING_BROWN
+        assert status.count_today == 2 and status.open_slots == [] and status.state != const.STATE_BLINKING_BLACK
         stamps = [e["timestamp"] for e in coord.history.get("a")]
         assert stamps == [at(9, d=18).isoformat(), at(7).isoformat(), at(13).isoformat()]
         assert coord.history.get("off") == []

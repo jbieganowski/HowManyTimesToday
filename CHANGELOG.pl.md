@@ -2,6 +2,49 @@
 
 ([English version](CHANGELOG.md))
 
+## [2.0.0] - 2026-10-22
+
+Integracja ma teraz to, co najnowsza aplikacja na Androida. Wersja główna: stan
+`blinking_brown` nazywa się teraz `blinking_black` (automatyzacje i szablony, które go
+sprawdzają, trzeba poprawić); wszystko zapisane przez 1.x jest czytane tak jak było.
+
+### Integracja
+
+- Klawisz migający przy spóźnionym terminie miga teraz na **czarno** (i jasnoszaro) zamiast
+  na brązowo; stan sensora to `blinking_black`.
+- **Zbyt wczesne naciśnięcie**: naciśnięcie tuż przed nadchodzącym terminem (ostatnia
+  dziesiąta część odstępu od poprzedniego terminu, przed jego oknem tolerancji) pyta, czy
+  zadanie wykonano przed czasem (`done_early`: zamyka nadchodzący termin zgodnie z
+  harmonogramem), czy to dodatkowe wykonanie (`extra`). Sensor pokazuje `early_by_seconds`;
+  naciśnięcie bez odpowiedzi kończy się błędem `early_answer_required`.
+- **Dźwięki przypomnień**: 18 dźwięków w sześciu klasach (delikatne, średnie, mocne, bardzo
+  mocne, melodie, okolicznościowe), każdy w czterech poziomach głośności, serwowane przez
+  integrację i odtwarzane przez kartę. Dźwięk i głośność domyślne w ustawieniach globalnych
+  oraz własne dla każdego harmonogramu (przepływ opcji, okno edycji na karcie z przyciskiem
+  *Odtwórz*, pola `sound_id` i `volume_level` usługi `update_schedule`).
+  `tools/make_sounds.py` generuje je od nowa.
+- **Rozmiar tekstu** (85 – 175 %) i **wysoki kontrast** w ustawieniach globalnych, stosowane
+  na każdej karcie i kafelku.
+- **Kolory jak w aplikacji**: zielony, potem żółty (zdanie „zbliża się pora” pojawia się
+  przy żółtym), potem czerwony.
+- **Pomoc** na każdej karcie i kafelku (przycisk **?**): wersja w pasku tytułu, A- / A+,
+  przełącznik kontrastu, spis treści z grupami, sekcje, autor i data kompilacji. Sensor ma
+  nowe atrybuty `sound`, `volume`, `own_sound`, `own_volume`, `default_sound`,
+  `default_volume`, `early_by_seconds`, `font_scale`, `high_contrast`, `version`, `author`,
+  `build`.
+- Nowe logo (klepsydra z aplikacji).
+
+### Zgodność
+
+- Opcje i harmonogramy zapisane przez 1.x wczytują się bez zmian: stare nazwy dźwięków są
+  mapowane (`chime`, `bell` na `dzwonek`, `alert` na `alarm`, `gentle` na
+  `delikatny_dzwonek`, `none` na ciszę), harmonogramy bez dźwięku używają domyślnego.
+
+### Dokumentacja
+
+- Przewodnik konfiguracji, specyfikacja, uwagi o testach i diagramy (EN + PL) opisują
+  zbyt wczesne naciśnięcie, dźwięki, czarne miganie i przejście kolorów; 168 testów.
+
 ## [1.3.6] - 2026-10-20
 
 ### Integracja

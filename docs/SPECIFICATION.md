@@ -68,22 +68,22 @@ Colour around a term T:
 | Moment | Look | Meaning |
 | --- | --- | --- |
 | After an execution | green, white number | Everything is fine |
-| From the execution to T | smooth fade from green to red | The term approaches |
+| From the execution to T | green up to 35 % of the way, then to yellow (reached at 55 %: "the time is coming"), then to red | The term approaches |
 | T (to T + window) | red, white number | Due now; the due alert goes out |
-| T + window (30 min) | blinks brown | Overdue; keeps blinking until the term is closed |
+| T + window (30 min) | blinks black | Overdue; keeps blinking (black and light grey) until the term is closed |
 | T + ¾ of the gap to the next term | (still blinking) | Declared missed: a MISSED entry in the log |
 | Out-of-window execution within the plan | the number blinks | A warning; the next press stops it and is judged afresh |
 | More executions than planned (e.g. 5 of 3) | red, black number, no blinking | Too many; lasts until midnight |
 
 The gap after the last term of a day counts to the first term of the next day; in every
-X hours mode the gap is X. Brown (an unresolved term) has priority over the other states.
+X hours mode the gap is X. Black (an unresolved term) has priority over the other states.
 
 <p align="center">
   <img src="images/diagram-color-timeline.svg" alt="Button colour around a term" width="100%">
 </p>
 
 The sensor state is the single source of truth for the look. Priority, highest first:
-`inactive`, `pending`, `blinking_brown`, `exceeded`, `red`, `transition`, `green`.
+`inactive`, `pending`, `blinking_black`, `exceeded`, `red`, `transition`, `green`.
 
 <p align="center">
   <img src="images/diagram-stage-states.svg" alt="Which state wins" width="100%">
@@ -106,19 +106,46 @@ the window of the oldest open term asks a question about that term:
 | C `extra` — done at the term, and this is an additional one | closed as in A | +2 | as A, plus OUTSIDE THE SCHEDULE |
 
 With several open terms (07:00 missed and 16:00 already red) one press closes one term,
-oldest first; the next press handles the next. When no term is open there is no question:
-the press is logged OUTSIDE THE SCHEDULE and the number blinks. A second press inside the
+oldest first; the next press handles the next. When no term is open and the press is not
+just before a term (see below) there is no question: the press is logged OUTSIDE THE
+SCHEDULE and the number blinks. A second press inside the
 window of an already closed term is such an extra execution too.
 
 <p align="center">
   <img src="images/diagram-window-answers.svg" alt="Pressing inside or outside the window" width="100%">
 </p>
 
+## Pressing a little too early
+
+When no term is open, a press *before* the coming term and before its window opens is
+**early**. If it falls in the last tenth of the gap since the previous term (a term at
+16:00 after one at 07:00: from 15:06 to the window start 15:30; in every X hours mode a
+tenth of X), the question is: was it **done ahead of time**?
+
+| Answer | Term | Count | History |
+| --- | --- | --- | --- |
+| `done_early` — yes, ahead of time | the coming term is closed | +1 | on schedule, with the term's time |
+| `extra` — an additional one | stays due | +1 | OUTSIDE THE SCHEDULE |
+
+A press earlier than that tenth is simply logged outside the schedule, without a question.
+The sensor shows `early_by_seconds` while a press would be early; a press without the answer
+fails with `early_answer_required`.
+
+## Reminder sounds, text size and contrast
+
+18 synthesised sounds in six classes (gentle, medium, strong, very strong, melody,
+seasonal), each recorded at four volume levels; level 0 is silence. The integration has a
+default sound and volume (global settings) and every schedule may have its own. The card
+plays the sound when the sensor turns `red` and again at `blinking_black`. The text size
+(85 – 175 %) and high contrast (white bold on black) are global settings and apply to every
+card. The card has a **help** window (**?**) with the version, A-/A+, a contrast switch, the
+table of contents, the author and the build date.
+
 ## Missed terms and the log
 
 A term nobody closed is declared **missed** after ¾ of the gap to the next term and a
 MISSED entry is written (the person may have forgotten, or skipped the action — with
-feeding an animal that can be dangerous). The button keeps blinking brown; closing the
+feeding an animal that can be dangerous). The button keeps blinking black; closing the
 term does not require any special action — the next press closes it. A term belongs to
 the day it falls on: an open term from the previous day stays open (and is logged missed)
 although the counter reset at midnight.
@@ -150,7 +177,7 @@ is armed for the next moment anything changes, besides the 30-second refresh):
 - optionally a **push** through the Home Assistant Companion app (`notify.mobile_app_*`),
   with the description as its text; it works with the app closed.
 
-Nothing repeats at brown or when a term is logged missed. No alert is sent for a term that
+Nothing repeats at black or when a term is logged missed. No alert is sent for a term that
 came due while Home Assistant was down.
 
 <p align="center">
@@ -176,7 +203,7 @@ came due while Home Assistant was down.
   flag) is stored separately from the history and restored on startup; today's counter is
   derived from the history, so it needs no storage of its own.
 - A restart does **not** reset the cycle: a term that came due while Home Assistant was
-  down is still open afterwards and shows brown. A missed dose must not look "on time"
+  down is still open afterwards and shows black. A missed dose must not look "on time"
   just because Home Assistant was restarted.
 - The stored state of a removed schedule is dropped; a corrupt saved entry for one
   schedule is skipped and does not affect the others.

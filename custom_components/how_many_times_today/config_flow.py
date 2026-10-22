@@ -13,8 +13,10 @@ from homeassistant.util import dt as dt_util
 
 from .const import (
     AUTHOR,
-    AVAILABLE_SOUNDS,
+    CONF_FONT_SCALE,
     CONF_GLOBAL_SOUND,
+    CONF_GLOBAL_VOLUME,
+    CONF_HIGH_CONTRAST,
     CONF_NOTIFY_SERVICE,
     CONF_SCHEDULE_DESCRIPTION,
     CONF_SCHEDULE_END_AT,
@@ -23,19 +25,34 @@ from .const import (
     CONF_SCHEDULE_INTERVAL_HOURS,
     CONF_SCHEDULE_MODE,
     CONF_SCHEDULE_NAME,
+    CONF_SCHEDULE_SOUND,
     CONF_SCHEDULE_START_AT,
+    CONF_SCHEDULE_VOLUME,
     CONF_SCHEDULE_WINDOW_MINUTES,
     CONF_SCHEDULES,
+    DEFAULT_FONT_SCALE,
     DEFAULT_WINDOW_MINUTES,
     DOMAIN,
+    FONT_SCALES,
     MAX_PER_DAY_COUNT,
+    MAX_VOLUME,
     MIN_PER_DAY_COUNT,
+    MIN_VOLUME,
     MODE_FIXED_TIMES,
     MODE_INTERVAL,
+    SOUND_IDS,
 )
-from .models import default_times, normalize_hhmm, normalize_local_datetime, parse_local_datetime
+from .models import (
+    default_times,
+    global_sound_settings,
+    normalize_hhmm,
+    normalize_local_datetime,
+    parse_local_datetime,
+)
 
 STEP_ACTIONS = ["edit", "switch_active", "remove"]
+VOLUME_LEVELS = [str(level) for level in range(MIN_VOLUME, MAX_VOLUME + 1)]
+USE_DEFAULT = "default"  # the option "the default of the integration" in a schedule's sound/volume
 
 
 async def _about_placeholders(hass) -> dict[str, str]:
@@ -253,6 +270,8 @@ class HowManyTimesTodayOptionsFlow(OptionsFlow):
                 if end is not None and parse_local_datetime(end, tz) <= parse_local_datetime(start, tz):
                     errors[CONF_SCHEDULE_END_AT] = "end_before_start"
                 else:
+                    own_sound = user_input.get(CONF_SCHEDULE_SOUND, USE_DEFAULT)
+                    own_volume = user_input.get(CONF_SCHEDULE_VOLUME, USE_DEFAULT)
                     schedule = {
                         CONF_SCHEDULE_ID: self._editing_id or uuid.uuid4().hex[:8],
                         CONF_SCHEDULE_NAME: self._draft[CONF_SCHEDULE_NAME],
@@ -261,6 +280,8 @@ class HowManyTimesTodayOptionsFlow(OptionsFlow):
                         CONF_SCHEDULE_START_AT: start,
                         CONF_SCHEDULE_END_AT: end,
                         CONF_SCHEDULE_WINDOW_MINUTES: int(user_input[CONF_SCHEDULE_WINDOW_MINUTES]),
+                        CONF_SCHEDULE_SOUND: None if own_sound == USE_DEFAULT else own_sound,
+                        CONF_SCHEDULE_VOLUME: None if own_volume == USE_DEFAULT else int(own_volume),
                     }
                     if schedule[CONF_SCHEDULE_MODE] == MODE_FIXED_TIMES:
                         schedule[CONF_SCHEDULE_FIXED_TIMES] = self._draft[CONF_SCHEDULE_FIXED_TIMES]
@@ -286,6 +307,19 @@ class HowManyTimesTodayOptionsFlow(OptionsFlow):
                     CONF_SCHEDULE_WINDOW_MINUTES,
                     default=int(current.get(CONF_SCHEDULE_WINDOW_MINUTES, DEFAULT_WINDOW_MINUTES)),
                 ): selector.selector({"number": {"min": 1, "max": 240, "step": 1, "mode": "box"}}),
+                vol.Required(
+                    CONF_SCHEDULE_SOUND, default=current.get(CONF_SCHEDULE_SOUND) or USE_DEFAULT
+                ): selector.selector(
+                    {"select": {"options": [USE_DEFAULT, *SOUND_IDS], "translation_key": "schedule_sound"}}
+                ),
+                vol.Required(
+                    CONF_SCHEDULE_VOLUME,
+                    default=USE_DEFAULT
+                    if current.get(CONF_SCHEDULE_VOLUME) is None
+                    else str(current[CONF_SCHEDULE_VOLUME]),
+                ): selector.selector(
+                    {"select": {"options": [USE_DEFAULT, *VOLUME_LEVELS], "translation_key": "schedule_volume"}}
+                ),
             }
         )
         return self.async_show_form(step_id="schedule_range", data_schema=schema, errors=errors)
@@ -343,15 +377,34 @@ class HowManyTimesTodayOptionsFlow(OptionsFlow):
         if user_input is not None:
             options = dict(self.config_entry.options)
             options[CONF_GLOBAL_SOUND] = user_input[CONF_GLOBAL_SOUND]
+            options[CONF_GLOBAL_VOLUME] = int(user_input[CONF_GLOBAL_VOLUME])
+            options[CONF_FONT_SCALE] = float(user_input[CONF_FONT_SCALE])
+            options[CONF_HIGH_CONTRAST] = bool(user_input.get(CONF_HIGH_CONTRAST, False))
             options[CONF_NOTIFY_SERVICE] = (user_input.get(CONF_NOTIFY_SERVICE) or "").strip() or None
             return self.async_create_entry(title="", data=options)
 
         current = self.config_entry.options
+        default_sound, default_volume = global_sound_settings(current)
+        scale = current.get(CONF_FONT_SCALE, DEFAULT_FONT_SCALE)
         schema = vol.Schema(
             {
+                vol.Required(CONF_GLOBAL_SOUND, default=default_sound): selector.selector(
+                    {"select": {"options": SOUND_IDS, "translation_key": "sound"}}
+                ),
+                vol.Required(CONF_GLOBAL_VOLUME, default=str(default_volume)): selector.selector(
+                    {"select": {"options": VOLUME_LEVELS, "translation_key": "volume"}}
+                ),
                 vol.Required(
-                    CONF_GLOBAL_SOUND, default=current.get(CONF_GLOBAL_SOUND, AVAILABLE_SOUNDS[0])
-                ): selector.selector({"select": {"options": AVAILABLE_SOUNDS}}),
+                    CONF_FONT_SCALE, default=str(scale if scale in FONT_SCALES else DEFAULT_FONT_SCALE)
+                ): selector.selector(
+                    {
+                        "select": {
+                            "options": [{"value": str(f), "label": f"{round(f * 100)} %"} for f in FONT_SCALES],
+                            "mode": "dropdown",
+                        }
+                    }
+                ),
+                vol.Required(CONF_HIGH_CONTRAST, default=bool(current.get(CONF_HIGH_CONTRAST, False))): bool,
                 vol.Optional(
                     CONF_NOTIFY_SERVICE,
                     description={"suggested_value": current.get(CONF_NOTIFY_SERVICE)},

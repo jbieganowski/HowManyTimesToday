@@ -24,7 +24,7 @@ A schedule is either **fixed times** (1–24 a day, for example 07:00 and 16:00)
 hours**, and has a start, an optional end and a tolerance window (default 30 minutes before
 and after each term). The button carries a big number — how many times it was done today
 — and its colour follows the day: green after an execution, fading to red as the next term
-approaches, red when it is due, blinking brown when it was not done in time. A term nobody
+approaches, red when it is due, blinking black when it was not done in time. A term nobody
 closed is logged as missed.
 
 Pressing outside the window while a term is still open asks what happened (it was done but
@@ -70,7 +70,8 @@ how_many_times_today:
 ## Configuration
 
 Everything is configured in the UI (the gear icon of the integration): schedules, the
-sound and an optional push notification service. Step-by-step guide with screenshots:
+reminder sound and volume (18 sounds, also per schedule), the text size, high contrast and
+an optional push notification service. Step-by-step guide with screenshots:
 [docs/CONFIGURATION.md](docs/CONFIGURATION.md) (Polish:
 [docs/CONFIGURATION.pl.md](docs/CONFIGURATION.pl.md)).
 
