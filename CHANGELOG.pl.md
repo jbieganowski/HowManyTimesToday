@@ -2,6 +2,16 @@
 
 ([English version](CHANGELOG.md))
 
+## [2.3.0] - 2026-10-22
+
+### Integracja
+
+- **Karta alarmu na wygaszacz** (`custom:how-many-times-today-alert-card`): pokazuje to, co
+  jest teraz należne (jeden harmonogram: ten harmonogram; kilka: logo i „N wydarzeń” w
+  poprawnej formie liczby danego języka) i chowa się, gdy nic nie jest należne. Do kart
+  wygaszacza takiego jak WallPanel, pod kalendarzem. Przewodnik krok po kroku to sekcja 13
+  przewodnika konfiguracji.
+
 ## [2.2.0] - 2026-10-22
 
 ### Integracja

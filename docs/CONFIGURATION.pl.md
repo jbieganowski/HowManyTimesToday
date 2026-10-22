@@ -461,3 +461,69 @@ wtedy ustawione); bez niej kończy się błędem `early_answer_required`.
 | Godziny wydają się przesunięte o dwie godziny | Harmonogramy używają strefy czasowej skonfigurowanej w Home Assistant, nie przeglądarki |
 
 Jak elementy ze sobą współpracują: [SPECYFIKACJA.md](SPECYFIKACJA.md).
+
+## 13. Alarm na wygaszaczu
+
+Pulpit używany jako wyświetlacz ścienny zwykle ma wygaszacz (na przykład karta
+[WallPanel](https://github.com/j-a-n/lovelace-wallpanel)) pokazujący zegar, pogodę i
+kalendarz. **Karta alarmu** dokłada pod nimi to, co jest teraz należne, a po wykonaniu
+zabiera:
+
+- **jeden harmonogram należny** (czerwony lub migający na czarno): sam harmonogram — koło z
+  liczbą, nazwa, opis i zdanie („TERAZ” / „UWAGA – spóźnione!”);
+- **kilka harmonogramów należnych**: tylko logo aplikacji i napis „**N wydarzeń**” w poprawnej
+  formie liczby języka zalogowanego użytkownika (po polsku: 1 wydarzenie, 2 wydarzenia,
+  5 wydarzeń, 22 wydarzenia; tak samo po rosyjsku i ukraińsku, a po angielsku i niemiecku
+  liczba pojedyncza i mnoga);
+- **nic nie jest należne**: karta chowa się i nie zajmuje miejsca.
+
+Po potwierdzeniu harmonogramu (na dowolnej karcie, w telefonie, usługą) jego sensor robi się
+zielony i alarm sam znika z każdego wygaszacza.
+
+### Krok po kroku
+
+1. Upewnij się, że integracja ma wersję **2.3.0 lub nowszą** (Ustawienia → Urządzenia i usługi →
+   How Many Times Today pokazuje wersję). Karta alarmu jest w tym samym pliku co pozostałe
+   karty; nie trzeba niczego dodawać jako zasobu.
+2. Otwórz pulpit z wygaszaczem, wybierz ołówek (**Edytuj pulpit**), trzy kropki, **Edytor
+   surowej konfiguracji**.
+3. Znajdź sekcję `wallpanel:` i jej listę `cards:`. Karty wygaszacza są pokazywane jedna pod
+   drugą w tej kolejności, więc alarm wstaw **po karcie kalendarza**:
+
+   ```yaml
+   wallpanel:
+     enabled: true
+     cards:
+       - type: clock
+       - type: weather-forecast
+         entity: weather.home
+       - type: custom:calendar-card-pro
+         entities:
+           - entity: calendar.moj_kalendarz
+       - type: custom:how-many-times-today-alert-card   # <- alarm, pod kalendarzem
+   ```
+
+4. **Zapisz** i zamknij edytor. Odśwież stronę (albo poczekaj, aż wygaszacz uruchomi się
+   ponownie): wygaszacz od razu pokazuje nową kartę.
+5. Sprawdź: ustaw harmonogram z terminem za minutę (sekcja 5) albo zmień stan testem opisanym
+   w [TESTING.pl.md](TESTING.pl.md). Gdy termin przypadnie, alarm pojawia się na wygaszaczu;
+   naciśnij klawisz na pulpicie (albo w telefonie), a alarm zniknie.
+6. Powtórz kroki 2–4 dla **każdego pulpitu, którego wygaszacz ma pokazywać alarm** (każdy
+   pulpit ma własną sekcję `wallpanel:`).
+
+### Opcje
+
+| Opcja | Znaczenie |
+| --- | --- |
+| `entities` | Opcjonalna lista sensorów harmonogramów, które karta obserwuje. Bez niej obserwowane są wszystkie harmonogramy integracji |
+
+```yaml
+- type: custom:how-many-times-today-alert-card
+  entities:
+    - sensor.karmienie_kota
+    - sensor.karmienie_krolika
+```
+
+Karta jest tylko wyświetlaczem: dotknięcie budzi wygaszacz, to nie jest przycisk. Rozmiar
+tekstu i wysoki kontrast z ustawień globalnych (sekcja 6) jej nie dotyczą; jej tekst jest
+zawsze biały na ciemnym, półprzezroczystym tle, więc czytelny na każdym obrazku.

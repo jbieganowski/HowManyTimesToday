@@ -77,3 +77,43 @@ def test_the_card_fades_green_to_yellow_to_red_like_the_app():
     assert "const AMBER = [255, 193, 7];" in text
     assert "const RED = [214, 30, 30];" in text
     assert "GREEN_HOLD_PROGRESS = 0.35" in text and "APPROACHING_PROGRESS = 0.55" in text
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="Node.js is not installed")
+def test_the_alert_card_says_the_number_of_events_in_correct_polish_and_other_languages():
+    text = CARD.read_text(encoding="utf-8")
+    code = text[text.index("function pluralForm"):text.index("class HowManyTimesTodayAlertCard")]
+    probe = code + """
+const out = {
+  pl: [1, 2, 3, 4, 5, 11, 12, 13, 14, 21, 22, 24, 25, 112, 122].map((n) => eventsText("pl", n)),
+  en: [1, 2].map((n) => eventsText("en", n)),
+  ru: [1, 2, 5, 11, 21].map((n) => eventsText("ru", n)),
+  uk: [1, 3, 5, 12, 22].map((n) => eventsText("uk", n)),
+  de: [1, 2].map((n) => eventsText("de", n)),
+  zh: [3].map((n) => eventsText("zh", n)),
+};
+console.log(JSON.stringify(out));
+"""
+    result = subprocess.run(["node", "-e", probe], capture_output=True, text=True, encoding="utf-8")
+    assert result.returncode == 0, result.stderr
+    import json
+
+    got = json.loads(result.stdout)
+    assert got["pl"] == [
+        "1 wydarzenie", "2 wydarzenia", "3 wydarzenia", "4 wydarzenia", "5 wydarzeń", "11 wydarzeń", "12 wydarzeń",
+        "13 wydarzeń", "14 wydarzeń", "21 wydarzeń", "22 wydarzenia", "24 wydarzenia", "25 wydarzeń", "112 wydarzeń",
+        "122 wydarzenia",
+    ]
+    assert got["en"] == ["1 event", "2 events"]
+    assert got["ru"] == ["1 событие", "2 события", "5 событий", "11 событий", "21 событие"]
+    assert got["uk"] == ["1 подія", "3 події", "5 подій", "12 подій", "22 події"]
+    assert got["de"] == ["1 Ereignis", "2 Ereignisse"]
+    assert got["zh"] == ["3 个事件"]
+
+
+def test_the_alert_card_is_registered_and_hides_itself_when_nothing_is_due():
+    text = CARD.read_text(encoding="utf-8")
+    assert 'defineOrUpgrade("how-many-times-today-alert-card"' in text
+    assert 'type: "how-many-times-today-alert-card"' in text
+    assert "this.hidden = due.length === 0;" in text
+    assert 's.state === "red" || s.state === "blinking_black"' in text

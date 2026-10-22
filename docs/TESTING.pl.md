@@ -162,3 +162,16 @@ Pułapki warte sprawdzenia najpierw:
 - Własne trasy dashboardu zapisane przez `lovelace/config/save` nawigują zawodnie przez
   skryptowe `Page.navigate`/`pushState`; prawdziwa, interaktywnie sterowana przeglądarka
   otwiera je bez problemu (zobacz `docs/images/screenshot-card-dashboard.jpg`).
+
+## Test karty alarmu (wygaszacz)
+
+1. Utwórz harmonogram z oknem tolerancji 1 minuta i terminem za dwie minuty (sekcja 5
+   przewodnika konfiguracji) albo użyj `reset_schedule` i poczekaj na następny termin.
+2. Dodaj `type: custom:how-many-times-today-alert-card` do pulpitu (albo do `cards:` wygaszacza
+   WallPanel, sekcja 13). Dopóki harmonogram jest zielony, nic się nie pokazuje.
+3. Gdy termin przypada: jeden należny harmonogram pokazuje koło, nazwę i zdanie; gdy drugi
+   też jest należny, karta pokazuje logo i „2 wydarzenia”.
+4. Naciśnij harmonogram(y): sensor robi się zielony, a alarm sam znika.
+
+Formy liczby (polski, rosyjski, ukraiński, angielski, niemiecki, chiński) pokrywa test
+jednostkowy `test_the_alert_card_says_the_number_of_events_in_correct_polish_and_other_languages`.

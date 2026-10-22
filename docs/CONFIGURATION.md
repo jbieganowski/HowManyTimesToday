@@ -462,3 +462,70 @@ press without one fails with `early_answer_required`.
 | Times look two hours off | Schedules use the time zone configured in Home Assistant, not the browser's |
 
 How the pieces fit together: [SPECIFICATION.md](SPECIFICATION.md).
+
+## 13. An alert on a screensaver
+
+A dashboard that is used as a wall display usually runs a screensaver (for example the
+[WallPanel](https://github.com/j-a-n/lovelace-wallpanel) card) showing the clock, the weather and
+the calendar. The **alert card** adds what is due right now under them, and removes it
+when it is done:
+
+- **one schedule due** (red or blinking black): the schedule itself — the circle with the
+  number, its name, its description and the sentence ("NOW" / "WARNING - overdue!");
+- **several schedules due**: only the logo of the application and "**N events**" in the
+  correct plural form of the language of the logged-in user (in Polish: 1 wydarzenie,
+  2 wydarzenia, 5 wydarzeń, 22 wydarzenia; the same for Russian and Ukrainian, singular and
+  plural for English and German);
+- **nothing due**: the card hides itself and takes no room.
+
+After the schedule is confirmed (on any card, on the phone, with the service) its sensor
+turns green and the alert disappears from every screensaver by itself.
+
+### Step by step
+
+1. Make sure the integration is version **2.3.0 or newer** (Settings → Devices & services →
+   How Many Times Today shows the version). The alert card is in the same file as the other
+   cards; nothing has to be added as a resource.
+2. Open the dashboard that has the screensaver, choose the pencil (**Edit dashboard**), the
+   three dots, **Raw configuration editor**.
+3. Find the `wallpanel:` section and its `cards:` list. The cards of the screensaver are
+   shown one below another in that order, so put the alert **after the calendar** card:
+
+   ```yaml
+   wallpanel:
+     enabled: true
+     cards:
+       - type: clock
+       - type: weather-forecast
+         entity: weather.home
+       - type: custom:calendar-card-pro
+         entities:
+           - entity: calendar.my_calendar
+       - type: custom:how-many-times-today-alert-card   # <- the alert, under the calendar
+   ```
+
+4. **Save** and close the editor. Reload the page (or wait for the screensaver to start
+   again): a screensaver shows the new card at once.
+5. Check it: set a schedule with a term in a minute (section 5) or switch the state with
+   the test described in [TESTING.md](TESTING.md). When the term comes due the alert
+   appears on the screensaver; press the button on the dashboard (or on the phone) and it
+   disappears.
+6. Repeat steps 2–4 for **every dashboard whose screensaver should show the alert** (each
+   dashboard has its own `wallpanel:` section).
+
+### Options
+
+| Option | Meaning |
+| --- | --- |
+| `entities` | Optional list of schedule sensors the card watches. Without it, every schedule of the integration is watched |
+
+```yaml
+- type: custom:how-many-times-today-alert-card
+  entities:
+    - sensor.cat_feeding
+    - sensor.rabbit_feeding
+```
+
+The card is only a display: a touch wakes the screensaver, it is not a button. The text size
+and the high contrast of the global settings (section 6) are not applied to it; its text is
+always white on a dark, translucent background so it is readable over any picture.

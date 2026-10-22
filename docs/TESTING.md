@@ -158,3 +158,16 @@ Gotchas worth checking first:
 - Custom dashboard routes saved via `lovelace/config/save` navigate unreliably through
   scripted `Page.navigate`/`pushState`; a real, interactively driven browser opens them
   fine (see `docs/images/screenshot-card-dashboard.jpg`).
+
+## Testing the alert card (screensaver)
+
+1. Create a schedule with a 1-minute tolerance window and a term two minutes ahead (section
+   5 of the configuration guide), or use `reset_schedule` and wait for the next term.
+2. Add `type: custom:how-many-times-today-alert-card` to a dashboard (or to the `cards:` of a
+   WallPanel screensaver, section 13). Nothing is shown while the schedule is green.
+3. When the term comes due: one due schedule shows its circle, name and sentence; make a
+   second schedule due and the card shows the logo and "2 events" (Polish: "2 wydarzenia").
+4. Press the schedule(s): the sensor turns green and the alert disappears by itself.
+
+The plural forms (Polish, Russian, Ukrainian, English, German, Chinese) are covered by the
+unit test `test_the_alert_card_says_the_number_of_events_in_correct_polish_and_other_languages`.

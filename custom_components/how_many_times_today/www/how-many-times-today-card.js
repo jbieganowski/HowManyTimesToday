@@ -988,6 +988,27 @@ const SOUND_GROUP_OF = { delikatny_dzwonek: "gentle", pozytywka: "gentle", harfa
   alarm: "verystrong", syrena: "verystrong", wlaz_kotek: "melody", kreskowka: "melody", pop_weasel: "melody",
   boze_narodzenie: "seasonal", wielkanoc_kurczaczek: "seasonal", wielkanoc_dzwony: "seasonal" };
 
+function colorForState(state, attrs) {
+  switch (state) {
+    case "green":
+      return rgb(GREEN);
+    case "red":
+    case "exceeded":
+      return rgb(RED);
+    case "blinking_black":
+      return rgb(BLACK);
+    case "pending":
+      return rgb(PENDING_GRAY);
+    case "inactive":
+      return rgb(INACTIVE_GRAY);
+    case "transition":
+    default: {
+      const p = typeof attrs.color_progress === "number" ? attrs.color_progress : 0;
+      return rgb(transitionColor(p));
+    }
+  }
+}
+
 function playSound(id, level) {
   const volume = Number(level);
   if (!id || !SOUND_IDS.includes(id) || !(volume >= 1 && volume <= 4)) return;
@@ -1130,24 +1151,7 @@ class HowManyTimesTodayCard extends HTMLElement {
   }
 
   _colorFor(state, attrs) {
-    switch (state) {
-      case "green":
-        return rgb(GREEN);
-      case "red":
-      case "exceeded":
-        return rgb(RED);
-      case "blinking_black":
-        return rgb(BLACK);
-      case "pending":
-        return rgb(PENDING_GRAY);
-      case "inactive":
-        return rgb(INACTIVE_GRAY);
-      case "transition":
-      default: {
-        const p = typeof attrs.color_progress === "number" ? attrs.color_progress : 0;
-        return rgb(transitionColor(p));
-      }
-    }
+    return colorForState(state, attrs);
   }
 
   async _onPress() {
@@ -2283,6 +2287,139 @@ class HowManyTimesTodayCardEditor extends HTMLElement {
 
 defineOrUpgrade("how-many-times-today-card-editor", HowManyTimesTodayCardEditor);
 
+
+// --- the alert card (for a screensaver such as WallPanel): shows what is due right now and
+// disappears when nothing is. One schedule due: that one (circle, name, sentence). Several:
+// only the logo and "N events" in the correct plural form of the language. ---
+const LOGO_URI = "data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 456 456%22 width=%22456%22 height=%22456%22%3E%3Cdefs%3E%3ClinearGradient id=%22bgA%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%232E7D32%22/%3E%3Cstop offset=%220.55%22 stop-color=%22%23C62828%22/%3E%3Cstop offset=%221%22 stop-color=%22%235D4037%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx=%22228%22 cy=%22228%22 r=%22214%22 fill=%22url(%23bgA)%22/%3E%3Cg opacity=%220.30%22 transform=%22translate(74 300) rotate(-14) scale(0.27) translate(-228 -228)%22%3E%3Cdefs%3E%3CclipPath id=%22gs1%22%3E%3Cpath d=%22M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z%22/%3E%3C/clipPath%3E%3C/defs%3E%3Cpath d=%22M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z%22 fill=%22rgba(255,255,255,0.10)%22/%3E%3Cg clip-path=%22url(%23gs1)%22%3E%3Crect x=%22140%22 y=%22170%22 width=%22170%22 height=%2258%22 fill=%22%23FFFFFF%22/%3E%3Cpath d=%22M150,340 C186,296 212,282 228,278 C244,282 270,296 306,340 Z%22 fill=%22%23FFFFFF%22/%3E%3C/g%3E%3Cline x1=%22228%22 y1=%22226%22 x2=%22228%22 y2=%22282%22 stroke=%22%23FFFFFF%22 stroke-width=%224%22 stroke-linecap=%22round%22/%3E%3Cpath d=%22M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z%22 fill=%22none%22 stroke=%22%23FFFFFF%22 stroke-width=%2211%22 stroke-linejoin=%22round%22/%3E%3Crect x=%22126%22 y=%2298%22 width=%22204%22 height=%2224%22 rx=%2210%22 fill=%22%23FFFFFF%22/%3E%3Crect x=%22126%22 y=%22334%22 width=%22204%22 height=%2224%22 rx=%2210%22 fill=%22%23FFFFFF%22/%3E%3C/g%3E%3Cg opacity=%220.30%22 transform=%22translate(382 156) rotate(14) scale(0.27) translate(-228 -228)%22%3E%3Cdefs%3E%3CclipPath id=%22gs2%22%3E%3Cpath d=%22M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z%22/%3E%3C/clipPath%3E%3C/defs%3E%3Cpath d=%22M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z%22 fill=%22rgba(255,255,255,0.10)%22/%3E%3Cg clip-path=%22url(%23gs2)%22%3E%3Crect x=%22140%22 y=%22170%22 width=%22170%22 height=%2258%22 fill=%22%23FFFFFF%22/%3E%3Cpath d=%22M150,340 C186,296 212,282 228,278 C244,282 270,296 306,340 Z%22 fill=%22%23FFFFFF%22/%3E%3C/g%3E%3Cline x1=%22228%22 y1=%22226%22 x2=%22228%22 y2=%22282%22 stroke=%22%23FFFFFF%22 stroke-width=%224%22 stroke-linecap=%22round%22/%3E%3Cpath d=%22M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z%22 fill=%22none%22 stroke=%22%23FFFFFF%22 stroke-width=%2211%22 stroke-linejoin=%22round%22/%3E%3Crect x=%22126%22 y=%2298%22 width=%22204%22 height=%2224%22 rx=%2210%22 fill=%22%23FFFFFF%22/%3E%3Crect x=%22126%22 y=%22334%22 width=%22204%22 height=%2224%22 rx=%2210%22 fill=%22%23FFFFFF%22/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id=%22ga%22%3E%3Cpath d=%22M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z%22/%3E%3C/clipPath%3E%3C/defs%3E%3Cpath d=%22M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z%22 fill=%22rgba(255,255,255,0.12)%22/%3E%3Cg clip-path=%22url(%23ga)%22%3E%3Crect x=%22140%22 y=%22170%22 width=%22170%22 height=%2258%22 fill=%22%23FFFFFF%22/%3E%3Cpath d=%22M150,340 C186,296 212,282 228,278 C244,282 270,296 306,340 Z%22 fill=%22%23FFFFFF%22/%3E%3C/g%3E%3Cline x1=%22228%22 y1=%22226%22 x2=%22228%22 y2=%22282%22 stroke=%22%23FFFFFF%22 stroke-width=%224%22 stroke-linecap=%22round%22/%3E%3Cpath d=%22M152,120 L304,120 C304,172 252,200 236,228 C252,256 304,284 304,336 L152,336 C152,284 204,256 220,228 C204,200 152,172 152,120 Z%22 fill=%22none%22 stroke=%22%23FFFFFF%22 stroke-width=%2211%22 stroke-linejoin=%22round%22/%3E%3Crect x=%22126%22 y=%2298%22 width=%22204%22 height=%2224%22 rx=%2210%22 fill=%22%23FFFFFF%22/%3E%3Crect x=%22126%22 y=%22334%22 width=%22204%22 height=%2224%22 rx=%2210%22 fill=%22%23FFFFFF%22/%3E%3C/svg%3E";
+
+// the plural form of a count: "one" | "few" | "many" | "other" (Polish: 1 wydarzenie,
+// 2-4 wydarzenia, 5-21 wydarzeń, 22-24 wydarzenia, 25-31 wydarzeń ...)
+function pluralForm(language, n) {
+  const lang = String(language || "en").toLowerCase().split("-")[0];
+  const abs = Math.abs(Math.trunc(n));
+  const mod10 = abs % 10;
+  const mod100 = abs % 100;
+  if (lang === "pl") {
+    if (abs === 1) return "one";
+    return mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14) ? "few" : "many";
+  }
+  if (lang === "ru" || lang === "uk") {
+    if (mod10 === 1 && mod100 !== 11) return "one";
+    if (mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14)) return "few";
+    return "many";
+  }
+  if (lang === "zh") return "other";
+  return abs === 1 ? "one" : "other"; // en, de
+}
+
+const EVENT_WORDS = {
+  en: { one: "event", other: "events" },
+  pl: { one: "wydarzenie", few: "wydarzenia", many: "wydarzeń" },
+  de: { one: "Ereignis", other: "Ereignisse" },
+  ru: { one: "событие", few: "события", many: "событий" },
+  uk: { one: "подія", few: "події", many: "подій" },
+  zh: { other: "个事件" },
+};
+
+function eventsText(language, n) {
+  const lang = String(language || "en").toLowerCase().split("-")[0];
+  const words = EVENT_WORDS[lang] || EVENT_WORDS.en;
+  const form = pluralForm(lang in EVENT_WORDS ? lang : "en", n);
+  return lang === "zh" ? `${n} ${words.other}` : `${n} ${words[form] ?? words.other ?? words.many}`;
+}
+
+class HowManyTimesTodayAlertCard extends HTMLElement {
+  setConfig(config) {
+    this._config = config || {};
+    if (!this.shadowRoot) this.attachShadow({ mode: "open" });
+    this._signature = null;
+    this._render();
+  }
+
+  set hass(hass) {
+    this._hass = hass;
+    this._render();
+  }
+
+  getCardSize() {
+    return 2;
+  }
+
+  static getStubConfig() {
+    return {};
+  }
+
+  // the schedules that are due right now: the optional `entities` list, else every schedule
+  // sensor of the integration; due = red (inside the window) or blinking black (overdue)
+  _due() {
+    if (!this._hass) return [];
+    const ids = Array.isArray(this._config.entities) && this._config.entities.length
+      ? this._config.entities
+      : Object.keys(this._hass.states).filter((id) => {
+          const a = this._hass.states[id].attributes;
+          return id.startsWith("sensor.") && a && a.schedule_id !== undefined;
+        });
+    return ids
+      .map((id) => this._hass.states[id])
+      .filter((s) => s && (s.state === "red" || s.state === "blinking_black"));
+  }
+
+  _render() {
+    if (!this.shadowRoot || !this._config) return;
+    const due = this._due();
+    const language = this._hass && this._hass.language;
+    const signature = `${language}|${due.map((s) => `${s.entity_id}:${s.state}:${s.attributes.count_today}:${s.attributes.font_scale}`).join(",")}`;
+    if (signature === this._signature) return; // nothing changed: do not redraw (keeps the blinking smooth)
+    this._signature = signature;
+    this.hidden = due.length === 0;
+    if (due.length === 0) {
+      this.shadowRoot.innerHTML = "";
+      return;
+    }
+    const style = `
+      <style>
+        ha-card { background: rgba(0, 0, 0, 0.6); color: #fff; border-radius: 16px; padding: 14px 18px; box-shadow: none; }
+        .row { display: flex; align-items: center; gap: 18px; }
+        .circle { width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center;
+          justify-content: center; border: 3px solid rgba(255,255,255,0.6); font-size: 2em; font-weight: 700; }
+        .circle.blinking { animation: alert-blink 1s step-start infinite; }
+        @keyframes alert-blink { 50% { background: ${BLACK_BLINK}; color: #000; } }
+        .logo { width: 72px; height: 72px; flex-shrink: 0; }
+        .name { font-size: 1.5em; font-weight: 700; }
+        .description { font-size: 1em; opacity: 0.85; }
+        .status { font-size: 1.25em; font-weight: 700; color: #ff8a80; margin-top: 2px; }
+        .events { font-size: 1.9em; font-weight: 700; }
+      </style>`;
+    let body;
+    if (due.length === 1) {
+      const s = due[0];
+      const a = s.attributes;
+      const name = a.name || a.friendly_name || s.entity_id;
+      const key = s.state === "red" ? "status_red" : "status_blinking_black";
+      const scale = Number(a.font_scale) || 1;
+      body = `
+        <div class="row" style="font-size:${scale}em">
+          <div class="circle ${s.state === "blinking_black" ? "blinking" : ""}" style="background:${colorForState(s.state, a)}">${a.count_today ?? 0}</div>
+          <div>
+            <div class="name">${name}</div>
+            ${a.description ? `<div class="description">${a.description}</div>` : ""}
+            <div class="status">${translate(language, key)}</div>
+          </div>
+        </div>`;
+    } else {
+      body = `
+        <div class="row">
+          <img class="logo" src="${LOGO_URI}" alt="">
+          <div class="events">${eventsText(language, due.length)}</div>
+        </div>`;
+    }
+    this.shadowRoot.innerHTML = `${style}<ha-card>${body}</ha-card>`;
+  }
+}
+
+defineOrUpgrade("how-many-times-today-alert-card", HowManyTimesTodayAlertCard);
+
 reportToServer("loaded", customElements.get("how-many-times-today-card") ? cardOutcome : "NOT defined");
 
 // Dashboard cards of this type that were built before the element existed show an error
@@ -2330,6 +2467,12 @@ for (const delay of [400, 2500, 7000, 16000, 30000, 60000]) {
 }
 
 window.customCards = window.customCards || [];
+if (!window.customCards.some((c) => c.type === "how-many-times-today-alert-card"))
+  window.customCards.push({
+    type: "how-many-times-today-alert-card",
+    name: "How Many Times Today - alert",
+    description: "What is due right now (for a screensaver): the one schedule, or the logo and the number of events; hidden when nothing is due.",
+  });
 if (!window.customCards.some((c) => c.type === "how-many-times-today-card"))
 window.customCards.push({
   type: "how-many-times-today-card",

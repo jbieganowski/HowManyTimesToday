@@ -2,6 +2,16 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [2.3.0] - 2026-10-22
+
+### Integration
+
+- **Alert card for a screensaver** (`custom:how-many-times-today-alert-card`): shows what is
+  due right now (one schedule: the schedule; several: the logo and "N events" in the correct
+  plural form of the language) and hides itself when nothing is due. Meant for the cards of
+  a screensaver such as WallPanel, under the calendar. A step-by-step guide is section 13 of
+  the configuration guide.
+
 ## [2.2.0] - 2026-10-22
 
 ### Integration
