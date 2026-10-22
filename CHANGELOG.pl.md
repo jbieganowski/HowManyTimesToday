@@ -2,6 +2,17 @@
 
 ([English version](CHANGELOG.md))
 
+## [2.2.0] - 2026-10-22
+
+### Integracja
+
+- **Drugie potwierdzenie przy odległym „wykonane teraz”.** Gdy nadchodzący termin jest dalej
+  niż jedna czwarta odstępu od poprzedniego terminu, odpowiedź „to nadchodzące wystąpienie,
+  wykonane teraz” pyta jeszcze raz (podaje godzinę terminu i mówi, że klawisz go przeskoczy),
+  bo przeskoczenie dawki, do której są jeszcze godziny, nie powinno się zdarzyć przez
+  pomyłkę. Sensor ma nowy atrybut `early_far`.
+- Karta sprawdza stronę pod kątem pozostałych kart błędu także po 30 i 60 sekundach.
+
 ## [2.1.0] - 2026-10-22
 
 ### Integracja

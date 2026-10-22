@@ -134,7 +134,9 @@ nigdy nie robi się czerwony dla przeskoczonego terminu, a pokazywane następne 
 po nim. Po `extra` wszystko działa jak dotąd: liczba miga, nadchodzący termin pozostaje
 należny. Jeśli nadchodzący termin jest już zamknięty (wcześniejsze `done_early`), pytania nie
 ma: naciśnięcie jest po prostu dodatkowe, zapisane poza harmonogramem. Pytanie podaje
-godzinę nadchodzącego terminu. Sensor pokazuje `early_by_seconds`, gdy naciśnięcie zadałoby
+godzinę nadchodzącego terminu. Gdy nadchodzący termin jest dalej niż jedna czwarta odstępu od
+poprzedniego terminu, `done_early` wymaga drugiego potwierdzenia (`early_far`), bo
+przeskakuje termin, który jest jeszcze daleko. Sensor pokazuje `early_by_seconds`, gdy naciśnięcie zadałoby
 pytanie; naciśnięcie bez odpowiedzi kończy się błędem `early_answer_required`.
 
 ## Dźwięki przypomnień, rozmiar tekstu i kontrast

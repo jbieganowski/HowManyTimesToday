@@ -756,3 +756,12 @@ def test_a_schedule_saved_by_version_1_loads_without_sound_fields():
            "start_at": "2026-10-19T00:00:00", "end_at": None, "window_minutes": 30}
     s = models.build_schedule(old, TZ)
     assert (s.sound_id, s.volume_level) == (None, None)
+
+
+def test_done_now_for_a_term_far_ahead_is_flagged_for_a_second_confirmation():
+    """More than a quarter of the gap since the previous term (07:00 -> 16:00 is 9 h: 2 h 15 min)."""
+    sim = Sim(fixed(), created=at(8, 0))
+    assert sim.status(at(9, 0)).early_far is True  # 7 h before 16:00
+    assert sim.status(at(13, 0)).early_far is True  # 3 h
+    assert sim.status(at(14, 0)).early_far is False  # 2 h
+    assert sim.status(at(15, 45)).early_far is False  # inside the window: no question at all

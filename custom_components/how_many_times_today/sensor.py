@@ -180,6 +180,7 @@ class ScheduleSensor(CoordinatorEntity[HowManyTimesTodayCoordinator], SensorEnti
             "own_sound": schedule.sound_id,
             "own_volume": schedule.volume_level,
             "early_by_seconds": status.early_by_seconds,
+            "early_far": status.early_far,
             "font_scale": coordinator.font_scale,
             "high_contrast": coordinator.high_contrast,
             "version": coordinator.version,

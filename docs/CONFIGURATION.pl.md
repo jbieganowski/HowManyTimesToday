@@ -126,7 +126,10 @@ pokazuje się jako należny; terminy starsze niż okno tolerancji nie są nadrab
   (+1): klawisz idzie dalej od zielonego, nigdy nie robi się dla tego terminu czerwony, a
   pokazywane następne karmienie to to po nim. `extra` to dodatkowe wykonanie poza
   harmonogramem (+1), a nadchodzący termin pozostaje należny. Jeśli nadchodzący termin jest
-  już zamknięty, pytania nie ma: naciśnięcie jest dodatkowe. Sensor pokazuje
+  dalej niż jedna czwarta odstępu od poprzedniego terminu, odpowiedź `done_early` wymaga
+  drugiego potwierdzenia (karta podaje godzinę terminu i mówi, że zostanie przeskoczony);
+  atrybut sensora to `early_far`. Jeśli nadchodzący termin jest już zamknięty, pytania nie
+  ma: naciśnięcie jest dodatkowe. Sensor pokazuje
   `early_by_seconds`, gdy naciśnięcie zadałoby pytanie; naciśnięcie bez odpowiedzi kończy
   się błędem `early_answer_required`.
 - **Poza oknem, nic otwartego** — to dodatkowe wykonanie, zapisane jako **POZA
@@ -265,7 +268,7 @@ Atrybuty:
 | `history` | Ostatnie 50 wpisów (niżej) |
 | `sound`, `volume` | Identyfikator dźwięku przypomnienia i poziom głośności (0 – 4) tego harmonogramu (własny, a jeśli brak — domyślny) |
 | `own_sound`, `own_volume`, `default_sound`, `default_volume` | Własny wybór harmonogramu (`null` = domyślny) i ustawienie domyślne integracji |
-| `early_by_seconds` | O ile za wcześnie byłoby naciśnięcie teraz (wtedy pojawia się pytanie), inaczej `null` |
+| `early_by_seconds`, `early_far` | O ile wcześniej byłoby naciśnięcie teraz (wtedy pojawia się pytanie), inaczej `null`; `early_far` to `true`, gdy nadchodzący termin jest dalej niż jedna czwarta odstępu (pojawia się drugie potwierdzenie) |
 | `font_scale`, `high_contrast` | Rozmiar tekstu i kontrast z ustawień globalnych |
 | `version`, `author`, `build` | Wersja integracji, autor i data kompilacji, pokazywane w pomocy karty |
 

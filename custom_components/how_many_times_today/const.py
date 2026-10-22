@@ -115,6 +115,10 @@ LEGACY_SOUNDS = {
 FONT_SCALES = [0.85, 1.0, 1.15, 1.3, 1.5, 1.75]
 DEFAULT_FONT_SCALE = 1.0
 
+# "done now" for a coming term further away than this share of the gap since the previous
+# term needs a second confirmation (it skips a term that is still far ahead)
+EARLY_FAR_FRACTION = 0.25
+
 UPDATE_INTERVAL_SECONDS = 30
 HISTORY_ATTRIBUTE_LIMIT = 50  # newest entries exposed on the sensor
 

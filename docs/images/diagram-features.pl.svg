@@ -42,5 +42,5 @@
   <rect x="40" y="535" width="920" height="40" rx="10" fill="#e6f2e7" stroke="#2e7d32" stroke-width="1.5"/>
   <circle cx="64" cy="555" r="11" fill="#2e7d32"/>
   <path d="M 58 555 L 62 560 L 71 549" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="86" y="561" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">171 testów jednostkowych i CI z hassfest / HACS</text>
+  <text x="86" y="561" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#2b2b28" text-anchor="start">172 testów jednostkowych i CI z hassfest / HACS</text>
 </svg>

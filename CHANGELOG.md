@@ -2,6 +2,17 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [2.2.0] - 2026-10-22
+
+### Integration
+
+- **Second confirmation for a far-ahead "done now".** When the coming term is further away
+  than a quarter of the gap since the previous term, answering that it is the coming
+  occurrence done now asks once more (it names the term's time and says the button will skip
+  it), because skipping a dose that is still hours away should not happen by a slip. The
+  sensor has the new attribute `early_far`.
+- The card checks the page for leftover error cards also after 30 and 60 seconds.
+
 ## [2.1.0] - 2026-10-22
 
 ### Integration

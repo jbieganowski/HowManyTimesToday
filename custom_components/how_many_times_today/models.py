@@ -37,6 +37,7 @@ from .const import (
     DEFAULT_VOLUME,
     DEFAULT_WINDOW_MINUTES,
     DUE_NOTIFY_GRACE_SECONDS,
+    EARLY_FAR_FRACTION,
     KIND_EXTRA,
     KIND_MISSED,
     KIND_ON_SCHEDULE,
@@ -425,6 +426,23 @@ def _pattern_next(s: Schedule, term: datetime) -> datetime:
     return datetime.combine(term.date() + timedelta(days=1), s.fixed_times[0], tzinfo=term.tzinfo)
 
 
+def _pattern_prev(s: Schedule, term: datetime) -> datetime:
+    """The term of the periodic pattern before `term` (to measure the gap before it)."""
+    if s.mode == MODE_INTERVAL:
+        return _add(term, -timedelta(hours=s.interval_hours))
+    for t in reversed(s.fixed_times):
+        candidate = datetime.combine(term.date(), t, tzinfo=term.tzinfo)
+        if candidate < term:
+            return candidate
+    return datetime.combine(term.date() - timedelta(days=1), s.fixed_times[-1], tzinfo=term.tzinfo)
+
+
+def early_is_far(s: Schedule, term: datetime, early_by: timedelta) -> bool:
+    """Whether "done now" would skip a term that is still far ahead (more than a quarter of
+    the gap since the previous term): the card then asks for a second confirmation."""
+    return early_by > _diff(term, _pattern_prev(s, term)) * EARLY_FAR_FRACTION
+
+
 def gap_after(s: Schedule, term: datetime) -> timedelta:
     """Time from `term` to the following term (the last one of a day counts to the
     first one of the next day)."""
@@ -771,6 +789,7 @@ class Status:
     open_slots: list[dict] = field(default_factory=list)
     # a press now would be too early by this many seconds (see early_press), else None
     early_by_seconds: int | None = None
+    early_far: bool = False
 
 
 def _next_unresolved(s: Schedule, rt: ScheduleRuntime, after: datetime) -> datetime | None:
@@ -837,4 +856,5 @@ def compute_status(s: Schedule, rt: ScheduleRuntime, history: list[dict], now: d
         answer_required=needs_answer,
         open_slots=open_slots,
         early_by_seconds=int(early[1].total_seconds()) if (early := early_press(s, rt, now)) else None,
+        early_far=bool(early and early_is_far(s, early[0], early[1])),
     )

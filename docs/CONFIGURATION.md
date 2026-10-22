@@ -126,7 +126,10 @@ A **term** is a moment a schedule is due. Each term has a tolerance window (defa
   now**, or an extra one. `done_early` closes the coming term (+1): the button goes on from
   green, never turns red for that term, and the next feeding shown is the one after it.
   `extra` is an additional execution outside the schedule (+1) and the coming term stays
-  due. If the coming term is already closed, there is no question: the press is an extra.
+  due. If the coming term is further away than a quarter of the gap since the previous
+  term, answering `done_early` asks for a second confirmation (the card shows the term's
+  time and says it will be skipped); the sensor attribute is `early_far`. If the coming
+  term is already closed, there is no question: the press is an extra.
   The sensor shows `early_by_seconds` while a press would ask; a press without the answer
   fails with `early_answer_required`.
 - **Outside the window, nothing open** — it is an extra execution, logged as
@@ -266,7 +269,7 @@ Attributes:
 | `history` | The newest 50 entries (see below) |
 | `sound`, `volume` | The reminder sound id and the volume level (0 – 4) of this schedule (its own, else the default) |
 | `own_sound`, `own_volume`, `default_sound`, `default_volume` | The schedule's own choice (`null` = default) and the default of the integration |
-| `early_by_seconds` | How early a press now would be (the early question follows), else `null` |
+| `early_by_seconds`, `early_far` | How early a press now would be (the question follows), else `null`; `early_far` is `true` when the coming term is further away than a quarter of the gap (a second confirmation follows) |
 | `font_scale`, `high_contrast` | The text size and contrast of the global settings |
 | `version`, `author`, `build` | The integration's version, author and the build date, shown in the card's help |
 

@@ -218,6 +218,7 @@ const CARD_STRINGS = {
     early_question: "Is this that coming occurrence, only done now, or an extra one?",
     early_yes: "The coming occurrence, done now",
     early_extra: "An extra one",
+    early_confirm: "The term at {time} is still far ahead. It will count as done now and the button will skip it (it will not turn red for that term). Is that right?",
     sound_label: "Reminder sound",
     volume_label: "Reminder volume",
     sound_default: "Default",
@@ -354,6 +355,7 @@ const CARD_STRINGS = {
     early_question: "Czy to jest nadchodzące wystąpienie, tylko wykonane teraz, czy dodatkowe?",
     early_yes: "Nadchodzące wystąpienie, wykonane teraz",
     early_extra: "Dodatkowe wykonanie",
+    early_confirm: "Termin {time} jest jeszcze daleko. Zostanie uznany za wykonany teraz, a klawisz go przeskoczy (nie zrobi się dla niego czerwony). Czy na pewno?",
     sound_label: "Dźwięk przypomnienia",
     volume_label: "Głośność przypomnienia",
     sound_default: "Domyślny",
@@ -490,6 +492,7 @@ const CARD_STRINGS = {
     early_question: "Ist das der kommende Termin, nur jetzt erledigt, oder eine zusätzliche Ausführung?",
     early_yes: "Der kommende Termin, jetzt erledigt",
     early_extra: "Eine zusätzliche Ausführung",
+    early_confirm: "Der Termin um {time} liegt noch weit voraus. Er zählt jetzt als erledigt und die Taste überspringt ihn (sie wird für diesen Termin nicht rot). Ist das richtig?",
     sound_label: "Erinnerungston",
     volume_label: "Erinnerungslautstärke",
     sound_default: "Standard",
@@ -626,6 +629,7 @@ const CARD_STRINGS = {
     early_question: "Это ближайшее выполнение, просто сделанное сейчас, или дополнительное?",
     early_yes: "Ближайшее выполнение, сделанное сейчас",
     early_extra: "Дополнительное выполнение",
+    early_confirm: "Срок {time} ещё далеко. Он будет засчитан как выполненный сейчас, а кнопка его пропустит (для этого срока она не станет красной). Всё верно?",
     sound_label: "Звук напоминания",
     volume_label: "Громкость напоминания",
     sound_default: "По умолчанию",
@@ -762,6 +766,7 @@ const CARD_STRINGS = {
     early_question: "Це найближче виконання, просто зроблене зараз, чи додаткове?",
     early_yes: "Найближче виконання, зроблене зараз",
     early_extra: "Додаткове виконання",
+    early_confirm: "Термін {time} ще далеко. Його буде зараховано як виконаний зараз, а кнопка його пропустить (для цього терміну вона не стане червоною). Усе вірно?",
     sound_label: "Звук нагадування",
     volume_label: "Гучність нагадування",
     sound_default: "Типовий",
@@ -898,6 +903,7 @@ const CARD_STRINGS = {
     early_question: "这是即将到来的那一次、只是现在做了，还是额外的一次？",
     early_yes: "即将到来的那一次，现在做了",
     early_extra: "额外的一次",
+    early_confirm: "时间点 {time} 还很远。它将被算作现在已完成，按钮会跳过它（该时间点不会变红）。确定吗？",
     sound_label: "提醒声音",
     volume_label: "提醒音量",
     sound_default: "默认",
@@ -1193,6 +1199,12 @@ class HowManyTimesTodayCard extends HTMLElement {
   }
 
   async _onAnswer(answer) {
+    // "done now" for a term that is still far ahead skips it: ask once more
+    const attrs = this._stateObj.attributes;
+    if (answer === "done_early" && attrs.early_far) {
+      const time = formatTime(attrs.next_expected_at, this._hass?.language);
+      if (!confirm(this._t("early_confirm", { time }))) return;
+    }
     await this._hass.callService(DOMAIN, "press_schedule", { answer }, { entity_id: this._config.entity });
     this._stateObj = this._hass.states[this._config.entity] || this._stateObj;
     if (this._config.layout === "tile") {
@@ -2298,7 +2310,7 @@ function scanPage() {
   return { errors, ours, drawn };
 }
 let firstErrorCount = null;
-for (const delay of [400, 2500, 7000, 16000]) {
+for (const delay of [400, 2500, 7000, 16000, 30000, 60000]) {
   setTimeout(() => {
     try {
       const { errors, ours, drawn } = scanPage();

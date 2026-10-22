@@ -130,7 +130,9 @@ After `done_early` the button goes on from green (the fade restarts at this pres
 turns red for the skipped term and the next feeding shown is the one after it. After
 `extra` everything behaves as before: the number blinks, the coming term stays due. If the
 coming term is already closed (an earlier `done_early`), there is no question: the press is
-simply an extra, logged outside the schedule. The question names the coming term's time.
+simply an extra, logged outside the schedule. The question names the coming term's time. When the coming term is further away than a
+quarter of the gap since the previous term, `done_early` needs a second confirmation
+(`early_far`), because it skips a term that is still far ahead.
 The sensor shows `early_by_seconds` while a press would ask; a press without the answer
 fails with `early_answer_required`.
 
