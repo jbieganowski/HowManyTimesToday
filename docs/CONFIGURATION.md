@@ -528,5 +528,6 @@ turns green and the alert disappears from every screensaver by itself.
 ```
 
 The card is only a display: a touch wakes the screensaver, it is not a button. The text size
-and the high contrast of the global settings (section 6) are not applied to it; its text is
-always white on a dark, translucent background so it is readable over any picture.
+of the global settings (section 6) applies to the single-schedule view; the high contrast does
+not apply to it. Its text is always white on a dark, translucent background so it is readable
+over any picture.

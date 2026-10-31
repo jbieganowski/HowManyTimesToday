@@ -526,5 +526,6 @@ zielony i alarm sam znika z każdego wygaszacza.
 ```
 
 Karta jest tylko wyświetlaczem: dotknięcie budzi wygaszacz, to nie jest przycisk. Rozmiar
-tekstu i wysoki kontrast z ustawień globalnych (sekcja 6) jej nie dotyczą; jej tekst jest
-zawsze biały na ciemnym, półprzezroczystym tle, więc czytelny na każdym obrazku.
+tekstu z ustawień globalnych (sekcja 6) dotyczy widoku jednego harmonogramu; wysoki kontrast
+jej nie dotyczy. Jej tekst jest zawsze biały na ciemnym, półprzezroczystym tle, więc czytelny
+na każdym obrazku.

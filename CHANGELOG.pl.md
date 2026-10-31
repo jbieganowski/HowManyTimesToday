@@ -2,6 +2,19 @@
 
 ([English version](CHANGELOG.md))
 
+## [2.4.1] - 2026-11-01
+
+### Integracja
+
+- Naciśnięcie z odpowiedzią `done_early`, gdy termin jest otwarty i spóźniony, nie kończy się
+  już błędem wewnętrznym: pytanie A/B/C jest zadawane ponownie (`answer_required`), jak przy
+  każdej odpowiedzi należącej do drugiego pytania.
+
+### Dokumentacja
+
+- Sekcja o karcie alarmu mówi, które ustawienia globalne jej dotyczą: rozmiar tekstu tak (w
+  widoku jednego harmonogramu), wysoki kontrast nie.
+
 ## [2.4.0] - 2026-11-01
 
 ### Integracja

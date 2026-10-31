@@ -2,6 +2,19 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [2.4.1] - 2026-11-01
+
+### Integration
+
+- Pressing with the answer `done_early` while a term is open and late no longer fails with an
+  internal error: the A/B/C question is asked again (`answer_required`), as for any answer that
+  belongs to the other question.
+
+### Documentation
+
+- The alert card section says which global settings apply to it: the text size does (in the
+  single-schedule view), the high contrast does not.
+
 ## [2.4.0] - 2026-11-01
 
 ### Integration

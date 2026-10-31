@@ -253,6 +253,14 @@ def test_answer_c_done_at_the_term_and_once_more_now():
     assert st.number_blinking is True  # 2 of 2 planned: still within the count
 
 
+def test_the_answer_of_the_early_question_does_not_fit_a_late_one():
+    """done_early is a valid answer, but while a term is open and late the A/B/C question is asked."""
+    sim = Sim(fixed())
+    sim.tick(at(8, 30))  # 07:00 is open and past its window
+    with pytest.raises(models.AnswerRequired):
+        models.press(sim.s, sim.rt, at(8, 30), sim.hist, const.ANSWER_DONE_EARLY)
+
+
 def test_an_answer_that_is_not_needed_is_ignored_and_an_unknown_one_is_rejected():
     sim = Sim(fixed())
     sim.tick(at(7, 10))

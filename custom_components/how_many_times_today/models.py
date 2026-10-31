@@ -706,6 +706,8 @@ def press(
                 entries.append(make_entry(now, KIND_REGISTERED_LATE, term, False, 1))
                 entries.append(make_entry(now, KIND_EXTRA, None, True, 1))
                 outside = True
+            elif answer == ANSWER_DONE_EARLY:
+                raise AnswerRequired  # a valid answer, but of the other question: ask again
             else:
                 raise ValueError(f"Unknown answer: {answer!r}")
         rt.occurrences[term.isoformat()] = {"status": RESOLVED, "missed": rt.occurrences[term.isoformat()]["missed"]}
