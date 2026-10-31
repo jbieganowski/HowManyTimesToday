@@ -2,6 +2,15 @@
 
 ([English version](CHANGELOG.md))
 
+## [2.3.1] - 2026-10-31
+
+### Dokumentacja
+
+- **Nowe logo (klepsydra) wszędzie.** Banery obu README (`docs/images/banner.svg`,
+  `banner.pl.svg`) oraz `icon.png`, `icon@2x.png`, `logo.png` i `logo@2x.png` w katalogu
+  głównym repozytorium pokazywały jeszcze stare logo (ptaszek); teraz pokazują klepsydrę,
+  ten sam rysunek co ikona marki integracji i aplikacja.
+
 ## [2.3.0] - 2026-10-22
 
 ### Integracja

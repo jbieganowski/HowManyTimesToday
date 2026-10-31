@@ -2,6 +2,15 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [2.3.1] - 2026-10-31
+
+### Documentation
+
+- **The new logo (the hourglass) everywhere.** The project banners of both READMEs
+  (`docs/images/banner.svg`, `banner.pl.svg`) and the repository's `icon.png`, `icon@2x.png`,
+  `logo.png` and `logo@2x.png` still showed the old logo (a check mark); they now show the
+  hourglass, the same drawing as the integration's brand icon and the app.
+
 ## [2.3.0] - 2026-10-22
 
 ### Integration
