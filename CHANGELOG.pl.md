@@ -2,6 +2,14 @@
 
 ([English version](CHANGELOG.md))
 
+## [2.3.2] - 2026-10-31
+
+### Integracja
+
+- `manifest.json`: klucze są znów posortowane tak, jak wymaga hassfest (domain, name, potem
+  alfabetycznie; `after_dependencies` było dodane poza kolejnością), więc sprawdzenie Validate
+  na GitHubie przechodzi. Test wersji sprawdza teraz także tę kolejność.
+
 ## [2.3.1] - 2026-10-31
 
 ### Dokumentacja

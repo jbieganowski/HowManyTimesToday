@@ -225,6 +225,8 @@ def test_the_version_is_semver_and_matches_both_changelogs():
     manifest = _load(INTEGRATION / "manifest.json")
     version = manifest["version"]
     assert re.fullmatch(r"\d+\.\d+\.\d+", version), version
+    keys = list(manifest)  # hassfest: domain, name, then alphabetical order
+    assert keys[:2] == ["domain", "name"] and keys[2:] == sorted(keys[2:]), keys
     for name in ("CHANGELOG.md", "CHANGELOG.pl.md"):
         text = (INTEGRATION.parent.parent / name).read_text(encoding="utf-8")
         assert f"## [{version}]" in text, f"{name} has no section for {version}"

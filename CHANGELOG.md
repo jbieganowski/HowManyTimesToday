@@ -2,6 +2,14 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [2.3.2] - 2026-10-31
+
+### Integration
+
+- `manifest.json`: the keys are sorted again as hassfest requires (domain, name, then
+  alphabetical; `after_dependencies` had been added out of order), so the Validate check on
+  GitHub passes. The version test now checks the order as well.
+
 ## [2.3.1] - 2026-10-31
 
 ### Documentation
