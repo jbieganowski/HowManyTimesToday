@@ -2,6 +2,25 @@
 
 ([English version](CHANGELOG.md))
 
+## [2.4.0] - 2026-11-01
+
+### Integracja
+
+- **Karty błędu innych kart są naprawiane.** Na wolnym urządzeniu (tablet ścienny ładujący 25
+  modułów pulpitu) karty innych integracji potrafiły zostać na „Błąd konfiguracji” („Custom
+  element doesn't exist: ...”), choć ich element został zdefiniowany chwilę później. Przez
+  pierwszą minutę po wczytaniu strony skrypt karty prosi teraz o odbudowanie każdej takiej
+  karty błędu, której element jest już zdefiniowany, a chwilę później przekazuje karcie
+  nadrzędnej świeżą kopię jej konfiguracji, żeby zbudowała się ponownie.
+- **Plik karty jest kompresowany i buforowany.** Jest wysyłany skompresowany gzip (126 KB ->
+  47 KB) i może być trzymany przez dobę pod adresem własnej wersji (`?v=<wersja>`); pod
+  każdym innym adresem nadal nigdy nie jest zapamiętywany. Mniej do pobrania przy każdej
+  stronie.
+
+### Dokumentacja
+
+- Rozwiązywanie problemów: „Karta na chwilę po wczytaniu strony pokazuje Błąd konfiguracji”.
+
 ## [2.3.2] - 2026-10-31
 
 ### Integracja

@@ -459,6 +459,7 @@ wtedy ustawione); bez niej kończy się błędem `early_answer_required`.
 | Klawisz jest szary i mówi, że jeszcze się nie zaczęło | Przed startem; do tego czasu naciśnięcia są odrzucane |
 | Karta harmonogramu zniknęła z pulpitu | Jest wyłączony lub po końcu (`inactive`); wejdź w edycję pulpitu, by zobaczyć ją na szaro, i zaznacz **Harmonogram aktywny** w jej edytorze albo włącz go w oknie Konfiguruj |
 | Godziny wydają się przesunięte o dwie godziny | Harmonogramy używają strefy czasowej skonfigurowanej w Home Assistant, nie przeglądarki |
+| Karta na chwilę po wczytaniu strony pokazuje „Błąd konfiguracji”, inne karty niestandardowe też | Pulpit ładuje wszystkie moduły JavaScript (karty z HACS) naraz i rysuje karty, zanim najwolniejsze są gotowe; same się naprawiają. Usuń zasoby pulpitu, których żaden pulpit nie używa, oraz duplikaty (np. dwa razy `mushroom.js`) i na tabletach ściennych używaj adresu lokalnego; od 2.4.0 skrypt karty odbudowuje też takie karty błędu, gdy tylko ich element jest zdefiniowany |
 
 Jak elementy ze sobą współpracują: [SPECYFIKACJA.md](SPECYFIKACJA.md).
 

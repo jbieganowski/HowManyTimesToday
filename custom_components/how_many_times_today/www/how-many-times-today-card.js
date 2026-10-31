@@ -2446,6 +2446,40 @@ function scanPage() {
   walk(document);
   return { errors, ours, drawn };
 }
+// The error card of ANY custom card whose element is defined by now ("Custom element doesn't
+// exist: <tag>") is rebuilt: Home Assistant is meant to do it itself when the element gets
+// defined, but on a slow device (a wall tablet loading 25 modules) the cards of other
+// integrations were seen to stay on "Configuration error". Every second for the first minute
+// after the page loaded: ask for the rebuild and, when the error card is still there a moment
+// later, hand its host card a fresh copy of its configuration so it builds the card again.
+function healErrorCards() {
+  const { errors } = scanPage();
+  for (const { el, text } of errors) {
+    const match = /Custom element doesn't exist: ([\w-]+)/.exec(text);
+    if (!match || !customElements.get(match[1])) continue;
+    el.dispatchEvent(new CustomEvent("ll-rebuild", { bubbles: true, composed: true }));
+    setTimeout(() => {
+      try {
+        if (!el.isConnected) return;
+        const host = el.getRootNode() && el.getRootNode().host;
+        if (host && host.localName === "hui-card" && host.config) host.config = { ...host.config };
+      } catch (err) {
+        /* healing must never break the page */
+      }
+    }, 1200);
+  }
+}
+let healTicks = 0;
+const healTimer = setInterval(() => {
+  healTicks += 1;
+  try {
+    healErrorCards();
+  } catch (err) {
+    /* healing must never break the page */
+  }
+  if (healTicks >= 60) clearInterval(healTimer);
+}, 1000);
+
 let firstErrorCount = null;
 for (const delay of [400, 2500, 7000, 16000, 30000, 60000]) {
   setTimeout(() => {

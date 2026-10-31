@@ -288,3 +288,13 @@ def test_the_sound_files_are_not_a_source_of_garbage():
     """The synthesised sounds are small: the whole folder stays under 3 MB."""
     total = sum(p.stat().st_size for p in (INTEGRATION / "www" / "sounds").glob("*.ogg"))
     assert 0 < total < 3 * 1024 * 1024
+
+
+def test_the_card_file_is_cached_only_under_the_address_of_its_own_version_and_is_compressed():
+    """Source check (the view cannot be imported without Home Assistant)."""
+    source = (INTEGRATION / "__init__.py").read_text(encoding="utf-8")
+    assert 'request.query.get("v") == self._version' in source
+    assert '"public, max-age=86400" if current else "no-store"' in source
+    assert "response.enable_compression()" in source
+    js = (INTEGRATION / "www" / "how-many-times-today-card.js").read_text(encoding="utf-8")
+    assert "function healErrorCards()" in js and "Custom element doesn't exist: ([\w-]+)" in js

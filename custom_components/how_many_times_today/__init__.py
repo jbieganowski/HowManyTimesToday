@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import logging
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 from aiohttp import web
 from homeassistant.components.http import HomeAssistantView
@@ -135,9 +136,10 @@ class _CardView(HomeAssistantView):
     name = f"{DOMAIN}:card"
     requires_auth = False  # a <script> tag cannot send credentials; it is only the card
 
-    def __init__(self, hass: HomeAssistant, path: Path) -> None:
+    def __init__(self, hass: HomeAssistant, path: Path, version: str = "") -> None:
         self._hass = hass
         self._path = path
+        self._version = version
 
     async def get(self, request: web.Request) -> web.Response:
         agent = (request.headers.get("User-Agent") or "unknown")[:110]
@@ -149,15 +151,24 @@ class _CardView(HomeAssistantView):
             _LOGGER.warning("Card script problem in %s: %s", agent, request.query["report"][:300])
             return web.Response(status=204)
         data = await self._hass.async_add_executor_job(self._path.read_bytes)
-        # always sent in full and never kept: a client that holds a copy of it
-        # (a conditional request answered "not modified") has shown the old or no card
-        _LOGGER.warning("Card file requested by %s (%s)", agent, request.remote or "?")
-        return web.Response(
+        _LOGGER.debug("Card file requested by %s (%s)", agent, request.remote or "?")
+        # The address of the current version carries its number (?v=<version>), so a copy kept
+        # under it is always this version: it may be cached for a day (a page of 25 dashboard
+        # modules loads noticeably faster) and is compressed. Any other address (an older
+        # version's, none) is never kept; there is no ETag, so no "not modified" answer can
+        # leave a client with an old or no card.
+        current = bool(self._version) and request.query.get("v") == self._version
+        response = web.Response(
             body=data,
             content_type="application/javascript",
             charset="utf-8",
-            headers={"Cache-Control": "no-store"},
+            headers={"Cache-Control": "public, max-age=86400" if current else "no-store"},
         )
+        try:
+            response.enable_compression()
+        except Exception:  # noqa: BLE001 - the card is served uncompressed
+            pass
+        return response
 
 
 class _SoundView(HomeAssistantView):
@@ -197,7 +208,7 @@ async def _async_register_frontend_card(hass: HomeAssistant, card_url: str = CAR
     card_path = Path(__file__).parent / "www" / "how-many-times-today-card.js"
 
     try:
-        hass.http.register_view(_CardView(hass, card_path))
+        hass.http.register_view(_CardView(hass, card_path, parse_qs(urlsplit(card_url).query).get("v", [""])[0]))
         hass.http.register_view(_SoundView(hass, card_path.parent / "sounds"))
     except Exception:  # noqa: BLE001
         _LOGGER.warning(

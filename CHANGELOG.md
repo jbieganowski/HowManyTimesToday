@@ -2,6 +2,24 @@
 
 ([Polish version](CHANGELOG.pl.md))
 
+## [2.4.0] - 2026-11-01
+
+### Integration
+
+- **Error cards of other cards are healed.** On a slow device (a wall tablet that loads 25
+  dashboard modules) the cards of other integrations were seen to stay on "Configuration
+  error" ("Custom element doesn't exist: ...") although their element was defined a moment
+  later. For the first minute after a page loads, the card script now asks for the rebuild of
+  every such error card whose element is defined by now and, a moment later, hands the host
+  card a fresh copy of its configuration so it builds again.
+- **The card file is compressed and cached.** It is sent gzip-compressed (126 KB -> 47 KB) and
+  may be kept for a day under the address of its own version (`?v=<version>`); under any other
+  address it is still never kept. Less to load on every page.
+
+### Documentation
+
+- Troubleshooting: "A card shows Configuration error for a moment after the page loads".
+
 ## [2.3.2] - 2026-10-31
 
 ### Integration

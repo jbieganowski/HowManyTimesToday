@@ -117,3 +117,41 @@ def test_the_alert_card_is_registered_and_hides_itself_when_nothing_is_due():
     assert 'type: "how-many-times-today-alert-card"' in text
     assert "this.hidden = due.length === 0;" in text
     assert 's.state === "red" || s.state === "blinking_black"' in text
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="Node.js is not installed")
+def test_the_healing_of_error_cards_rebuilds_only_cards_whose_element_is_defined():
+    text = CARD.read_text(encoding="utf-8")
+    code = text[text.index("function scanPage()"):text.index("let healTicks = 0;")]
+    probe = """
+class CE { constructor(type){ this.detail = {type}; } }
+global.CustomEvent = CE;
+const makeError = (tag, host) => ({
+  localName: "hui-error-card", _config: { message: `Custom element doesn't exist: ${tag}.` }, isConnected: true,
+  events: [], dispatchEvent(ev) { this.events.push(ev.detail.type); return true; },
+  getRootNode() { return { host }; },
+});
+const hostA = { localName: "hui-card", config: { type: "custom:defined-card" } };
+const hostB = { localName: "hui-card", config: { type: "custom:missing-card" } };
+const errA = makeError("defined-card", hostA);
+const errB = makeError("missing-card", hostB);
+global.document = { querySelectorAll: () => [errA, errB] };
+errA.shadowRoot = null; errB.shadowRoot = null;
+global.customElements = { get: (tag) => (tag === "defined-card" ? function () {} : undefined) };
+""" + code + """
+const configBefore = hostA.config;
+healErrorCards();
+setTimeout(() => {
+  console.log(JSON.stringify({
+    a_events: errA.events, b_events: errB.events,
+    a_config_replaced: hostA.config !== configBefore && hostA.config.type === configBefore.type,
+    b_config_kept: hostB.config.type === "custom:missing-card",
+  }));
+}, 1500);
+"""
+    result = subprocess.run(["node", "-e", probe], capture_output=True, text=True, encoding="utf-8")
+    assert result.returncode == 0, result.stderr
+    import json
+
+    got = json.loads(result.stdout)
+    assert got == {"a_events": ["ll-rebuild"], "b_events": [], "a_config_replaced": True, "b_config_kept": True}

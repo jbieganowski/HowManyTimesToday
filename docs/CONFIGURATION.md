@@ -460,6 +460,7 @@ press without one fails with `early_answer_required`.
 | The button is grey and says it has not started | Before the start; presses are refused until then |
 | A schedule's card has disappeared from the dashboard | It is switched off or past its end (`inactive`); edit the dashboard to see it grey, then tick **Schedule active** in its editor or switch it on in the Configure dialog |
 | Times look two hours off | Schedules use the time zone configured in Home Assistant, not the browser's |
+| A card shows "Configuration error" for a moment after the page loads, other custom cards too | The dashboard loads all its JavaScript modules (HACS cards) at once and draws the cards before the slowest ones are ready; they recover by themselves. Remove the dashboard resources no dashboard uses and any duplicate (for example `mushroom.js` twice) and use the local address on wall tablets; since 2.4.0 the card script also rebuilds such error cards once their element is defined |
 
 How the pieces fit together: [SPECIFICATION.md](SPECIFICATION.md).
 
